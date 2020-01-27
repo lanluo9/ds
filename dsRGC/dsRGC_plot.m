@@ -4,17 +4,18 @@ clear
 clc
 
 dataset_num = '02';
-datapath = append('/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
-% datapath = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
-% datapath = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/data006/data006';
+prefix_now = '/Volumes/dusom_fieldlab/';
+% prefix_now = '/Volumes/All_Staff/';
 
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
+% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 
 %% load data
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
-datarun.names.stimulus_path = append('/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
+datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
 % datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s02.txt';
 % datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s06.txt';
 
@@ -63,7 +64,7 @@ selected_indices = intersect(x_finder, y_finder);
 ds_cell_ids = datarun.cell_ids(selected_indices);
 
 %%
-slave_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/data000/data000';
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000/data000');
 datarun_s = load_data(slave_path);
 datarun_s = load_neurons(datarun_s);
 datarun_s = load_params(datarun_s);
@@ -121,7 +122,7 @@ fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_li
 %% rasterplot by direction for single dsRGC w separate TPs
 
 ds_now = 5; % range 1:length(ds_index)
-tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
+tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
 
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
@@ -135,7 +136,7 @@ for dir = 1:length(grat_dirs)
     for rep = 1:size(single_dirtp,2)        
         spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
         rep_mark = rep .* ones(length(spike_time),1);
-        scatter(spike_time, rep_mark, 8, 'filled')
+        scatter(spike_time, rep_mark, 50, 'filled')
         axis([0 10 0 7])
         hold on
     end
