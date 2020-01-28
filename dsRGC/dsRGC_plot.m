@@ -3,7 +3,7 @@
 clear
 clc
 
-dataset_num = '02';
+dataset_num = '06';
 prefix_now = '/Volumes/dusom_fieldlab/';
 % prefix_now = '/Volumes/All_Staff/';
 
@@ -121,7 +121,7 @@ fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_li
 
 %% rasterplot by direction for single dsRGC w separate TPs
 
-ds_now = 5; % range 1:length(ds_index)
+ds_now = 30; % range 1:length(ds_index)
 tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
 
 ds_index = selected_indices;
@@ -170,5 +170,5 @@ theta = [theta, theta(1)];
 radius = ds_spike_count(find(ds_index==single_ds_index),:);
 radius = [radius, radius(1)];
 polarplot(theta, radius)
-title(['dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
 
