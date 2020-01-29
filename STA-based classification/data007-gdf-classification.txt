@@ -1,0 +1,289 @@
+91  All/OFF/nc9/
+481  All/OFF/nc9/
+1171  All/OFF/nc9/
+1172  All/OFF/nc9/
+1174  All/OFF/nc9/
+1231  All/OFF/nc9/
+1591  All/OFF/nc9/
+1594  All/OFF/nc9/
+1622  All/OFF/nc9/
+2041  All/OFF/nc9/
+2119  All/OFF/nc9/
+2521  All/OFF/nc9/
+2701  All/OFF/nc9/
+3676  All/OFF/nc9/
+4186  All/OFF/nc9/
+4411  All/OFF/nc9/
+4741  All/OFF/nc9/
+5746  All/OFF/nc9/
+5881  All/OFF/nc9/
+6121  All/OFF/nc9/
+6781  All/OFF/nc9/
+6856  All/OFF/nc9/
+7351  All/OFF/nc9/
+496  All/OFF/brisk transient/
+706  All/OFF/brisk transient/
+811  All/OFF/brisk transient/
+1321  All/OFF/brisk transient/
+1501  All/OFF/brisk transient/
+1906  All/OFF/brisk transient/
+1966  All/OFF/brisk transient/
+2672  All/OFF/brisk transient/
+2762  All/OFF/brisk transient/
+3361  All/OFF/brisk transient/
+3436  All/OFF/brisk transient/
+3842  All/OFF/brisk transient/
+3961  All/OFF/brisk transient/
+4158  All/OFF/brisk transient/
+4486  All/OFF/brisk transient/
+4531  All/OFF/brisk transient/
+4893  All/OFF/brisk transient/
+5086  All/OFF/brisk transient/
+5356  All/OFF/brisk transient/
+5401  All/OFF/brisk transient/
+5941  All/OFF/brisk transient/
+6136  All/OFF/brisk transient/
+6526  All/OFF/brisk transient/
+6871  All/OFF/brisk transient/
+7381  All/OFF/brisk transient/
+7441  All/OFF/brisk transient/
+7591  All/OFF/brisk transient/
+7621  All/OFF/brisk transient/
+7742  All/OFF/brisk transient/
+1441  All/OFF/transient/
+1788  All/OFF/transient/
+2222  All/OFF/transient/
+3123  All/OFF/transient/
+4324  All/OFF/transient/
+4442  All/OFF/transient/
+4757  All/OFF/transient/
+4951  All/OFF/transient/
+5344  All/OFF/transient/
+5717  All/OFF/transient/
+7217  All/OFF/transient/
+76  All/OFF/sustained/
+108  All/OFF/sustained/
+618  All/OFF/sustained/
+751  All/OFF/sustained/
+1006  All/OFF/sustained/
+1066  All/OFF/sustained/
+1127  All/OFF/sustained/
+1503  All/OFF/sustained/
+2071  All/OFF/sustained/
+2268  All/OFF/sustained/
+2432  All/OFF/sustained/
+3020  All/OFF/sustained/
+3109  All/OFF/sustained/
+3227  All/OFF/sustained/
+4711  All/OFF/sustained/
+4787  All/OFF/sustained/
+4955  All/OFF/sustained/
+5134  All/OFF/sustained/
+5671  All/OFF/sustained/
+5928  All/OFF/sustained/
+6093  All/OFF/sustained/
+6421  All/OFF/sustained/
+6482  All/OFF/sustained/
+6528  All/OFF/sustained/
+6783  All/OFF/sustained/
+7324  All/OFF/sustained/
+7517  All/OFF/sustained/
+469  All/OFF/unclassified/
+815  All/OFF/unclassified/
+858  All/OFF/unclassified/
+1355  All/OFF/unclassified/
+1804  All/OFF/unclassified/
+1819  All/OFF/unclassified/
+2131  All/OFF/unclassified/
+2719  All/OFF/unclassified/
+2911  All/OFF/unclassified/
+3138  All/OFF/unclassified/
+3154  All/OFF/unclassified/
+3710  All/OFF/unclassified/
+3766  All/OFF/unclassified/
+3903  All/OFF/unclassified/
+4142  All/OFF/unclassified/
+4159  All/OFF/unclassified/
+4771  All/OFF/unclassified/
+5060  All/OFF/unclassified/
+5132  All/OFF/unclassified/
+5509  All/OFF/unclassified/
+5581  All/OFF/unclassified/
+5958  All/OFF/unclassified/
+6048  All/OFF/unclassified/
+6571  All/OFF/unclassified/
+7277  All/OFF/unclassified/
+7292  All/OFF/unclassified/
+7398  All/OFF/unclassified/
+7442  All/OFF/unclassified/
+7726  All/OFF/unclassified/
+124  All/ON/brisk transient/
+453  All/ON/brisk transient/
+963  All/ON/brisk transient/
+1159  All/ON/brisk transient/
+1471  All/ON/brisk transient/
+1578  All/ON/brisk transient/
+1803  All/ON/brisk transient/
+1833  All/ON/brisk transient/
+2028  All/ON/brisk transient/
+2239  All/ON/brisk transient/
+2296  All/ON/brisk transient/
+2596  All/ON/brisk transient/
+3063  All/ON/brisk transient/
+3106  All/ON/brisk transient/
+3196  All/ON/brisk transient/
+3437  All/ON/brisk transient/
+3603  All/ON/brisk transient/
+3677  All/ON/brisk transient/
+4231  All/ON/brisk transient/
+4385  All/ON/brisk transient/
+4396  All/ON/brisk transient/
+4876  All/ON/brisk transient/
+5088  All/ON/brisk transient/
+5164  All/ON/brisk transient/
+5267  All/ON/brisk transient/
+5298  All/ON/brisk transient/
+5386  All/ON/brisk transient/
+5732  All/ON/brisk transient/
+5776  All/ON/brisk transient/
+6137  All/ON/brisk transient/
+6198  All/ON/brisk transient/
+6241  All/ON/brisk transient/
+6588  All/ON/brisk transient/
+6782  All/ON/brisk transient/
+6798  All/ON/brisk transient/
+7261  All/ON/brisk transient/
+7353  All/ON/brisk transient/
+7576  All/ON/brisk transient/
+271  All/ON/brisk sustained/
+467  All/ON/brisk sustained/
+739  All/ON/brisk sustained/
+1412  All/ON/brisk sustained/
+2101  All/ON/brisk sustained/
+2326  All/ON/brisk sustained/
+2402  All/ON/brisk sustained/
+2927  All/ON/brisk sustained/
+2959  All/ON/brisk sustained/
+3332  All/ON/brisk sustained/
+3557  All/ON/brisk sustained/
+3602  All/ON/brisk sustained/
+3751  All/ON/brisk sustained/
+4157  All/ON/brisk sustained/
+4532  All/ON/brisk sustained/
+4561  All/ON/brisk sustained/
+5131  All/ON/brisk sustained/
+5236  All/ON/brisk sustained/
+5521  All/ON/brisk sustained/
+6331  All/ON/brisk sustained/
+6541  All/ON/brisk sustained/
+6661  All/ON/brisk sustained/
+7171  All/ON/brisk sustained/
+7246  All/ON/brisk sustained/
+7727  All/ON/brisk sustained/
+392  All/ON/unclassified/
+663  All/ON/unclassified/
+768  All/ON/unclassified/
+781  All/ON/unclassified/
+1216  All/ON/unclassified/
+1295  All/ON/unclassified/
+1382  All/ON/unclassified/
+1563  All/ON/unclassified/
+1577  All/ON/unclassified/
+1756  All/ON/unclassified/
+1848  All/ON/unclassified/
+1922  All/ON/unclassified/
+1951  All/ON/unclassified/
+1968  All/ON/unclassified/
+2011  All/ON/unclassified/
+2208  All/ON/unclassified/
+2313  All/ON/unclassified/
+2704  All/ON/unclassified/
+3035  All/ON/unclassified/
+3440  All/ON/unclassified/
+3528  All/ON/unclassified/
+3571  All/ON/unclassified/
+3618  All/ON/unclassified/
+3663  All/ON/unclassified/
+3691  All/ON/unclassified/
+3769  All/ON/unclassified/
+3978  All/ON/unclassified/
+4562  All/ON/unclassified/
+4622  All/ON/unclassified/
+4666  All/ON/unclassified/
+4696  All/ON/unclassified/
+4745  All/ON/unclassified/
+4760  All/ON/unclassified/
+4773  All/ON/unclassified/
+4818  All/ON/unclassified/
+4832  All/ON/unclassified/
+4846  All/ON/unclassified/
+4921  All/ON/unclassified/
+5029  All/ON/unclassified/
+5147  All/ON/unclassified/
+5251  All/ON/unclassified/
+5254  All/ON/unclassified/
+5281  All/ON/unclassified/
+5296  All/ON/unclassified/
+5673  All/ON/unclassified/
+5926  All/ON/unclassified/
+6184  All/ON/unclassified/
+6362  All/ON/unclassified/
+6423  All/ON/unclassified/
+6587  All/ON/unclassified/
+6663  All/ON/unclassified/
+6905  All/ON/unclassified/
+7082  All/ON/unclassified/
+7141  All/ON/unclassified/
+7173  All/ON/unclassified/
+7201  All/ON/unclassified/
+7366  All/ON/unclassified/
+212  All/weak/
+230  All/weak/
+648  All/weak/
+890  All/weak/
+1010  All/weak/
+1383  All/weak/
+1384  All/weak/
+1396  All/weak/
+1518  All/weak/
+1520  All/weak/
+1651  All/weak/
+1681  All/weak/
+1891  All/weak/
+1893  All/weak/
+2105  All/weak/
+2194  All/weak/
+2494  All/weak/
+2508  All/weak/
+2509  All/weak/
+2599  All/weak/
+2868  All/weak/
+2960  All/weak/
+3496  All/weak/
+3902  All/weak/
+3904  All/weak/
+3962  All/weak/
+4129  All/weak/
+4216  All/weak/
+4217  All/weak/
+4606  All/weak/
+4802  All/weak/
+4906  All/weak/
+4953  All/weak/
+4981  All/weak/
+5042  All/weak/
+5056  All/weak/
+5071  All/weak/
+5206  All/weak/
+5240  All/weak/
+5297  All/weak/
+5432  All/weak/
+5539  All/weak/
+5701  All/weak/
+5989  All/weak/
+6078  All/weak/
+6155  All/weak/
+6514  All/weak/
+6706  All/weak/
+7758  All/weak/
+7759  All/weak/
