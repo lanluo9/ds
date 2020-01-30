@@ -1,10 +1,9 @@
 %% changeable dataset_num & ds_now
-
 clear
 clc
 
-dataset_num = '00';
-prefix_now = '/Volumes/dusom_fieldlab/';
+dataset_num = '02';
+prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
@@ -17,7 +16,6 @@ datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
 % datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s02.txt';
-% datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s06.txt';
 
 %% process triggers and extract some stim params
 trigger_set = round(datarun.triggers);
