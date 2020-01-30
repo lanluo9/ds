@@ -36,6 +36,24 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 % verify datarun.spikes
 % histogram(datarun.spikes{1,1}, 40)
 
-%% scaffold: single section - dark
+%% scaffold: single section of darkness
 gaps = round(diff(datarun.triggers));
-section_bound = gaps ~= 2 & gaps ~= 4;
+switching = gaps ~= 2 & gaps ~= 4;
+switch_duration = gaps(switching);
+
+tmp_triggers = datarun.triggers(switching);
+switch_index = [];
+for i = 1 : length(tmp_triggers)
+    switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
+end
+
+%% scaffold: sanity check
+ntrig_flash = 60;
+nflash = [60];
+gap_seq = [300];
+for i = 2 : length(switch_index)
+    ntrig_flash = ntrig_flash + switch_index(i) - switch_index(i-1) -1;
+    nflash = [nflash, (switch_index(i) - switch_index(i-1) - 1)];
+    gap_seq = [gap_seq, (datarun.triggers(switch_index(i)) - datarun.triggers(switch_index(i-1)))];
+end
+% ntrig_flash + length(switch_index) + 1 == length(datarun.triggers)
