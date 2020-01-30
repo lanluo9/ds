@@ -36,24 +36,32 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 % verify datarun.spikes
 % histogram(datarun.spikes{1,1}, 40)
 
-%% scaffold: single section of darkness
+%% scaffold: single section of darkness. cell id = 469, index = 21
 gaps = round(diff(datarun.triggers));
-switching = gaps ~= 2 & gaps ~= 4;
-switch_duration = gaps(switching);
+switch_flag = gaps ~= 2 & gaps ~= 4;
+switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
 
-tmp_triggers = datarun.triggers(switching);
+tmp_triggers = datarun.triggers(switch_flag);
 switch_index = [];
 for i = 1 : length(tmp_triggers)
     switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
 end
+section_end_prev = [300; datarun.triggers(switch_index)];
+section_start_next = [datarun.triggers(1); datarun.triggers(switch_index + 1)];
+sections = [section_end_prev, section_start_next];
+
+tolerance = 0.01;
 
 %% scaffold: sanity check
-ntrig_flash = 60;
-nflash = [60];
-gap_seq = [300];
-for i = 2 : length(switch_index)
-    ntrig_flash = ntrig_flash + switch_index(i) - switch_index(i-1) -1;
-    nflash = [nflash, (switch_index(i) - switch_index(i-1) - 1)];
-    gap_seq = [gap_seq, (datarun.triggers(switch_index(i)) - datarun.triggers(switch_index(i-1)))];
-end
-% ntrig_flash + length(switch_index) + 1 == length(datarun.triggers)
+% ntrig_flash = 60;
+% nflash = [60];
+% gap_seq = [300];
+% for i = 2 : length(switch_index)
+%     ntrig_flash = ntrig_flash + switch_index(i) - switch_index(i-1) -1;
+%     nflash = [nflash, (switch_index(i) - switch_index(i-1) - 1)];
+%     gap_seq = [gap_seq, (datarun.triggers(switch_index(i)) - datarun.triggers(switch_index(i-1)))];
+% end
+% % ntrig_flash + length(switch_index) + 1 == length(datarun.triggers)
+% gap_seq = [gap_seq, (datarun.triggers(end) - gap_seq(end))];
+% section_seq = transpose(gap_seq) - switch_duration;
+
