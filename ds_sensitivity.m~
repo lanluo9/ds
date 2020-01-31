@@ -46,9 +46,15 @@ switch_index = [];
 for i = 1 : length(tmp_triggers)
     switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
 end
-section_end_prev = [300; datarun.triggers(switch_index)];
-section_start_next = [datarun.triggers(1); datarun.triggers(switch_index + 1)];
-sections = [section_end_prev, section_start_next];
+section_end = [300; datarun.triggers(switch_index); datarun.duration];
+section_start = [0; datarun.triggers(1); datarun.triggers(switch_index + 1)];
+sections = [section_start, section_end, (section_end - section_start)];
+sections = [sections(1:12,:); [sections(12,2), sections(13,1), (sections(13,1)-sections(12,2))]; sections(13:end,:)];
+
+ndf = [99; 5;4;5; 4;4;4;4;4; 3;4;3;99; 3;2;2;99];
+flash_config = [0; 2.4;2.4;2.8; 2.2;2.4;2.2;2.8;2.4; 2.2;2.8;2.4;0; 2.8;4.2;4.8;0];
+nflash = [0; sections(2:12,3)./2; 0; sections(14,3)./2; sections(2:12,3)./4];
+sections = [sections, ndf, flash_config];
 
 %%
 tolerance = 0.01;
@@ -57,19 +63,19 @@ spike_time = datarun.spikes{cell_index, 1};
 
 % section_now = [0, 300];
 % section_now = [(0 - tolerance), (300 + tolerance)]; % for first section of 300s dark
-section_id = 1;
+section_id = 8; 
 section_now = [sections(section_id, 2), sections((section_id+1), 1)];
 
 section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
 spike_time_section = spike_time(section_flag);
+spike_time_section = spike_time_section - section_now(1);
 
 %%
-spike_time_section = spike_time_section - section_now(1);
 rep_max = round(section_now(2) - section_now(1)) / 2;
 for rep = 1 : rep_max
     rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
     spike_time_rep = spike_time_section(rep_flag);
-    spike_time_rep = spike_time_rep - min(spike_time_rep);
+    spike_time_rep = spike_time_rep - (rep-1)*2;
 
     rep_mark = rep * ones(length(spike_time_rep),1);
     scatter(spike_time_rep, rep_mark, 50, 'filled')
