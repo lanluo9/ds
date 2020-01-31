@@ -54,19 +54,22 @@ sections = [section_end_prev, section_start_next];
 tolerance = 0.01;
 cell_index = 35; % slave index! find by datarun.cell_ids. match master id to slave id to slave index
 spike_time = datarun.spikes{cell_index, 1};
-section_now = [(0 - tolerance), (300 + tolerance)];
-% section_id = 4;
-% section_now = [sections(section_id, 2), sections((section_id+1), 1)];
+
+% section_now = [0, 300];
+% section_now = [(0 - tolerance), (300 + tolerance)]; % for first section of 300s dark
+section_id = 8; % range 1-14
+section_now = [sections(section_id, 2), sections((section_id+1), 1)];
+
 section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
 spike_time_section = spike_time(section_flag);
+spike_time_section = spike_time_section - section_now(1);
 
 %%
-spike_time_section = spike_time_section - min(spike_time_section);
 rep_max = round(section_now(2) - section_now(1)) / 2;
 for rep = 1 : rep_max
     rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
     spike_time_rep = spike_time_section(rep_flag);
-    spike_time_rep = spike_time_rep - min(spike_time_rep);
+    spike_time_rep = spike_time_rep - (rep-1)*2;
 
     rep_mark = rep * ones(length(spike_time_rep),1);
     scatter(spike_time_rep, rep_mark, 50, 'filled')
