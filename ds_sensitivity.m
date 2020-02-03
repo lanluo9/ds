@@ -6,10 +6,9 @@
 clear
 clc
 
-dataset_num = '00'; % dim flashes stimulus to test absolute sensitivity
+dataset_num = '00'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
-
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
 % datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 
@@ -18,10 +17,18 @@ datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-%% chop data000 to sections
+%% load ds cell index & id in master dataset
+% cell_id_mapped = [469 2867 3710 4399 4621 5105 6318 6423 6695 7291];
+cell_master_id_mapped = [469 2869 3710 4399 4621 5105 6320 6423 6695 7291]; % shifted bc master got spike sorted
+ds_cells = load('ds_cells.mat', 'ds_cells');
+ds = ds_cells.ds_cells;
+cell_master_index_mapped = ds( 1, ismember(ds(2,:), cell_master_id_mapped) );
+% sanity_check = [cell_index_mapped; cell_id_mapped];
+
+%% chop data000 into sections
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
-switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
+% switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
 
 tmp_triggers = datarun.triggers(switch_flag);
 switch_index = [];
@@ -38,9 +45,9 @@ flash_config = [0; 2.4;2.4;2.8; 2.2;2.4;2.2;2.8;2.4; 2.2;2.8;2.4;0; 2.8;4.2;4.8;
 nflash = [0; sections(2:12,3)./2; 0; sections(14,3)./2; sections(15:16,3)./4; 0];
 sections = [sections, ndf, flash_config, nflash];
 
-%% scaffold: single section of darkness. cell id = 469, index = 21
-cell_index = 35; % slave index! find by datarun.cell_ids. match master id to slave id to slave index
-spike_time = datarun.spikes{cell_index, 1};
+%% select cell
+cell_slave_index = 55; % 35,55,154: result of map_ei. find by datarun.cell_ids. match master id to slave id to slave index
+spike_time = datarun.spikes{cell_slave_index, 1};
 
 section_id = 10; % range 1-17
 section_now = [sections(section_id, 1), sections(section_id, 2)];
@@ -86,7 +93,7 @@ for section_i = 1 : size(sections, 1)
     end
 end
 
-%% sort sections by NDF and flash_config. fixed x_axis=2
+%% sort sections by NDF and flash_config, unmerged. fixed x_axis=2
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 
@@ -141,7 +148,7 @@ for m = 1:length(marker)
             rep_len = 2;
         else
             rep_len = 2;
-%             rep_len = 4;
+%             rep_len = 4; % bug here. all subplot got x-axis turned into 0-4
         end
         rep_max = round(section_now(2) - section_now(1)) / rep_len;
         

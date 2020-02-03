@@ -117,7 +117,7 @@ fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_li
 %     hold on
 % end
 
-%% rasterplot by direction for single dsRGC w separate TPs
+%% 
 
 ds_now = 30; % range 1:length(ds_index)
 tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
@@ -126,6 +126,12 @@ ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
 single_ds_index = ds_cells(1,ds_now);
 single_ds_id = ds_cells(2,ds_now);
+
+%%
+savefile = 'ds_cells.mat';
+save(savefile, 'ds_cells');
+
+%% rasterplot by direction for single dsRGC w separate TPs
 
 subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
 for dir = 1:length(grat_dirs) 

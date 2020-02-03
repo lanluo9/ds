@@ -1,10 +1,9 @@
 %% changeable dataset_num & ds_now
-
 clear
 clc
 
 dataset_num = '02';
-prefix_now = '/Volumes/dusom_fieldlab/';
+prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
@@ -17,7 +16,6 @@ datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
 % datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s02.txt';
-% datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s06.txt';
 
 %% process triggers and extract some stim params
 trigger_set = round(datarun.triggers);
@@ -129,6 +127,11 @@ ds_cells = [ds_index; ds_cell_ids];
 single_ds_index = ds_cells(1,ds_now);
 single_ds_id = ds_cells(2,ds_now);
 
+%%
+savefile = 'ds_cells_index_id.mat';
+save(savefile, 'ds_cells');
+
+%%
 subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
 for dir = 1:length(grat_dirs) 
     subplot(3,3,subplot_num(1,dir))
@@ -170,5 +173,5 @@ theta = [theta, theta(1)];
 radius = ds_spike_count(find(ds_index==single_ds_index),:);
 radius = [radius, radius(1)];
 polarplot(theta, radius)
-title(['','dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
 

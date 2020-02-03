@@ -6,7 +6,7 @@
 clear
 clc
 
-dataset_num = '00'; % dim flashes stimulus to test absolute sensitivity
+dataset_num = '00'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
@@ -18,10 +18,10 @@ datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-%% chop data000 to sections
+%% chop data000 into sections
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
-switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
+% switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
 
 tmp_triggers = datarun.triggers(switch_flag);
 switch_index = [];
@@ -39,6 +39,12 @@ nflash = [0; sections(2:12,3)./2; 0; sections(14,3)./2; sections(15:16,3)./4; 0]
 sections = [sections, ndf, flash_config, nflash];
 
 %% scaffold: single section of darkness. cell id = 469, index = 21
+cell_id_mapped = [469 2867 3710 4399 4621 5105 6318 6423 6695 7291];
+ds_cells = load('ds_cells.mat', 'ds_cells');
+ds = ds_cells.ds_cells;
+cell_index_mapped = find(ds(2,:)==);
+
+%%
 cell_index = 35; % slave index! find by datarun.cell_ids. match master id to slave id to slave index
 spike_time = datarun.spikes{cell_index, 1};
 
@@ -86,7 +92,7 @@ for section_i = 1 : size(sections, 1)
     end
 end
 
-%% sort sections by NDF and flash_config. fixed x_axis=2
+%% sort sections by NDF and flash_config, unmerged. fixed x_axis=2
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 
@@ -125,6 +131,7 @@ marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
 for m = 1:length(marker)
+    subplot(length(marker), 1, m)  
     marker_now = marker(m);
     section_id_seq = find(marker_seq == marker_now, length(marker_seq));
     
@@ -139,7 +146,8 @@ for m = 1:length(marker)
         if section_i >=1 && section_i <= 15
             rep_len = 2;
         else
-            rep_len = 4;
+            rep_len = 2;
+%             rep_len = 4; % bug here. all subplot got x-axis turned into 0-4
         end
         rep_max = round(section_now(2) - section_now(1)) / rep_len;
         
@@ -153,11 +161,6 @@ for m = 1:length(marker)
             hold on
             axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
         end
-    end
-    
-end
-
-for section_i = 1 : size(section_sort, 1)
-    
-%     title(['NDF = ', num2str(section_sort(section_i, 4))])
+        hold on
+    end    
 end
