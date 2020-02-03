@@ -25,7 +25,10 @@ ds = ds_cells.ds_cells;
 cell_master_index_mapped = ds( 1, ismember(ds(2,:), cell_master_id_mapped) );
 % sanity_check = [cell_index_mapped; cell_id_mapped];
 
-%% chop data000 into sections
+%% select cell & chop data000 into sections
+cell_slave_index = 55; % 35,55,154: result of map_ei. find by datarun.cell_ids. match master id to slave id to slave index
+spike_time = datarun.spikes{cell_slave_index, 1};
+
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
 % switch_duration = [round(datarun.triggers(1)) - 300; gaps(switch_flag)];
@@ -45,57 +48,55 @@ flash_config = [0; 2.4;2.4;2.8; 2.2;2.4;2.2;2.8;2.4; 2.2;2.8;2.4;0; 2.8;4.2;4.8;
 nflash = [0; sections(2:12,3)./2; 0; sections(14,3)./2; sections(15:16,3)./4; 0];
 sections = [sections, ndf, flash_config, nflash];
 
-%% select cell
-cell_slave_index = 55; % 35,55,154: result of map_ei. find by datarun.cell_ids. match master id to slave id to slave index
-spike_time = datarun.spikes{cell_slave_index, 1};
-
-section_id = 10; % range 1-17
-section_now = [sections(section_id, 1), sections(section_id, 2)];
-
-section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
-spike_time_section = spike_time(section_flag);
-spike_time_section = spike_time_section - section_now(1);
-
-rep_max = round(section_now(2) - section_now(1)) / 2;
-for rep = 1 : rep_max
-    rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
-    spike_time_rep = spike_time_section(rep_flag);
-    spike_time_rep = spike_time_rep - (rep-1)*2;
-
-    rep_mark = rep * ones(length(spike_time_rep),1);
-    scatter(spike_time_rep, rep_mark, 10, 'filled')
-    hold on
-    axis([-0.05 2.05 0 (rep_max + 1)])
-end
-
-%% plot all sections separately
-for section_i = 1 : size(sections, 1)
-    subplot( size(sections, 1), 1, section_i )
-    title(['NDF = ', num2str(sections(section_i, 4))])
-
-    section_id = section_i; 
-    section_now = [sections(section_id, 1), sections(section_id, 2)];
-
-    section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
-    spike_time_section = spike_time(section_flag);
-    spike_time_section = spike_time_section - section_now(1);
-
-    rep_max = round(section_now(2) - section_now(1)) / 2;
-    for rep = 1 : rep_max
-        rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
-        spike_time_rep = spike_time_section(rep_flag);
-        spike_time_rep = spike_time_rep - (rep-1)*2;
-
-        rep_mark = rep * ones(length(spike_time_rep),1);
-        scatter(spike_time_rep, rep_mark, 10, 'filled')
-        hold on
-        axis([-0.05 2.05 0 (rep_max + 1)])
-    end
-end
-
-%% sort sections by NDF and flash_config, unmerged. fixed x_axis=2
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
+
+% %% single section plot
+% section_id = 10; % range 1-17
+% section_now = [sections(section_id, 1), sections(section_id, 2)];
+% 
+% section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
+% spike_time_section = spike_time(section_flag);
+% spike_time_section = spike_time_section - section_now(1);
+% 
+% rep_max = round(section_now(2) - section_now(1)) / 2;
+% for rep = 1 : rep_max
+%     rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
+%     spike_time_rep = spike_time_section(rep_flag);
+%     spike_time_rep = spike_time_rep - (rep-1)*2;
+% 
+%     rep_mark = rep * ones(length(spike_time_rep),1);
+%     scatter(spike_time_rep, rep_mark, 10, 'filled')
+%     hold on
+%     axis([-0.05 2.05 0 (rep_max + 1)])
+% end
+% 
+% %% plot all sections separately
+% for section_i = 1 : size(sections, 1)
+%     subplot( size(sections, 1), 1, section_i )
+%     title(['NDF = ', num2str(sections(section_i, 4))])
+% 
+%     section_id = section_i; 
+%     section_now = [sections(section_id, 1), sections(section_id, 2)];
+% 
+%     section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
+%     spike_time_section = spike_time(section_flag);
+%     spike_time_section = spike_time_section - section_now(1);
+% 
+%     rep_max = round(section_now(2) - section_now(1)) / 2;
+%     for rep = 1 : rep_max
+%         rep_flag = spike_time_section >= (rep-1)*2 & spike_time_section <= rep*2;
+%         spike_time_rep = spike_time_section(rep_flag);
+%         spike_time_rep = spike_time_rep - (rep-1)*2;
+% 
+%         rep_mark = rep * ones(length(spike_time_rep),1);
+%         scatter(spike_time_rep, rep_mark, 10, 'filled')
+%         hold on
+%         axis([-0.05 2.05 0 (rep_max + 1)])
+%     end
+% end
+
+%% sort sections by NDF and flash_config, unmerged. fixed x_axis=2
 
 for section_i = 1 : size(section_sort, 1)
     subplot( size(section_sort, 1), 1, section_i )
@@ -144,12 +145,12 @@ for m = 1:length(marker)
         spike_time_section = spike_time(section_flag);
         spike_time_section = spike_time_section - section_now(1);
 
-        if section_i >=1 && section_i <= 15
-            rep_len = 2;
-        else
-            rep_len = 2;
+%         if section_i >=1 && section_i <= 15
+%             rep_len = 2;
+%         else
+%             rep_len = 2;
 %             rep_len = 4; % bug here. all subplot got x-axis turned into 0-4
-        end
+%         end
         rep_max = round(section_now(2) - section_now(1)) / rep_len;
         
         for rep = 1 : rep_max
@@ -160,8 +161,8 @@ for m = 1:length(marker)
             rep_mark = rep * ones(length(spike_time_rep),1);
             scatter(spike_time_rep, rep_mark, 10, 'filled')
             hold on
-            axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
         end
         hold on
-    end    
+    end
+    axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
 end
