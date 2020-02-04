@@ -1,4 +1,4 @@
-function [vector_sums, vector_mags] = get_vector_sums(datarun, cell_spec, varargin)
+function [vector_sums, vector_mags] = get_vector_sums_consistency(datarun, cell_spec, varargin)
 %
 % usage: function spike_times = get_grating_spike_times(datarun, cell_ids, varargin)
 %
