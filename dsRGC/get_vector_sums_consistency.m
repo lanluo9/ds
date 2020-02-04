@@ -37,6 +37,8 @@ num_rgcs = length(cell_indices);
 %vector_sums = zeros(num_rgcs, 2);
 %vector_mags = zeros(num_rgcs, 1);
 spike_counts = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+spike_count_rep = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION), datarun.stimulus.repetitions);
+
 
 for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
         temp_dir = datarun.stimulus.params.DIRECTION(g_dir);
@@ -49,6 +51,7 @@ for rgc = 1:num_rgcs
         tmp_counter = 0;
         for g_rep = 1:datarun.stimulus.repetitions
             tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            spike_count_rep
         end
         spike_counts(rgc, g_dir) = tmp_counter;
     end
