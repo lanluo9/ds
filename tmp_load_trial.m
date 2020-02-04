@@ -8,7 +8,7 @@ prefix_now = '/Volumes/dusom_fieldlab';
 % datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
 % datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/000-map-002-200129/000-map-002-200129');
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/000-map-002-20200129/data000-map');
 % /Volumes/dusom_fieldlab/lab/Experiments/Array/Analysis/2019-11-21-0/000-map-002-200129
 
 datarun = load_data(datapath);
@@ -19,5 +19,5 @@ datarun = load_neurons(datarun);
 %%
 % cell_master_id_mapped = [469 2867 3710 4399 4621 5105 6318 6423 6695 7291]; % result of map-analysis
 cell_master_id_mapped = [469 2869 3710 4399 4621 5105 6320 6423 6695 7291]; % shifted bc master002 was spike sorted
-% [sanity, check] = ismembertol(cell_master_id_mapped(2), datarun.cell_ids, 1)
-[sanity, check] = ismembertol(2869, datarun.cell_ids, 1)
+[sanity, check] = ismembertol(cell_master_id_mapped(2), datarun.cell_ids, 1)
+% [sanity, check] = ismembertol(2869, datarun.cell_ids, 1)

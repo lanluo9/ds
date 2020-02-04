@@ -50,7 +50,7 @@ scatter((vector_mags_120), (vector_mags_240))
 %%
 % set x-y cuoff
 % cutoff_coord = [1.2, 1.2]; % leads to 47 failed_to_map out of 49 dsRGC in data006
-cutoff_coord = [1.0, 1.0]; % leads to 50 failed_to_map out of 53 dsRGC in data006
+% cutoff_coord = [1.0, 1.0]; % leads to 50 failed_to_map out of 53 dsRGC in data006
 
 % cutoff_coord = [0.9, 1.2]; % leads to 25 failed_to_map out of 28 dsRGC in data002
 cutoff_coord = [1.0, 1.0]; % leads to 29 failed_to_map out of 32 dsRGC in data002
