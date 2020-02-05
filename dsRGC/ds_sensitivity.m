@@ -6,7 +6,7 @@
 clear
 clc
 
-dataset_num = '00'; % dim flashes to test absolute sensitivity
+dataset_num = '00-map'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
@@ -17,18 +17,19 @@ datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-%% load ds cell index & id in master dataset
+%% load ds cell identified in master 
 % cell_id_mapped = [469 2867 3710 4399 4621 5105 6318 6423 6695 7291]; % result of map-analysis
-cell_master_id_mapped = [469 2869 3710 4399 4621 5105 6320 6423 6695 7291]; % shifted bc master002 was spike sorted
-% NEED REVISION HERE
+% cell_master_id_mapped = [469 2869 3710 4399 4621 5105 6320 6423 6695 7291]; % shifted bc master002 was spike sorted
 
-ds_cells = load('ds_cells.mat', 'ds_cells');
-ds = ds_cells.ds_cells;
-cell_master_index_mapped = ds( 1, ismember(ds(2,:), cell_master_id_mapped) );
+% tmp = load('ds_cells_0205.mat', 'ds_cells');
+% ds_master = tmp.ds_cells;
+
+% cell_master_index_mapped = ds_master( 1, ismember(ds_master(2,:), cell_master_id_mapped) );
 % sanity_check = [cell_index_mapped; cell_id_mapped];
 
 %% select cell & chop data000 into sections
-cell_slave_index = 35; % 35,55,154: result of map_ei. find by datarun.cell_ids. match master id to slave id to slave index
+cell_slave_index = 40; % 35,55,154: result of map_ei. find by datarun.cell_ids. match master id to slave id to slave index
+% master cell_ID:2867 -> 2674 = slave(40)
 spike_time = datarun.spikes{cell_slave_index, 1};
 
 gaps = round(diff(datarun.triggers));
@@ -52,54 +53,6 @@ sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
-
-% %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
-% 
-% for m = 1: (length(marker))
-%     subplot(length(marker), 1, m)  
-%     marker_now = marker(m);
-%     section_id_seq = find(marker_seq == marker_now, length(marker_seq));
-%     
-%     for s = 1:length(section_id_seq)
-%         section_id = section_id_seq(s); 
-%         section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
-%         section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
-%         
-%         spike_time_section = spike_time(section_flag);
-%         spike_time_section = spike_time_section - section_now(1);
-% 
-%         rep_len = 2;
-%         rep_max = round(section_now(2) - section_now(1)) / rep_len;
-%         
-%         if section_id <= 15
-%             for rep = 1 : rep_max
-%                 rep_flag = spike_time_section >= (rep-1)*rep_len & spike_time_section <= rep*rep_len;
-%                 spike_time_rep = spike_time_section(rep_flag);
-%                 spike_time_rep = spike_time_rep - (rep-1)*rep_len;
-% 
-%                 rep_mark = rep * ones(length(spike_time_rep),1);
-%                 scatter(spike_time_rep, rep_mark, 10, 'filled')
-%                 axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
-%                 hold on
-%             end
-%             hold on
-%         else
-%             for rep = 1 : 2: rep_max
-%                 rep_flag = spike_time_section >= (rep-1)*rep_len & spike_time_section <= rep*rep_len;
-%                 spike_time_rep = spike_time_section(rep_flag);
-%                 spike_time_rep = spike_time_rep - (rep-1)*rep_len;
-% 
-%                 rep_mark = rep * ones(length(spike_time_rep),1);
-%                 scatter(spike_time_rep, rep_mark, 10, 'filled')
-%                 axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
-%                 hold on
-%             end
-%             hold on
-%         end
-%         
-%     end
-% end
-
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 

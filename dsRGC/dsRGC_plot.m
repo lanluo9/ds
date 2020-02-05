@@ -2,12 +2,14 @@
 clear
 clc
 
-dataset_num = '02';
+dataset_num = '02-sorted';
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
+% prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
-% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, ...
+    '/data0', dataset_num);
+% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002-sorted';
 
 %% load data
 datarun = load_data(datapath);
@@ -22,6 +24,7 @@ trigger_set = round(datarun.triggers);
 trig_inds = find(mod(trigger_set, 10) == 0);
 user_defined_trigs = datarun.triggers(trig_inds);
 datarun = load_stim(datarun, 'user_defined_trigger_set', trig_inds);
+
 num_stim = length(datarun.stimulus.combinations);
 grat_dirs = datarun.stimulus.params.DIRECTION;
 grat_TPs = datarun.stimulus.params.TEMPORAL_PERIOD;
@@ -62,7 +65,7 @@ selected_indices = intersect(x_finder, y_finder);
 ds_cell_ids = datarun.cell_ids(selected_indices);
 
 %%
-slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000/data000');
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000-map/data000-map');
 datarun_s = load_data(slave_path);
 datarun_s = load_neurons(datarun_s);
 datarun_s = load_params(datarun_s);
@@ -71,51 +74,6 @@ datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 %%
 [map_list, failed_to_map_list] = map_ei(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
 fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
-
-% %% dsRGC tuning curve Cartesian w merged TPs
-% 
-% dir_spike_count = [];
-% for dir = 1:length(grat_dirs)
-%     for tp = 1:length(grat_TPs)
-%         tp_spike_count = 0;
-%         single_dirtp = gratingrun.direction(dir).temporal_period(tp).spike_times;
-%         neuron_spike_count = zeros(size(single_dirtp,1),1);
-%         for neuron = 1:size(single_dirtp,1)
-%             for rep = 1:size(single_dirtp,2)
-%                 neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
-%                     length(gratingrun.direction(dir).temporal_period(tp).spike_times{neuron,rep});
-%             end
-%         end
-%         tp_spike_count = tp_spike_count + neuron_spike_count;
-%     end
-%     dir_spike_count = [dir_spike_count, tp_spike_count];
-% end
-% 
-% ds_index = selected_indices;
-% ds_spike_count = [];
-% for i = 1:length(ds_index)
-%     ds_spike_count = [ds_spike_count; dir_spike_count(ds_index(i),:)];
-% end
-% 
-% for i = 1:length(ds_index)
-%     plot(grat_dirs, ds_spike_count(i,:))
-%     hold on
-% end
-% 
-% %% dsRGC tuning curve polar plot w merged TPs
-% 
-% theta = deg2rad(grat_dirs);
-% theta = [theta, theta(1)];
-% % radius = ds_spike_count(1,:);
-% % radius = [radius, radius(1)];
-% % polarplot(theta, radius)
-% 
-% for i = 1:length(ds_index)
-%     radius = ds_spike_count(i,:);
-%     radius = [radius, radius(1)];
-%     polarplot(theta, radius)
-%     hold on
-% end
 
 %% 
 
@@ -127,9 +85,8 @@ ds_cells = [ds_index; ds_cell_ids];
 single_ds_index = ds_cells(1,ds_now);
 single_ds_id = ds_cells(2,ds_now);
 
-%%
-savefile = 'ds_cells.mat';
-save(savefile, 'ds_cells');
+% savefile = append('ds_cells_', date, '.mat');
+% save(savefile, 'ds_cells');
 
 %% rasterplot by direction for single dsRGC w separate TPs
 
