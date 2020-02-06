@@ -2,7 +2,9 @@
 clear
 clc
 
-dataset_num = '02-sorted';
+% dataset_num = '02-sorted';
+dataset_num = '02';
+
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 % prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
@@ -65,28 +67,52 @@ selected_indices = intersect(x_finder, y_finder);
 ds_cell_ids = datarun.cell_ids(selected_indices);
 
 %%
-slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000-map/data000-map');
+% slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000-map/data000-map');
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000/data000');
+
 datarun_s = load_data(slave_path);
 datarun_s = load_neurons(datarun_s);
 datarun_s = load_params(datarun_s);
 datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 
-%%
-[map_list, failed_to_map_list] = map_ei(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
+%% NEED REWRITING
+[map_list, failed_to_map_list] = map_ei_custom(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
 fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
+% map_list(~cellfun('isempty',map_list))
+t = map_list';
+t2 = t(~cellfun('isempty', t))
+% t = sortrows(t)
+ 
+%%
+ds_slave_id_mapEI = cell2mat(map_list);
 
-%% 
-
-ds_now = 30; % range 1:length(ds_index)
-tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
+ds_slave_index_mapEI = [];
+for i = 1 : length(ds_slave_id_mapEI)
+    ds_slave_index_mapEI = [ds_slave_index_mapEI, find(datarun_s.cell_ids == ds_slave_id_mapEI(i))];
+end
+% only survivor after PCA and EI mapping: master id 2867 mapped to slave id 2674 index 40
 
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
-single_ds_index = ds_cells(1,ds_now);
-single_ds_id = ds_cells(2,ds_now);
-
-% savefile = append('ds_cells_', date, '.mat');
+% savefile = append('ds_cells_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
+
+
+% ds_now = 1; % checking if ds_master are really all ds cells
+% tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
+% single_ds_index = ds_cells(1,ds_now);
+% single_ds_id = ds_cells(2,ds_now);
+
+ds_now = 14; % only survivor after PCA and EI mapping
+
+% ds_master_index_mapPCA = [21 116 143 173 201 244 258 282];
+ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]; % result of map-analysis only. manually picked 
+
+% ds_slave_index_mapEI = [35, 55, 154]; % result of map_ei only. find by datarun.cell_ids. match master id to slave id to slave index
+% ds_slave_id_mapEI = [1983 2870 6421];
+
+ds_slave_index_map2 = 40; % result of first map-analysis, then map_ei -> master id 2867 mapped to 2674 = slave(40)
+ds_master_id_map2 = 2867;
 
 %% rasterplot by direction for single dsRGC w separate TPs
 
