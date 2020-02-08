@@ -165,10 +165,10 @@ for i = 1:length(master_indices)
             
             cell_list_map{1,master_indices(i)} = master_datarun.cell_ids(master_indices(i));
             cell_list_map{2,master_indices(i)} = slave_datarun.cell_ids(slave_indices(max_corr_index));
-            cell_list_map{3,master_indices(i)} = largest_corr;
+            cell_list_map{3,master_indices(i)} = largest_corr_col;
             
             if troubleshoot
-                fprintf('master cell_ID:%4d -> %4d (correlation:%1.3f) - next closest: %4d(%1.3f) %4d(%1.3f) %4d(%1.3f) - distance: %2.2fsd\n', master_datarun.cell_ids(master_indices(i)), cell_list_map{master_indices(i)}, largest_corr,...
+                fprintf('master cell_ID:%4d -> %4d (correlation:%1.3f) - next closest: %4d(%1.3f) %4d(%1.3f) %4d(%1.3f) - distance: %2.2fsd\n', master_datarun.cell_ids(master_indices(i)), slave_datarun.cell_ids(slave_indices(max_corr_index)), largest_corr,...
                     slave_datarun.cell_ids(slave_indices(t_corr_index(end-1))),t_corr(end-1), slave_datarun.cell_ids(slave_indices(t_corr_index(end-2))),t_corr(end-2), slave_datarun.cell_ids(slave_indices(t_corr_index(end-3))),t_corr(end-3),(largest_corr-t_corr(end-1))/robust_std(corr(i,:)) )
                 %pause(0.1)
             end

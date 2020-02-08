@@ -9,9 +9,9 @@ clc
 dataset_num = '00-map'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
+
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
 % datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
-
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
@@ -19,25 +19,17 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
 
-% tmp = load('ds_cells_20200206.mat', 'ds_cells');
-% ds_master = tmp.ds_cells;
-
-ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]; % result of map-analysis only. shifted bc master002 was spike sorted
-ds_slave_id_mapPCA = ds_master_id_mapPCA;
-ds_slave_index_mapPCA = [];
-% ??????
-
-% sanity = ismember(ds_slave_id_mapPCA, datarun_s.cell_ids(:))
-% sanity = uniquetol(datarun_s.cell_ids(:), ds_slave_id_mapPCA, 5)
-
-% ds_master_index_mapPCA = ds_master( 1, ismember(ds_master(2,:), ds_master_id_mapPCA) );
-% ds_master_mapPCA = [ds_master_index_mapPCA; ds_master_id_mapPCA];
-
-ds_slave_index_mapEI = [35, 55, 154]; % result of map_ei only. find by datarun.cell_ids. match master id to slave id to slave index
+load('ds_cell_map_20200207.mat', 'ds_cells', 'ds_map_all');
+flag = find(ds_map_all(:,1)==0);
+ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
+ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
+ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
 
 %% select cell & chop data000 into sections
-ds_slave_index_map2 = 40; % result of first map-analysis, then map_ei -> master id 2867 mapped to 2674 = slave(40)
-spike_time = datarun.spikes{ds_slave_index_map2, 1};
+
+ds_slave_id = ds_slave_index_map2(1);
+ds_slave_index = find(datarun_s.cell_ids == ds_slave_id);
+spike_time = datarun.spikes{ds_slave_index, 1};
 
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
