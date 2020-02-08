@@ -52,6 +52,12 @@ end
 
 scatter((vector_mags_120), (vector_mags_240))
 
+%% test consistency code
+[vector_sums_120_reg, vector_mags_120_reg, spike_var_flag_120] = get_vector_sums_consistency(datarun, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_240_reg, vector_mags_240_reg, spike_var_flag_240] = get_vector_sums_consistency(datarun, 'all', 'TP', 240, 'SP', 240);
+
+scatter((vector_mags_120_reg), (vector_mags_240_reg))
+
 %%
 % set x-y cuoff
 % cutoff_coord = [1.2, 1.2]; % leads to 47 failed_to_map out of 49 dsRGC in data006
