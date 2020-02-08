@@ -1,4 +1,4 @@
-%% changeable dataset_num & ds_now
+%% changeable dataset_num
 clear
 clc
 
@@ -78,29 +78,35 @@ datarun_s = load_params(datarun_s);
 datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 
 %%
-[map_list, failed_to_map_list] = map_ei_custom(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
+[map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
 fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
 
 %%
 t = map_list(1:2,:)';
 t2 = t(~cellfun('isempty', t));
-ds_map = cell2mat(reshape(t2,[length(t2)/2,2]))
+ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
 
-ds_master_id_mapEI = cell2mat(ds_map(:,1)); % map_ei only, corr threshold 0.85
-ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]; % map-analysis only. manually input
-ds_master_id_map2 = [2867 5105]; % survivor after map-analysis & map_ei
+ds_master_id_mapEI = ds_map_ei(:,1);                                      % map_ei only, corr threshold 0.85
+ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]';          % map-analysis only. manually input
+ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % survivor after map-analysis & map_ei
 
-ds_slave_id_mapEI = ds_map(:,2); 
+ds_slave_id_mapEI = ds_map_ei(:,2); 
 ds_slave_id_mapPCA = ds_master_id_mapPCA; 
-ds_slave_id_map2 = [2674, 4639];
+ds_slave_id_map2 = intersect(ds_slave_id_mapEI, ds_slave_id_mapPCA);
 
-ds_map_
+t1 = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
+t2 = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; ds_slave_id_map2];
+if length(t1) > length(t2)
+    t3 = zeros(length(t1) - length(t2), 1);
+    t2 = [t2; t3];
+end
+ds_map_all = [t1, t2];
 
-% savefile = append('ds_cells_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells');
+% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells', 'ds_map_all');
 
 %%
-single_ds_id = ds_master_id_mapEI(1); 
+single_ds_id = ds_master_id_map2(1); 
 tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
 single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
 

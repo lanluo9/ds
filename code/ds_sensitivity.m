@@ -19,22 +19,17 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
 
-load('ds_cell_map_20200207.mat', 'ds_cells', 'ds_map_all');
-
-
-
-% sanity = ismember(ds_slave_id_mapPCA, datarun_s.cell_ids(:))
-% sanity = uniquetol(datarun_s.cell_ids(:), ds_slave_id_mapPCA, 5)
-
-% ds_master_index_mapPCA = ds_master( 1, ismember(ds_master(2,:), ds_master_id_mapPCA) );
-% ds_master_mapPCA = [ds_master_index_mapPCA; ds_master_id_mapPCA];
-
-ds_slave_index_mapEI = [35, 55, 154]; % result of map_ei only. find by datarun.cell_ids. match master id to slave id to slave index
+load('ds_cell_map_20200208.mat', 'ds_cells', 'ds_map_all');
+flag = find(ds_map_all(:,1)==0);
+ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
+ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
+ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
 
 %% select cell & chop data000 into sections
 
-ds_slave_index_map2 = 40; % result of first map-analysis, then map_ei -> master id 2867 mapped to 2674 = slave(40)
-spike_time = datarun.spikes{ds_slave_index_map2, 1};
+ds_slave_id = 4639;
+ds_slave_index = find(datarun.cell_ids == ds_slave_id);
+spike_time = datarun.spikes{ds_slave_index, 1};
 
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
@@ -59,7 +54,7 @@ marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
-
+tic
 for m = 1: (length(marker))
     subplot(length(marker), 1, m)  
     marker_now = marker(m);
@@ -95,4 +90,4 @@ for m = 1: (length(marker))
         hold on
     end
 end
-
+toc

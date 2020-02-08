@@ -1,4 +1,4 @@
-function [cell_list_map, failed_cells, output_matrix, combo] = map_ei_custom(master_datarun, slave_datarun, varargin)
+function [cell_list_map, failed_cells, output_matrix] = map_ei(master_datarun, slave_datarun, varargin)
 % 
 % map_ei
 %
@@ -22,7 +22,7 @@ function [cell_list_map, failed_cells, output_matrix, combo] = map_ei_custom(mas
 %   slave_cell_type         'all'     cell type identifier for slave datarun
 %   electrode_threshold       5       electrodes with signals below electrode_threshold are set to 0
 %   significant_electrodes    10      there must be at least this number of electrodes with a significant signal
-%   corr_threshold           0.85     only cell pairs with correlation coefficients above this 
+%   corr_threshold           0.95     only cell pairs with correlation coefficients above this 
 %                                     threshold are reported
 %   space_only              true      use only the spatial information in the EI
 %   verbose                 false     logical for producing verbose output
@@ -40,7 +40,7 @@ p.addParamValue('significant_electrodes',   10,     @isnumeric);
 p.addParamValue('master_cell_type',         'all'             );
 p.addParamValue('slave_cell_type',          'all'             );
 p.addParamValue('electrode_threshold',      5,      @isnumeric);
-p.addParamValue('corr_threshold',           0.85,   @isnumeric);
+p.addParamValue('corr_threshold',           0.95,   @isnumeric);
 p.addParamValue('verbose',                  false,  @islogical);
 p.addParamValue('space_only',               true,   @islogical);
 p.addParamValue('troubleshoot',             false,  @islogical);
@@ -152,7 +152,6 @@ corr(isnan(corr)) = 0;
 %sort
 failed_cell_count = 0;
 cell_list_map = cell(1,length(master_datarun.cell_ids));
-combo = [];
 for i = 1:length(master_indices)
     %[largest_corr, max_corr_index] = max(corr(i,:));    
     [t_corr, t_corr_index] = sort(corr(i,:));
@@ -162,13 +161,9 @@ for i = 1:length(master_indices)
     if largest_corr >= corr_threshold 
         [largest_corr_col, max_corr_index_col] = max(corr(:,max_corr_index));
         if largest_corr==largest_corr_col
-            
-            cell_list_map{1,master_indices(i)} = master_datarun.cell_ids(master_indices(i));
-            cell_list_map{2,master_indices(i)} = slave_datarun.cell_ids(slave_indices(max_corr_index));
-            cell_list_map{3,master_indices(i)} = largest_corr_col;
-            
+            cell_list_map{master_indices(i)} = slave_datarun.cell_ids(slave_indices(max_corr_index));
             if troubleshoot
-                fprintf('master cell_ID:%4d -> %4d (correlation:%1.3f) - next closest: %4d(%1.3f) %4d(%1.3f) %4d(%1.3f) - distance: %2.2fsd\n', master_datarun.cell_ids(master_indices(i)), slave_datarun.cell_ids(slave_indices(max_corr_index)), largest_corr,...
+                fprintf('master cell_ID:%4d -> %4d (correlation:%1.3f) - next closest: %4d(%1.3f) %4d(%1.3f) %4d(%1.3f) - distance: %2.2fsd\n', master_datarun.cell_ids(master_indices(i)), cell_list_map{master_indices(i)}, largest_corr,...
                     slave_datarun.cell_ids(slave_indices(t_corr_index(end-1))),t_corr(end-1), slave_datarun.cell_ids(slave_indices(t_corr_index(end-2))),t_corr(end-2), slave_datarun.cell_ids(slave_indices(t_corr_index(end-3))),t_corr(end-3),(largest_corr-t_corr(end-1))/robust_std(corr(i,:)) )
                 %pause(0.1)
             end

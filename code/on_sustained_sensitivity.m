@@ -1,33 +1,41 @@
-% sensitivity plot for single cell
-% later will import ds cell id list to achieve sequential plotting for
-% every single ds cell
+%% load master data
 
-%% load data w changeable dataset_num & ds_now
 clear
 clc
 
-dataset_num = '00-map'; % dim flashes to test absolute sensitivity
+dataset_num = '02-sorted';
 prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/All_Staff/';
-
+% prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
-% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
+
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
+datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
 
-%% load ds cell identified in master 
+%% load slave data
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000-map/data000-map');
 
-load('ds_cell_map_20200207.mat', 'ds_cells', 'ds_map_all');
-flag = find(ds_map_all(:,1)==0);
-ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
-ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
-ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
+datarun_s = load_data(slave_path);
+datarun_s = load_neurons(datarun_s);
+datarun_s = load_params(datarun_s);
+datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 
-%% select cell & chop data000 into sections
+%% map ON sustained cell master id
+on_sus_cell_ids = importdata('data002-sorted.fakeclassification.txt');
 
-ds_slave_id = ds_slave_index_map2(1);
+[map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', on_sus_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
+fprintf('failed %d neurons out of %d neurons \n', length(failed_to_map_list), length(on_sus_cell_ids)); 
+fprintf('mapped %d neurons out of %d neurons \n', length(on_sus_cell_ids)-length(failed_to_map_list), length(on_sus_cell_ids)); 
+
+t = map_list(1:2,:)';
+t = t(~cellfun('isempty', t));
+on_sus_map_ei = cell2mat(reshape(t,[length(t)/2,2]));
+
+%% select ON sustained cell & chop data000 into sections
+
+ds_slave_id = on_sus_map_ei(0,2);
 ds_slave_index = find(datarun_s.cell_ids == ds_slave_id);
 spike_time = datarun.spikes{ds_slave_index, 1};
 
@@ -53,7 +61,8 @@ section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
-%% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
+%% sensitivity plot for ON sustained cell
+% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 
 for m = 1: (length(marker))
     subplot(length(marker), 1, m)  
