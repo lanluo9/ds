@@ -46,31 +46,31 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-%% test case
-datarun_fake = datarun;
-i = 1;
-while i <= 600
-    datarun_fake.spikes{1,1}(end+1) = 0.59;
-    i = i+1;
-end
+% %% test case
+% datarun_fake = datarun;
+% i = 1;
+% while i <= 600
+%     datarun_fake.spikes{1,1}(end+1) = 0.59;
+%     i = i+1;
+% end
+% 
+% %% test consistency code
+% [vector_sums_120_reg, vector_mags_120_reg, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
+% perc = sum(sum(outlier_flag)) / (size(outlier_flag,1)*size(outlier_flag,2))
+% 
+% % [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
+% 
+% % scatter((vector_mags_120_reg), (vector_mags_240_reg))
+% 
+% % n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
+% % n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
+% % n = length(spike_var_flag_120)
 
 %% scatter plot of vector sums for two different gratings.
 [vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
-% [vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
 
-% scatter((vector_mags_120), (vector_mags_240))
-
-%% test consistency code
-[vector_sums_120_reg, vector_mags_120_reg, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
-perc = sum(sum(outlier_flag)) / (size(outlier_flag,1)*size(outlier_flag,2))
-
-% [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
-
-% scatter((vector_mags_120_reg), (vector_mags_240_reg))
-
-% n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
-% n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
-% n = length(spike_var_flag_120)
+scatter((vector_mags_120), (vector_mags_240))
 
 %%
 % set x-y cuoff

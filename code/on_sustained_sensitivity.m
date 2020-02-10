@@ -104,8 +104,10 @@ end
 
 %% ON sus cells overlay
 tic
-% for i = 1 : size(on_sus_map_ei,1)
-for i = 3 : 5
+for i = 1 : size(on_sus_map_ei,1)
+% for i = 3 : 5 % took an hour! wth
+
+%     i = 1;
     ds_slave_id = on_sus_map_ei(i,2);
     ds_slave_index = find(datarun_s.cell_ids == ds_slave_id);
     spike_time = datarun_s.spikes{ds_slave_index, 1};
