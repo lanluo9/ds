@@ -46,12 +46,6 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-%% scatter plot of vector sums for two different gratings.
-[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
-[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
-
-scatter((vector_mags_120), (vector_mags_240))
-
 %% test case
 datarun_fake = datarun;
 i = 1;
@@ -60,8 +54,16 @@ while i <= 600
     i = i+1;
 end
 
+%% scatter plot of vector sums for two different gratings.
+[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
+% [vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
+
+% scatter((vector_mags_120), (vector_mags_240))
+
 %% test consistency code
-[vector_sums_120_reg, vector_mags_120_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_120_reg, vector_mags_120_reg, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
+perc = sum(sum(outlier_flag)) / (size(outlier_flag,1)*size(outlier_flag,2))
+
 % [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
 
 % scatter((vector_mags_120_reg), (vector_mags_240_reg))

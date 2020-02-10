@@ -1,4 +1,4 @@
-function [vector_sums, vector_mags, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun, cell_spec, varargin)
+function [vector_sums, vector_mags, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun, cell_spec, varargin)
 %
 % usage: function spike_times = get_grating_spike_times(datarun, cell_ids, varargin)
 %
@@ -38,8 +38,8 @@ num_rgcs = length(cell_indices);
 %vector_mags = zeros(num_rgcs, 1);
 spike_counts = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
 spike_count_rep = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION), datarun.stimulus.repetitions);
-var_flag_rep = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-var_flag_cell = zeros(num_rgcs, 1);
+outlier_rep = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+outlier_flag = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
 
 
 for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
@@ -52,37 +52,18 @@ for rgc = 1:num_rgcs
     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
         tmp_counter = 0;
         for g_rep = 1:datarun.stimulus.repetitions
-            tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            
             spike_count_rep(rgc, g_dir, g_rep) = length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            outlier_flag(rgc, g_dir) = sum(isoutlier(spike_count_rep(rgc, g_dir, :), 'median', 'ThresholdFactor', 9));
+            
+            outlier_rep{rgc, g_dir} = isoutlier(spike_count_rep(rgc, g_dir, :), 'median', 'ThresholdFactor', 9);
+            if outlier_rep{rgc, g_dir}(g_rep) == 0
+                tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            end
+                        
         end
         spike_counts(rgc, g_dir) = tmp_counter;
     end
-end
-
-
-var_range = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-mean_spike_count = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-
-for rgc = 1:num_rgcs
-    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
-
-        var_range(rgc, g_dir) = 3 * std(spike_count_rep(rgc, g_dir, :));
-        mean_spike_count(rgc, g_dir) = mean(spike_count_rep(rgc, g_dir, :));
-        threshold = mean_spike_count(rgc, g_dir) + var_range(rgc, g_dir);
-        rep_var = 0;
-            
-        for g_rep = 1:datarun.stimulus.repetitions
-            if spike_count_rep(rgc, g_dir, g_rep) >= threshold
-                rep_var = rep_var + (spike_count_rep(rgc, g_dir, g_rep) - threshold);
-                spike_count_rep(rgc, g_dir, g_rep) = threshold;
-            end
-        end
-        
-        var_flag_rep(rgc, g_dir) = var_flag_rep(rgc, g_dir) + rep_var;
-        spike_counts(rgc, g_dir) = sum(spike_count_rep(rgc, g_dir, :));
-        
-    end
-    var_flag_cell(rgc) = var_flag_cell(rgc) + var_flag_rep(rgc, g_dir);
 end
 
 
