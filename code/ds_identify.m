@@ -61,14 +61,14 @@ while i <= 600
 end
 
 %% test consistency code
-[vector_sums_120_reg, vector_mags_120_reg, spike_var_flag_120] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
-[vector_sums_240_reg, vector_mags_240_reg, spike_var_flag_240] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
+[vector_sums_120_reg, vector_mags_120_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
+% [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
 
 % scatter((vector_mags_120_reg), (vector_mags_240_reg))
 
-n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
-n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
-n = length(spike_var_flag_120)
+% n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
+% n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
+% n = length(spike_var_flag_120)
 
 %%
 % set x-y cuoff

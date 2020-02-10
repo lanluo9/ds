@@ -103,7 +103,7 @@ for m = 1: (length(marker))
 end
 
 %% ON sus cells overlay
-
+tic
 % for i = 1 : size(on_sus_map_ei,1)
 for i = 1 : 2
     ds_slave_id = on_sus_map_ei(i,2);
@@ -146,3 +146,4 @@ for i = 1 : 2
         end
     end
 end
+toc

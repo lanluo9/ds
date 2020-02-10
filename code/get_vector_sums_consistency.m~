@@ -52,29 +52,34 @@ for rgc = 1:num_rgcs
         tmp_counter = 0;
         for g_rep = 1:datarun.stimulus.repetitions
             tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            spike_count_rep(rgc, g_dir, g_rep) = length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
         end
         spike_counts(rgc, g_dir) = tmp_counter;
     end
 end
 
+
+var_range = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+mean_spike_count = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+
 for rgc = 1:num_rgcs
     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+
         rep_var = 0;
-        
-        for g_rep = 1:datarun.stimulus.repetitions
-            spike_count_rep(rgc, g_dir, g_rep) = length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
-        end
-        
-        for g_rep = 1:datarun.stimulus.repetitions
+        var_range(rgc, g_dir) = 3 * std(spike_count_rep(rgc, g_dir, :));
+        mean_spike_count(rgc, g_dir) = mean(spike_count_rep(rgc, g_dir, :));
+        threshold
             
-            
-            if spike_count_rep(rgc, g_dir, g_rep) >= mean_spike_count + var_range
+        for g_rep = 1:datarun.stimulus.repetitions
+            if spike_count_rep(rgc, g_dir, g_rep) >= threshold
                 rep_var = rep_var + spike_count_rep(rgc, g_dir, g_rep) - (mean_spike_count + var_range);
                 spike_count_rep(rgc, g_dir, g_rep) = mean_spike_count + var_range;
             end
         end
+        
         spike_var_flag(rgc) = spike_var_flag(rgc) + rep_var;
         spike_counts(rgc, g_dir) = sum(spike_count_rep(rgc, g_dir, :));
+        
     end
 end
 
