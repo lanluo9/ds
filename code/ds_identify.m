@@ -9,15 +9,15 @@ prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 % prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, ...
-    '/data0', dataset_num);
-% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002-sorted';
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/rerun/data0', dataset_num, ...
+    '/data0', dataset_num); % rerun
+% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 
 %% load data
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
-datarun = load_params(datarun);
-datarun = load_ei(datarun, 'all', 'array_type', 519);
+% datarun = load_params(datarun);
+% datarun = load_ei(datarun, 'all', 'array_type', 519);
 datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s', dataset_num, '.txt');
 % datarun.names.stimulus_path = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2019-11-21-0/stimuli/s02.txt';
 
@@ -70,7 +70,7 @@ end
 [vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
 [vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
 
-scatter((vector_mags_120), (vector_mags_240))
+% scatter((vector_mags_120), (vector_mags_240))
 
 %%
 % set x-y cuoff
@@ -88,14 +88,36 @@ ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
 
+% savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells');
+% 
+% %%
+% load('ds_cell_map_20200210.mat', 'ds_map_all'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+% ds_map_all
+% 
+% ds_cells_002 = load('ds_master_002_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+% ds_cells_002
+% 
+% ds_cells_002_sorted = load('ds_master_002_sorted_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+% ds_cells_002_sorted
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%
-slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000-map/data000-map');
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/rerun/data000-map/data000-map');
 % slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data000/data000');
 
 datarun_s = load_data(slave_path);
 datarun_s = load_neurons(datarun_s);
-datarun_s = load_params(datarun_s);
-datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
+% datarun_s = load_params(datarun_s);
+% datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
+
+%%
+id_kept = intersect(datarun.cell_ids, datarun_s.cell_ids)
+intersect(id_kept, ds_cell_ids)
+length(datarun.cell_ids)
+length(datarun_s.cell_ids)
+length(id_kept)
 
 %%
 [map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
@@ -122,8 +144,12 @@ if length(t1) > length(t2)
 end
 ds_map_all = [t1, t2];
 
-% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells', 'ds_map_all');
+savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
+save(savefile, 'ds_cells', 'ds_map_all');
+
+%% sanity check
+ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
+% on_sus_cell_ids = importdata('data007-ON-sustained-id.txt'); % map ON sustained cell master id
 
 %%
 single_ds_id = ds_master_id_map2(1); 

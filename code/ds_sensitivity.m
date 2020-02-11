@@ -10,20 +10,28 @@ dataset_num = '00-map'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
-% datapath = '/Volumes/???/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/rerun/data0', dataset_num, '/data0', dataset_num);
+% datapath = '/Volumes/___/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
-datarun = load_params(datarun);
-datarun = load_ei(datarun, 'all', 'array_type', 519);
+% datarun = load_params(datarun);
+% datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
 
-load('ds_cell_map_20200208.mat', 'ds_cells', 'ds_map_all');
+load('ds_cell_map_20200210.mat', 'ds_map_all');
 flag = find(ds_map_all(:,1)==0);
 ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
 ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
 ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
+% ds_map_all
+% 
+% ds_cells_002 = load('ds_master_002_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+% ds_cells_002
+% 
+% ds_cells_002_sorted = load('ds_master_002_sorted_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+% ds_cells_002_sorted
+
 
 %% select cell & chop data000 into sections
 
