@@ -91,15 +91,15 @@ ds_cells = [ds_index; ds_cell_ids];
 % savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
 % 
-% %%
-% load('ds_cell_map_20200210.mat', 'ds_map_all'); % identical ds_master_002_dat.mat except shifts resulting from sorting
-% ds_map_all
-% 
-% ds_cells_002 = load('ds_master_002_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
-% ds_cells_002
-% 
-% ds_cells_002_sorted = load('ds_master_002_sorted_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
-% ds_cells_002_sorted
+%%
+load('ds_cell_map_20200210.mat', 'ds_map_all'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+ds_map_all
+
+ds_cells_002 = load('ds_master_002_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+ds_cells_002.ds_cells
+
+ds_cells_002_sorted = load('ds_master_002_sorted_20200211.mat'); % identical ds_master_002_dat.mat except shifts resulting from sorting
+ds_cells_002_sorted.ds_cells
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -113,11 +113,19 @@ datarun_s = load_neurons(datarun_s);
 % datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 
 %%
-id_kept = intersect(datarun.cell_ids, datarun_s.cell_ids)
+id_kept = intersect(datarun.cell_ids, datarun_s.cell_ids);
 intersect(id_kept, ds_cell_ids)
 length(datarun.cell_ids)
 length(datarun_s.cell_ids)
 length(id_kept)
+
+s = ones(length(datarun_s.cell_ids), 1);
+m = 2*ones(length(datarun.cell_ids), 1);
+j1 = [datarun_s.cell_ids, datarun.cell_ids+0.44]';
+j1 = sort(j1);
+% j2 = [s;m];
+% j = [j1,j2];
+% j = sortrow(j,[1,-2]);
 
 %%
 [map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
