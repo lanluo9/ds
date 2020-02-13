@@ -10,7 +10,7 @@ dataset_num = '00-map'; % dim flashes to test absolute sensitivity
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/rerun/data0', dataset_num, '/data0', dataset_num);
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, '/data0', dataset_num);
 % datapath = '/Volumes/___/lab/Experiments/Array/Analysis/2019-11-21-0/data002/data002';
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
@@ -35,7 +35,7 @@ ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
 
 %% select cell & chop data000 into sections
 
-ds_slave_id = 2867; % trust mapPCA: 2867, 5105
+ds_slave_id = 4639; % trust mapPCA: 2867, 5105
 ds_slave_index = find(datarun.cell_ids == ds_slave_id); % but 000-map-002 does not contain such slave id
 spike_time = datarun.spikes{ds_slave_index, 1};
 
