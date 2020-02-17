@@ -85,8 +85,8 @@ ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
 
-savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
-save(savefile, 'ds_cells');
+% savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells');
 
 %%
 slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/high_cont/data000-map/data000-map');
@@ -125,12 +125,11 @@ ds_map_all = [t1, t2];
 savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
 save(savefile, 'ds_cells', 'ds_map_all');
 
-%%
-single_ds_id = ds_master_id_mapPCA(8); 
+%% rasterplot by direction for single dsRGC w separate TPs
+% single_ds_id = ds_master_id_mapPCA(8); 
+single_ds_id = 7291;
 tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
 single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
-
-%% rasterplot by direction for single dsRGC w separate TPs
 
 subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
 for dir = 1:length(grat_dirs) 

@@ -27,7 +27,8 @@ ds_map_all
 
 %% select cell & chop data000 into sections
 
-ds_slave_id = ds_slave_id_mapPCA(5); % trust mapPCA more
+% ds_slave_id = ds_slave_id_mapPCA(8); % trust mapPCA more
+ds_slave_id = 3018;
 ds_slave_index = find(datarun.cell_ids == ds_slave_id); % but 000-map-002 does not contain such slave id
 spike_time = datarun.spikes{ds_slave_index, 1};
 
@@ -90,4 +91,4 @@ for m = 1: (length(marker))
         hold on
     end
 end
-toc
+toc % takes 8-10 min to generate a single cell sensitivity plot. needs optim
