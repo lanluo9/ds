@@ -31,6 +31,16 @@ stim_dur = 8;
 num_reps = datarun.stimulus.repetitions;
 num_rgcs = length(datarun.cell_ids);
 
+%% test case
+datarun_fake = datarun;
+i = 1;
+while i <= 600
+    datarun_fake.spikes{1,1}(end+1) = 0.59;
+    i = i+1;
+end
+datarun_fake.spikes{1, 1} = sort(datarun_fake.spikes{1, 1});
+datarun = datarun_fake;
+
 %%
 g_sp = datarun.stimulus.params.SPATIAL_PERIOD(1);
 for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
@@ -43,25 +53,17 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-% %% test case
-% datarun_fake = datarun;
-% i = 1;
-% while i <= 600
-%     datarun_fake.spikes{1,1}(end+1) = 0.59;
-%     i = i+1;
-% end
-% 
-% %% test consistency code
-% [vector_sums_120_reg, vector_mags_120_reg, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
-% perc = sum(sum(outlier_flag)) / (size(outlier_flag,1)*size(outlier_flag,2))
-% 
-% % [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
-% 
-% % scatter((vector_mags_120_reg), (vector_mags_240_reg))
-% 
-% % n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
-% % n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
-% % n = length(spike_var_flag_120)
+%% test consistency code
+[vector_sums_120_reg, vector_mags_120_reg, outlier_rep, outlier_flag] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 120, 'SP', 240);
+perc = sum(sum(outlier_flag)) / (size(outlier_flag,1)*size(outlier_flag,2))
+
+% [vector_sums_240_reg, vector_mags_240_reg, var_flag_rep, var_flag_cell] = get_vector_sums_consistency(datarun_fake, 'all', 'TP', 240, 'SP', 240);
+
+% scatter((vector_mags_120_reg), (vector_mags_240_reg))
+
+% n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
+% n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
+% n = length(spike_var_flag_120)
 
 %% scatter plot of vector sums for two different gratings.
 [vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
@@ -122,14 +124,15 @@ if length(t1) > length(t2)
 end
 ds_map_all = [t1, t2];
 
-savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
-save(savefile, 'ds_cells', 'ds_map_all');
+% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells', 'ds_map_all');
 
 %% rasterplot by direction for single dsRGC w separate TPs
 % single_ds_id = ds_master_id_mapPCA(8); 
-single_ds_id = 7291;
+single_ds_id = 31;
 tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
-single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+% single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+single_ds_index = 1;
 
 subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
 for dir = 1:length(grat_dirs) 

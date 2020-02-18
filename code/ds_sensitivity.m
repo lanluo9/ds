@@ -91,4 +91,4 @@ for m = 1: (length(marker))
         hold on
     end
 end
-toc % takes 8-10 min to generate a single cell sensitivity plot. needs optim
+toc % takes 7-9 min to generate a single cell sensitivity plot. needs optim
