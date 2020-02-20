@@ -12,8 +12,8 @@ event = event(~isnan(event)); % delete NaNs
 
 %% sanity checks
 
-white_mean = mean(white)
-white_var = std(white)
+white_mean = mean(white);
+white_var = std(white);
 % figure; plot(white)
 
 if min(event) < min(time_seq) || max(event) > max(time_seq)
