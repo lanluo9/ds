@@ -53,19 +53,37 @@ for rgc = 1:num_rgcs
 end
 
 %%
-% bin spike time every rep
+% bin spike time every rep to get vector. also get vector mean.
 binned = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION), datarun.stimulus.repetitions);
+binned_mean = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+
+for rgc = 1:num_rgcs
+    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+        binnum = ceil(spike_counts(rgc, g_dir) / datarun.stimulus.repetitions / 2 + 0.001); % number of bins = half of average spike number per rep. if uniform dist, binned=[2,2,2...2]
+        binned_mean{rgc, g_dir} = zeros(1, binnum);
+        for g_rep = 1:datarun.stimulus.repetitions
+            spike_time_rep = tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep}; % time range 0-8s
+            [binned{rgc, g_dir, g_rep}, ~] = histcounts(spike_time_rep, binnum); % binned = vector of nspike in each bin
+            binned_mean{rgc, g_dir} = binned_mean{rgc, g_dir} + binned{rgc, g_dir, g_rep};
+        end
+        binned_mean{rgc, g_dir} = binned_mean{rgc, g_dir} / datarun.stimulus.repetitions;
+    end
+end
+
+%%
+% template matching: dot product of every vector w the mean vector
+binned_match = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION), datarun.stimulus.repetitions);
 for rgc = 1:num_rgcs
     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
         for g_rep = 1:datarun.stimulus.repetitions
-            spike_time_rep = tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep}; % time range 0-8s
-            binnum = ceil(spike_counts(rgc, g_dir) / datarun.stimulus.repetitions / 2 + 0.001); % number of bins = half of average spike number per rep. if uniform dist, binned=[2,2,2...2]
-            [binned{rgc, g_dir, g_rep}, ~] = histcounts(spike_time_rep, binnum); % binned = vector of nspike in each bin
+            binned_match(rgc, g_dir, g_rep) = binned{rgc, g_dir, g_rep} * binned_mean{rgc, g_dir}';
         end
     end
 end
 
-binned_mean = mean(binned,3);
+%%
+% find outlier among 6 reps
+isoutlier(binned_match(8, 6, :), 'median', 'ThresholdFactor', 9);
 
 %%
 for rgc = 1:num_rgcs
