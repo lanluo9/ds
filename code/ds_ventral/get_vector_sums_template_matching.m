@@ -83,7 +83,7 @@ end
 
 %%
 % find outlier among 6 reps
-isoutlier(binned_match(rgc, g_dir, :));
+isoutlier(binned_match(8, 6, :), 'median', 'ThresholdFactor', 9);
 
 %%
 for rgc = 1:num_rgcs
