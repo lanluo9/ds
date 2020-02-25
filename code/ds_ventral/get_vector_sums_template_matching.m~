@@ -65,6 +65,8 @@ for rgc = 1:num_rgcs
     end
 end
 
+binned_mean = mean(binned,3);
+
 %%
 for rgc = 1:num_rgcs
     norm_factor = max(spike_counts(rgc, :));

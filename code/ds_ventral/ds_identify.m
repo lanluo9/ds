@@ -54,9 +54,9 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
 end
 
 %% test consistency code
-[vector_sums_120, vector_mags_120, outlier_rep_120, outlier_flag_120] = get_vector_sums_consistency(datarun, 'all', 'TP', 120, 'SP', 240);
-perc = sum(sum(outlier_flag_120)) / (size(outlier_flag_120,1)*size(outlier_flag_120,2))
-[vector_sums_240, vector_mags_240, outlier_rep_240, outlier_flag_240] = get_vector_sums_consistency(datarun, 'all', 'TP', 240, 'SP', 240);
+[vector_sums_120, vector_mags_120] = get_vector_sums_template_matching(datarun, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums_template_matching(datarun, 'all', 'TP', 240, 'SP', 240);
+% perc = sum(sum(outlier_flag_120)) / (size(outlier_flag_120,1)*size(outlier_flag_120,2))
 
 
 % scatter((vector_mags_120_reg), (vector_mags_240_reg))
@@ -73,10 +73,6 @@ perc = sum(sum(outlier_flag_120)) / (size(outlier_flag_120,1)*size(outlier_flag_
 
 %%
 % set x-y cuoff
-% cutoff_coord = [1.2, 1.2]; % leads to 47 failed_to_map out of 49 dsRGC in data006
-% cutoff_coord = [1.0, 1.0]; % leads to 50 failed_to_map out of 53 dsRGC in data006
-
-% cutoff_coord = [0.9, 1.2]; % leads to 25 failed_to_map out of 28 dsRGC in data002
 cutoff_coord = [1.0, 1.0]; % leads to 29 failed_to_map out of 32 dsRGC in data002
 
 x_finder = find(vector_mags_120 > cutoff_coord(1));
