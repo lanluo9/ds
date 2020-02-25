@@ -34,11 +34,11 @@ num_rgcs = length(datarun.cell_ids);
 %% test case
 datarun_fake = datarun;
 i = 1;
-while i <= 6000
-    datarun_fake.spikes{1,1}(end+1) = 0.59 + i/1000000;
+while i <= 600
+    datarun_fake.spikes{8,1}(end+1) = 0.28 + i/1000000;
     i = i+1;
 end
-datarun_fake.spikes{1, 1} = sort(datarun_fake.spikes{1, 1});
+datarun_fake.spikes{8,1} = sort(datarun_fake.spikes{8,1});
 datarun = datarun_fake;
 
 %%
@@ -129,10 +129,10 @@ ds_cells = [ds_index; ds_cell_ids];
 
 %% rasterplot by direction for single dsRGC w separate TPs
 % single_ds_id = ds_master_id_mapPCA(8); 
-single_ds_id = 31;
-tp_set = 2; % range 1:length(grat_TPs), in this case 1:3
+single_ds_id = datarun_fake.cell_ids(8);
+tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
 % single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
-single_ds_index = 1;
+single_ds_index = 8;
 
 dir_spike_count = [];
 for dir = 1:length(grat_dirs)
