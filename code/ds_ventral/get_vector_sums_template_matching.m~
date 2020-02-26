@@ -83,7 +83,19 @@ end
 
 %%
 % find outlier among 6 reps
-isoutlier(binned_match(8, 6, :), 'median', 'ThresholdFactor', 9);
+outlier_flag = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+outlier_rep = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+outlier_num = 
+for rgc = 1:num_rgcs
+    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+        for g_rep = 1:datarun.stimulus.repetitions
+            outlier_flag{rgc, g_dir} = isoutlier(binned_match(rgc, g_dir, :), 'median', 'ThresholdFactor', 9);
+            if sum(outlier_flag{rgc, g_dir}) > 0 
+                outlier_rep{rgc, g_dir} = find(outlier_flag{rgc, g_dir});
+            end
+        end
+    end
+end
 
 %%
 for rgc = 1:num_rgcs
