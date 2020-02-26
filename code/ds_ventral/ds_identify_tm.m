@@ -54,8 +54,8 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
 end
 
 %% test consistency code
-[vector_sums_120, vector_mags_120] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 120, 'SP', 240);
-[vector_sums_240, vector_mags_240] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 240, 'SP', 240);
+[vector_sums_120, vector_mags_120] = get_vector_sums_template_matching(datarun, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums_template_matching(datarun, 'all', 'TP', 240, 'SP', 240);
 % perc = sum(sum(outlier_flag_120)) / (size(outlier_flag_120,1)*size(outlier_flag_120,2))
 
 

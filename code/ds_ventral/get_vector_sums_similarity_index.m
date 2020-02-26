@@ -1,4 +1,4 @@
-function [vector_sums, vector_mags] = get_vector_sums_template_matching(datarun, cell_spec, varargin)
+function [vector_sums, vector_mags] = get_vector_sums_similarity_index(datarun, cell_spec, varargin)
 %
 % usage: function spike_times = get_grating_spike_times(datarun, cell_ids, varargin)
 %
@@ -64,6 +64,7 @@ for rgc = 1:num_rgcs
         for g_rep = 1:datarun.stimulus.repetitions
             spike_time_rep = tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep}; % time range 0-8s
             [binned{rgc, g_dir, g_rep}, ~] = histcounts(spike_time_rep, binnum); % binned = vector of nspike in each bin
+            binned{rgc, g_dir, g_rep} = binned{rgc, g_dir, g_rep} / (norm(binned{rgc, g_dir, g_rep}) + 0.001);
             binned_mean{rgc, g_dir} = binned_mean{rgc, g_dir} + binned{rgc, g_dir, g_rep};
         end
         binned_mean{rgc, g_dir} = binned_mean{rgc, g_dir} / datarun.stimulus.repetitions;
