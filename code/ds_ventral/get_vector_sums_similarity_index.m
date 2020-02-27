@@ -84,33 +84,35 @@ for rgc = 1:num_rgcs
     end
 end
 similarity_index = mean(binned_match,3);
+similarity_index = similarity_index / max(similarity_index(:));
 
-%%
-% find outlier among 6 reps
-outlier_flag = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-outlier_rep = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-outlier_num = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-for rgc = 1:num_rgcs
-    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
-        for g_rep = 1:datarun.stimulus.repetitions
-            outlier_flag{rgc, g_dir} = isoutlier(binned_match(rgc, g_dir, :), 'median', 'ThresholdFactor', 15);
-            if sum(outlier_flag{rgc, g_dir}) > 0 
-                outlier_rep{rgc, g_dir} = find(outlier_flag{rgc, g_dir});
-                outlier_num(rgc, g_dir) = length(outlier_rep{rgc, g_dir});
-            end
-        end
-    end
-end
-
-outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep);
+% %%
+% % find outlier among 6 reps
+% outlier_flag = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+% outlier_rep = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+% outlier_num = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+% for rgc = 1:num_rgcs
+%     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+%         for g_rep = 1:datarun.stimulus.repetitions
+%             outlier_flag{rgc, g_dir} = isoutlier(binned_match(rgc, g_dir, :), 'median', 'ThresholdFactor', 6);
+%             if sum(outlier_flag{rgc, g_dir}) > 0 
+%                 outlier_rep{rgc, g_dir} = find(outlier_flag{rgc, g_dir});
+%                 outlier_num(rgc, g_dir) = length(outlier_rep{rgc, g_dir});
+%             end
+%         end
+%     end
+% end
+% 
+% outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep);
 
 %%
 for rgc = 1:num_rgcs
     norm_factor = max(spike_counts(rgc, :));
     
-    x_cords = (spike_counts(rgc,:) ./ norm_factor) .* sind(datarun.stimulus.params.DIRECTION);
-    y_cords = (spike_counts(rgc,:) ./ norm_factor) .* cosd(datarun.stimulus.params.DIRECTION);
+    x_cords = (spike_counts(rgc,:) ./ norm_factor) .* sind(datarun.stimulus.params.DIRECTION) .* similarity_index(rgc,:);
+    y_cords = (spike_counts(rgc,:) ./ norm_factor) .* cosd(datarun.stimulus.params.DIRECTION) .* similarity_index(rgc,:);
 
     vector_sums(rgc,:) = [sum(x_cords), sum(y_cords)];
     vector_mags(rgc) = norm([sum(x_cords), sum(y_cords)]);   
 end
+

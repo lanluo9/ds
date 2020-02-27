@@ -32,10 +32,15 @@ num_reps = datarun.stimulus.repetitions;
 num_rgcs = length(datarun.cell_ids);
 
 %% test case
+% cell index 8: low firing neuron w abnormal burst of high firing in 1 repetition (both TP 120 & 240)
+% cell index 1: high firing neuron w abnormal uniformly added spikes in 1 direction (both TP 120 & 240)
+% cell index 4: high firing neuron w abnormal uniformly added spikes in all directions (both TP 120 & 240)
+
 datarun_fake = datarun;
 i = 1;
 while i <= 600
     datarun_fake.spikes{8,1}(end+1) = 0.28 + i/1000000;
+    datarun_fake.spikes{8,1}(end+1) = 2.98 + i/1000000;
     i = i+1;
 end
 datarun_fake.spikes{8,1} = sort(datarun_fake.spikes{8,1});
@@ -54,26 +59,16 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
 end
 
 %% test consistency code
-[vector_sums_120, vector_mags_120] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 120, 'SP', 240);
-[vector_sums_240, vector_mags_240] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 240, 'SP', 240);
-% perc = sum(sum(outlier_flag_120)) / (size(outlier_flag_120,1)*size(outlier_flag_120,2))
+% [vector_sums_120_original, vector_mags_120_original] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
+% get_vector_sums_similarity_index
+[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
 
-
-% scatter((vector_mags_120_reg), (vector_mags_240_reg))
-
-% n_var_120 =  length(spike_var_flag_120(spike_var_flag_120~=0))
-% n_var_240 =  length(spike_var_flag_240(spike_var_flag_240~=0))
-% n = length(spike_var_flag_120)
-
-% %% scatter plot of vector sums for two different gratings.
-% [vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
-% [vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
-
-% scatter((vector_mags_120), (vector_mags_240))
+scatter((vector_mags_120), (vector_mags_240))
 
 %%
 % set x-y cuoff
-cutoff_coord = [1.0, 1.0]; % leads to 29 failed_to_map out of 32 dsRGC in data002
+cutoff_coord = [0.9, 0.9]; 
 
 x_finder = find(vector_mags_120 > cutoff_coord(1));
 y_finder = find(vector_mags_240 > cutoff_coord(2));
@@ -85,43 +80,6 @@ ds_cells = [ds_index; ds_cell_ids];
 
 % savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
-
-% %%
-% slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/high_cont/data000-map/data000-map');
-% 
-% datarun_s = load_data(slave_path);
-% datarun_s = load_neurons(datarun_s);
-% datarun_s = load_params(datarun_s);
-% datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
-% 
-% %%
-% [map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
-% fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
-% 
-% %%
-% t = map_list(1:2,:)';
-% t2 = t(~cellfun('isempty', t));
-% ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
-% 
-% ds_master_id_mapEI = ds_map_ei(:,1);                                      % map_ei only, corr threshold 0.85
-% ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]';          % map-analysis only. manually input
-% % ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
-% ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % survivor after map-analysis & map_ei
-% 
-% ds_slave_id_mapEI = ds_map_ei(:,2); 
-% ds_slave_id_mapPCA = ds_master_id_mapPCA; 
-% ds_slave_id_map2 = intersect(ds_slave_id_mapEI, ds_slave_id_mapPCA);
-% 
-% t1 = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
-% t2 = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; ds_slave_id_map2];
-% if length(t1) > length(t2)
-%     t3 = zeros(length(t1) - length(t2), 1);
-%     t2 = [t2; t3];
-% end
-% ds_map_all = [t1, t2];
-
-% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells', 'ds_map_all');
 
 %% rasterplot by direction for single dsRGC w separate TPs
 % single_ds_id = ds_master_id_mapPCA(8); 
@@ -146,11 +104,6 @@ for dir = 1:length(grat_dirs)
     end
     dir_spike_count = [dir_spike_count, tp_spike_count];
 end
-
-% ds_spike_count = [];
-% for i = 1:length(ds_index)
-%     ds_spike_count = [ds_spike_count; dir_spike_count(ds_index(i),:)];
-% end
 
 %%
 

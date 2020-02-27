@@ -59,7 +59,8 @@ binned_mean = cell(num_rgcs, length(datarun.stimulus.params.DIRECTION));
 
 for rgc = 1:num_rgcs
     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
-        binnum = ceil(spike_counts(rgc, g_dir) / datarun.stimulus.repetitions / 2 + 0.001); % number of bins = half of average spike number per rep. if uniform dist, binned=[2,2,2...2]
+        binnum = ceil(8000 / 15); % bin size = 15 ms
+%         binnum = ceil(spike_counts(rgc, g_dir) / datarun.stimulus.repetitions / 2 + 0.001); % number of bins = half of average spike number per rep. if uniform dist, binned=[2,2,2...2]
         binned_mean{rgc, g_dir} = zeros(1, binnum);
         for g_rep = 1:datarun.stimulus.repetitions
             spike_time_rep = tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep}; % time range 0-8s
