@@ -1,4 +1,4 @@
-function [vector_sums, vector_mags] = get_vector_sums_similarity_index(datarun, cell_spec, varargin)
+function [vector_sums, vector_mags, similarity_index] = get_vector_sums_similarity_index(datarun, cell_spec, varargin)
 %
 % usage: function spike_times = get_grating_spike_times(datarun, cell_ids, varargin)
 %
@@ -84,7 +84,7 @@ for rgc = 1:num_rgcs
     end
 end
 similarity_index = mean(binned_match,3);
-similarity_index = similarity_index / max(similarity_index(:));
+% similarity_index = similarity_index / max(similarity_index(:));
 
 % %%
 % % find outlier among 6 reps
