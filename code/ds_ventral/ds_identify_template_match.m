@@ -31,22 +31,25 @@ stim_dur = 8;
 num_reps = datarun.stimulus.repetitions;
 num_rgcs = length(datarun.cell_ids);
 
-%% test case 1: burst in 1 rep
-% test case is written upon 2019-11-21-0/data002-sorted
-% cell 8: low firing neuron w abnormal burst of high firing in 1 repetition (both TP 120 & 240, dir 6, rep 1)
+% %% test case 1: burst in 1 rep (unrealistic)
+% % test case is written upon 2019-11-21-0/data002-sorted
+% % cell 8: low firing neuron w abnormal burst of high firing in 1 repetition (both TP 120 & 240, dir 6, rep 1)
+% 
+% datarun_fake = datarun;
+% i = 1;
+% while i <= 600
+%     datarun_fake.spikes{8,1}(end+1) = 0.28 + i/1000000;
+%     datarun_fake.spikes{8,1}(end+1) = 163.01 + i/1000000;
+%     i = i+1;
+% end
+% datarun_fake.spikes{8,1} = sort(datarun_fake.spikes{8,1});
+% datarun = datarun_fake;
 
-datarun_fake = datarun;
-i = 1;
-while i <= 600
-    datarun_fake.spikes{8,1}(end+1) = 0.28 + i/1000000;
-    datarun_fake.spikes{8,1}(end+1) = 163.01 + i/1000000;
-    i = i+1;
-end
-datarun_fake.spikes{8,1} = sort(datarun_fake.spikes{8,1});
-datarun = datarun_fake;
+% did not try the following test cases bc not realistic enough (?):
+% cell 13: low firing neuron w abnormal uniformly added spikes in 1 direction all repetitions (both TP 120 & 240)
+% cell 7: low-mid firing neuron w abnormal uniformly added spikes in all directions (both TP 120 & 240)
 
 %% test case 2: uniform noise in 1 rep
-% cell 1: high firing neuron w abnormal uniformly added spikes in 1 repetition. result: high firing neurons are robust against uniform noise.
 % cell 9: low firing neuron w abnormal uniformly added spikes in 1 repetition (both TP 120 & 240) - most reasonable
 
 datarun_fake = datarun;
@@ -63,10 +66,6 @@ for i = 1:2*N
 end
 datarun_fake.spikes{9,1} = sort(datarun_fake.spikes{9,1});
 datarun = datarun_fake;
-
-% did not try the following test cases bc not realistic enough (?):
-% cell 13: low firing neuron w abnormal uniformly added spikes in 1 direction all repetitions (both TP 120 & 240)
-% cell 7: low-mid firing neuron w abnormal uniformly added spikes in all directions (both TP 120 & 240)
 
 %%
 g_sp = datarun.stimulus.params.SPATIAL_PERIOD(1);
@@ -94,13 +93,8 @@ ds_index = selected_indices;
 ds_ori = [ds_index; ds_cell_ids];
 
 %% test consistency code
-[~, vector_mags_120, similarity_index_120] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 120, 'SP', 240);
-[~, vector_mags_240, similarity_index_240] = get_vector_sums_similarity_index(datarun, 'all', 'TP', 240, 'SP', 240);
-
-% median(similarity_index_120(:))
-% median(similarity_index_240(:))
-% prctile(similarity_index_120(:),80)
-% prctile(similarity_index_240(:),80)
+[~, vector_mags_120] = get_vector_sums_template_matching(datarun, 'all', 'TP', 120, 'SP', 240);
+[~, vector_mags_240] = get_vector_sums_template_matching(datarun, 'all', 'TP', 240, 'SP', 240);
 % scatter((vector_mags_120), (vector_mags_240))
 
 cutoff_coord = [0.12, 0.12]; 
@@ -110,7 +104,7 @@ selected_indices = intersect(x_finder, y_finder);
 
 ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
-ds_simil = [ds_index; ds_cell_ids];
+ds_template = [ds_index; ds_cell_ids];
 
 %% rasterplot by direction w separate TPs for 1 dsRGC
 % single_ds_id = ds_master_id_mapPCA(8); 
@@ -160,7 +154,7 @@ title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_inde
 
 %% testing if promoted cells are ds enough
 
-promoted_cell = ds_simil(:, promoted);
+promoted_cell = ds_template(:, promoted);
 
 for i = 1 : length(promoted_cell(1, :))
     figure
@@ -269,9 +263,9 @@ end
 %% make adjustment to ds list accordingly 
 % (manually pick suspicious cells to discard or add back if necessary)
 
-promoted = find(~ismember(ds_simil(1,:),ds_ori(1,:))) % ds_simil(:, promoted) = newly appeared ds cells
-demoted = find(~ismember(ds_ori(1,:),ds_simil(1,:))) % ds_ori(:, demoted) = ds cells discarded bc of high variance btw repetitions
-ds_cells = ds_simil;
+promoted = find(~ismember(ds_template(1,:),ds_ori(1,:))) % ds_simil(:, promoted) = newly appeared ds cells
+demoted = find(~ismember(ds_ori(1,:),ds_template(1,:))) % ds_ori(:, demoted) = ds cells discarded bc of high variance btw repetitions
+ds_cells = ds_template;
 ds_cells(:, promoted) = []; % should not promote cells to ds list just bc they have lower inter-repetition variance?
 
 % savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
