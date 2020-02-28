@@ -45,10 +45,13 @@ datarun_fake.spikes{8,1} = sort(datarun_fake.spikes{8,1});
 datarun = datarun_fake;
 
 %% test case 2: uniform noise in 1 rep
-% cell 1: high firing neuron w abnormal uniformly added spikes in 1 repetition. result: high firing neurons are robust against uniform noise.
-% cell 9: low firing neuron w abnormal uniformly added spikes in 1 repetition (both TP 120 & 240) - most reasonable
+% cell 1: high firing neuron w abnormal uniformly added spikes in 1
+% repetition. result: high firing neu
+% cell 1: high firing neuron w abnormal uniformly added spikes in 1 repetition (both TP 120 & 240) - most reasonable
+% cell 4: high firing neuron w abnormal uniformly added spikes in 1 direction all repetitions (both TP 120 & 240)
+% cell 5: high firing neuron w abnormal uniformly added spikes in all directions (both TP 120 & 240)
 
-datarun_fake = datarun;
+% datarun_fake = datarun;
 t120 = [datarun_fake.stimulus.triggers(1), datarun_fake.stimulus.triggers(2)];
 t240 = [datarun_fake.stimulus.triggers(17), datarun_fake.stimulus.triggers(18)];
 
@@ -58,13 +61,10 @@ sp240 = t240(1) + (t240(2)-t240(1)).*rand(N,1);
 sp_add = [sp120; sp240];
 
 for i = 1:2*N
-    datarun_fake.spikes{9,1}(end+1) = sp_add(i);
+    datarun_fake.spikes{1,1}(end+1) = sp_add(i);
 end
-datarun_fake.spikes{9,1} = sort(datarun_fake.spikes{9,1});
-% datarun = datarun_fake;
-
-% cell 13: low firing neuron w abnormal uniformly added spikes in 1 direction all repetitions (both TP 120 & 240)
-% cell 7: low-mid firing neuron w abnormal uniformly added spikes in all directions (both TP 120 & 240)
+datarun_fake.spikes{1,1} = sort(datarun_fake.spikes{1,1});
+datarun = datarun_fake;
 
 %%
 g_sp = datarun.stimulus.params.SPATIAL_PERIOD(1);
