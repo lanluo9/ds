@@ -97,7 +97,7 @@ ds_ori = [ds_index; ds_cell_ids];
 [~, vector_mags_240] = get_vector_sums_template_matching(datarun, 'all', 'TP', 240, 'SP', 240);
 % scatter((vector_mags_120), (vector_mags_240))
 
-cutoff_coord = [0.12, 0.12]; 
+cutoff_coord = [0.9, 0.9]; 
 x_finder = find(vector_mags_120 > cutoff_coord(1));
 y_finder = find(vector_mags_240 > cutoff_coord(2));
 selected_indices = intersect(x_finder, y_finder);
@@ -106,55 +106,67 @@ ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
 ds_template = [ds_index; ds_cell_ids];
 
-%% rasterplot by direction w separate TPs for 1 dsRGC
-% single_ds_id = ds_master_id_mapPCA(8); 
-single_ds_id = datarun_fake.cell_ids(8);
-tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
-% single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
-single_ds_index = 8;
+% %% rasterplot by direction w separate TPs for 1 dsRGC
+% % single_ds_id = ds_master_id_mapPCA(8); 
+% single_ds_id = datarun_fake.cell_ids(8);
+% tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
+% % single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+% single_ds_index = 8;
+% 
+% dir_spike_count = [];
+% for dir = 1:length(grat_dirs)
+%     for tp = tp_set
+%         tp_spike_count = 0;
+%         single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+%         neuron_spike_count = zeros(size(single_dirtp,1),1);
+%         for neuron = 1:size(single_dirtp,1)
+%             for rep = 1:size(single_dirtp,2)
+%                 neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
+%                     length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
+%             end
+%         end
+%         tp_spike_count = tp_spike_count + neuron_spike_count;
+%     end
+%     dir_spike_count = [dir_spike_count, tp_spike_count];
+% end
+% 
+% subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
+% for dir = 1:length(grat_dirs) 
+%     subplot(3,3,subplot_num(1,dir))
+%     single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+%     for rep = 1:size(single_dirtp,2)        
+%         spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
+%         rep_mark = rep .* ones(length(spike_time),1);
+%         scatter(spike_time, rep_mark, 50, 'filled')
+%         axis([0 10 0 7])
+%         hold on
+%     end
+% end
+% 
+% subplot(3,3,5)
+% theta = deg2rad(grat_dirs);
+% theta = [theta, theta(1)];
+% % radius = ds_spike_count(find(ds_index==single_ds_index),:);
+% radius = dir_spike_count(single_ds_index,:);
+% radius = [radius, radius(1)];
+% polarplot(theta, radius)
+% title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
 
-dir_spike_count = [];
-for dir = 1:length(grat_dirs)
-    for tp = tp_set
-        tp_spike_count = 0;
-        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-        neuron_spike_count = zeros(size(single_dirtp,1),1);
-        for neuron = 1:size(single_dirtp,1)
-            for rep = 1:size(single_dirtp,2)
-                neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
-                    length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
-            end
-        end
-        tp_spike_count = tp_spike_count + neuron_spike_count;
-    end
-    dir_spike_count = [dir_spike_count, tp_spike_count];
-end
+%% make adjustment to ds list accordingly 
+% (manually pick suspicious cells to discard or add back if necessary)
 
-subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
-for dir = 1:length(grat_dirs) 
-    subplot(3,3,subplot_num(1,dir))
-    single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-    for rep = 1:size(single_dirtp,2)        
-        spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
-        rep_mark = rep .* ones(length(spike_time),1);
-        scatter(spike_time, rep_mark, 50, 'filled')
-        axis([0 10 0 7])
-        hold on
-    end
-end
+promoted = find(~ismember(ds_template(1,:),ds_ori(1,:))); % ds_simil(:, promoted) = newly appeared ds cells
+demoted = find(~ismember(ds_ori(1,:),ds_template(1,:))); % ds_ori(:, demoted) = ds cells discarded bc of high variance btw repetitions
+promoted_cell = ds_template(:, promoted)
+demoted_cell = ds_ori(:, demoted)
 
-subplot(3,3,5)
-theta = deg2rad(grat_dirs);
-theta = [theta, theta(1)];
-% radius = ds_spike_count(find(ds_index==single_ds_index),:);
-radius = dir_spike_count(single_ds_index,:);
-radius = [radius, radius(1)];
-polarplot(theta, radius)
-title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+% ds_cells = ds_template;
+% ds_cells(:, promoted) = []; % should not promote cells to ds list just bc they have lower inter-repetition variance?
+
+% savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells');
 
 %% testing if promoted cells are ds enough
-
-promoted_cell = ds_template(:, promoted);
 
 for i = 1 : length(promoted_cell(1, :))
     figure
@@ -208,8 +220,6 @@ end
 
 %% verify demoted cells' inter-repetition var (testing if discarding cells is justified)
 
-demoted_cell = ds_ori(:, demoted);
-
 for i = 1 : length(demoted_cell(1, :))
     figure
     
@@ -260,13 +270,3 @@ for i = 1 : length(demoted_cell(1, :))
 %     close all
 end
 
-%% make adjustment to ds list accordingly 
-% (manually pick suspicious cells to discard or add back if necessary)
-
-promoted = find(~ismember(ds_template(1,:),ds_ori(1,:))) % ds_simil(:, promoted) = newly appeared ds cells
-demoted = find(~ismember(ds_ori(1,:),ds_template(1,:))) % ds_ori(:, demoted) = ds cells discarded bc of high variance btw repetitions
-ds_cells = ds_template;
-ds_cells(:, promoted) = []; % should not promote cells to ds list just bc they have lower inter-repetition variance?
-
-% savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells');

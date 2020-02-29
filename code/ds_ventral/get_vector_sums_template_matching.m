@@ -34,22 +34,10 @@ p.parse(varargin{:});
 cell_indices = get_cell_indices(datarun, cell_spec);
 num_rgcs = length(cell_indices);
 
-spike_counts = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
-
 for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
         temp_dir = datarun.stimulus.params.DIRECTION(g_dir);
         tmp_spike_times = get_grating_spike_times(datarun, cell_spec, p.Results.stim_duration, 'direction', temp_dir, 'SP', p.Results.SP, 'TP', p.Results.TP);
         tmp_gratingrun.direction(g_dir).spike_times = tmp_spike_times;
-end
-
-for rgc = 1:num_rgcs
-    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
-        tmp_counter = 0;
-        for g_rep = 1:datarun.stimulus.repetitions
-            tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
-        end
-        spike_counts(rgc, g_dir) = tmp_counter;
-    end
 end
 
 %%
@@ -99,7 +87,28 @@ for rgc = 1:num_rgcs
     end
 end
 
-outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep);
+outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep) %#ok<NASGU>
+
+%%
+% substitute abnormal rep w mean of non-outlier reps
+
+spike_counts = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
+for rgc = 1:num_rgcs
+    for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+        tmp_spike_num = cellfun('length',tmp_gratingrun.direction(g_dir).spike_times);
+        spike_rep_avg = tmp_spike_num(rgc,:) * reshape(~outlier_flag{rgc, g_dir}, [datarun.stimulus.repetitions, 1]) / sum(~outlier_flag{rgc, g_dir});
+        
+        tmp_counter = 0;
+        for g_rep = 1:datarun.stimulus.repetitions
+            if outlier_num(rgc, g_dir) == 0
+                tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
+            else
+                tmp_counter = tmp_counter + spike_rep_avg;
+            end
+        end
+        spike_counts(rgc, g_dir) = tmp_counter;
+    end
+end
 
 %%
 for rgc = 1:num_rgcs

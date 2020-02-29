@@ -87,20 +87,22 @@ for rgc = 1:num_rgcs
     end
 end
 
-% outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep);
+outlier_percent = sum(sum(outlier_num)) / (rgc * g_dir * g_rep) %#ok<NASGU>
 
 %%
-% substitute abnormal rep w mean of other reps
+% substitute abnormal rep w mean of non-outlier reps
 
 spike_counts = zeros(num_rgcs, length(datarun.stimulus.params.DIRECTION));
 for rgc = 1:num_rgcs
     for g_dir = 1:length(datarun.stimulus.params.DIRECTION)
+        tmp_spike_num = cellfun('length',tmp_gratingrun.direction(g_dir).spike_times);
+        spike_rep_avg = tmp_spike_num(rgc,:) * reshape(~outlier_flag{rgc, g_dir}, [datarun.stimulus.repetitions, 1]) / sum(~outlier_flag{rgc, g_dir});
+        
         tmp_counter = 0;
         for g_rep = 1:datarun.stimulus.repetitions
             if outlier_num(rgc, g_dir) == 0
                 tmp_counter = tmp_counter + length(tmp_gratingrun.direction(g_dir).spike_times{rgc, g_rep});
             else
-                spike_rep_avg
                 tmp_counter = tmp_counter + spike_rep_avg;
             end
         end
