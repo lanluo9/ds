@@ -214,7 +214,7 @@ for i = 1 : length(promoted_cell(1, :))
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    savefig(['promoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
+%     savefig(['promoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
 %     close all
 end
 
@@ -266,7 +266,7 @@ for i = 1 : length(demoted_cell(1, :))
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    savefig(['demoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
+%     savefig(['demoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
 %     close all
 end
 
