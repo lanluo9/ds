@@ -162,3 +162,56 @@ radius = [radius, radius(1)];
 polarplot(theta, radius)
 title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
 
+%% testing 002 ds cells before fixing clusters of 000-map
+
+ds002 = importdata('002ds.txt'); % 11 out of 27 cells have sad tuning curve...
+
+for i = 1 : length(ds002)
+    figure
+    
+    single_ds_id = ds002(i); 
+    single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    tp_set = 2; % range 1:3
+
+    dir_spike_count = [];
+    for dir = 1:length(grat_dirs)
+        for tp = tp_set
+            tp_spike_count = 0;
+            single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+            neuron_spike_count = zeros(size(single_dirtp,1),1);
+            for neuron = 1:size(single_dirtp,1)
+                for rep = 1:size(single_dirtp,2)
+                    neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
+                        length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
+                end
+            end
+            tp_spike_count = tp_spike_count + neuron_spike_count;
+        end
+        dir_spike_count = [dir_spike_count, tp_spike_count];
+    end
+
+    subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
+    for dir = 1:length(grat_dirs) 
+        subplot(3,3,subplot_num(1,dir))
+        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+        for rep = 1:size(single_dirtp,2)        
+            spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
+            rep_mark = rep .* ones(length(spike_time),1);
+            scatter(spike_time, rep_mark, 50, 'filled')
+            axis([0 10 0 7])
+            hold on
+        end
+    end
+
+    subplot(3,3,5)
+    theta = deg2rad(grat_dirs);
+    theta = [theta, theta(1)];
+    % radius = ds_spike_count(find(ds_index==single_ds_index),:);
+    radius = dir_spike_count(single_ds_index,:);
+    radius = [radius, radius(1)];
+    polarplot(theta, radius)
+    title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+    
+%     savefig(['promoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
+%     close all
+end
