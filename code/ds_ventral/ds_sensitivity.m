@@ -1,20 +1,18 @@
-% sensitivity plot for single cell
-% later will import ds cell id list to achieve sequential plotting for
-% every single ds cell
-
 %% load data w changeable dataset_num & ds_now
 clear
 clc
 
-dataset_num = '00-map'; % dim flashes to test absolute sensitivity
+dataset_num = '/data000-map-sorted'; 
+date_num = '2020-02-29-0';
+
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/high_cont/data0', dataset_num, '/data0', dataset_num);
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
-% datarun = load_ei(datarun, 'all', 'array_type', 519);
+datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
 

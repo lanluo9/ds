@@ -170,6 +170,9 @@ for i = 1 : length(ds_master_id_mapEI)
     
     single_ds_id = ds_master_id_mapEI(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    if isempty(single_ds_index)
+        continue
+    end
     tp_set = 2; % range 1:3
 
     dir_spike_count = [];
@@ -215,11 +218,15 @@ for i = 1 : length(ds_master_id_mapEI)
     close
 end
 
+%%
 for i = 1 : length(ds_master_id_mapPCA)
     figure
     
     single_ds_id = ds_master_id_mapPCA(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    if isempty(single_ds_index)
+        continue
+    end
     tp_set = 2; % range 1:3
 
     dir_spike_count = [];
@@ -265,11 +272,15 @@ for i = 1 : length(ds_master_id_mapPCA)
     close
 end
 
+%%
 for i = 1 : length(ds_master_id_map2)
     figure
     
     single_ds_id = ds_master_id_map2(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    if isempty(single_ds_index)
+        continue
+    end
     tp_set = 2; % range 1:3
 
     dir_spike_count = [];
