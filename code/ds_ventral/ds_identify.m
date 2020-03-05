@@ -87,13 +87,17 @@ datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
 fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
 
 %%
+
+ds_master_id_mapPCA = importdata('002ds.txt'); % map-analysis only
+ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
+
+%%
 t = map_list(1:2,:)';
 t2 = t(~cellfun('isempty', t));
 ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
 
 ds_master_id_mapEI = ds_map_ei(:,1);                                      % map_ei only, corr threshold 0.85
-ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]';          % map-analysis only. manually input
-% ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
+% ds_master_id_mapPCA = [469 2867 3710 4399 5105 6318 6695 7291]';          . manually input
 ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % survivor after map-analysis & map_ei
 
 ds_slave_id_mapEI = ds_map_ei(:,2); 
@@ -164,7 +168,7 @@ title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_inde
 
 %% testing 002 ds cells before fixing clusters of 000-map
 
-ds002 = importdata('002ds.txt'); % 11 out of 27 cells have sad tuning curve...
+% ds002 = importdata('002ds.txt'); % 11 out of 27 cells have sad tuning curve...
 
 for i = 1 : length(ds002)
     figure
