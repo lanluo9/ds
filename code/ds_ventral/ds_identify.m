@@ -90,14 +90,14 @@ fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_li
 t = map_list(1:2,:)';
 t2 = t(~cellfun('isempty', t));
 ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
-ds_master_id_mapEI = ds_map_ei(:,1);                                      % map_ei only, corr threshold 0.85
+ds_master_id_mapEI = ds_map_ei(:,1);                                      % 17 mapped by map_ei only, corr threshold 0.85
 ds_slave_id_mapEI = ds_map_ei(:,2); 
 
-ds_master_id_mapPCA = importdata('mapPCA_id.txt');                        % map-analysis only
+ds_master_id_mapPCA = importdata('mapPCA_id.txt');                        % 15 mapped by map-analysis only
 ds_slave_id_mapPCA = ds_master_id_mapPCA; 
 ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
 
-ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % survivor of both map-analysis & map_ei
+ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % 11 survivors of both map-analysis & map_ei
 ds_slave_id_map2 = intersect(ds_slave_id_mapEI, ds_slave_id_mapPCA);
 
 t1 = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
@@ -160,9 +160,60 @@ ds_map_all = [t1, t2];
 % polarplot(theta, radius)
 % title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
 
-%% testing 002 ds cells before fixing clusters of 000-map
+%% ds-ness of mapped cells
 
-% ds002 = importdata('002ds.txt'); % 11 out of 27 cells have sad tuning curve...
+% 002-sorted ds cells regardless of mapping quality: 11 out of 27 cells have sad tuning curve
+% ds_master_id_mapPCA: 5 out of 15 cells have sad tuning curve
+
+for i = 1 : length(ds_master_id_mapEI)
+    figure
+    
+    single_ds_id = ds_master_id_mapEI(i); 
+    single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    tp_set = 2; % range 1:3
+
+    dir_spike_count = [];
+    for dir = 1:length(grat_dirs)
+        for tp = tp_set
+            tp_spike_count = 0;
+            single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+            neuron_spike_count = zeros(size(single_dirtp,1),1);
+            for neuron = 1:size(single_dirtp,1)
+                for rep = 1:size(single_dirtp,2)
+                    neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
+                        length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
+                end
+            end
+            tp_spike_count = tp_spike_count + neuron_spike_count;
+        end
+        dir_spike_count = [dir_spike_count, tp_spike_count];
+    end
+
+    subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
+    for dir = 1:length(grat_dirs) 
+        subplot(3,3,subplot_num(1,dir))
+        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+        for rep = 1:size(single_dirtp,2)        
+            spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
+            rep_mark = rep .* ones(length(spike_time),1);
+            scatter(spike_time, rep_mark, 50, 'filled')
+            axis([0 10 0 7])
+            hold on
+        end
+    end
+
+    subplot(3,3,5)
+    theta = deg2rad(grat_dirs);
+    theta = [theta, theta(1)];
+    % radius = ds_spike_count(find(ds_index==single_ds_index),:);
+    radius = dir_spike_count(single_ds_index,:);
+    radius = [radius, radius(1)];
+    polarplot(theta, radius)
+    title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+    
+    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    close
+end
 
 for i = 1 : length(ds_master_id_mapPCA)
     figure
@@ -210,6 +261,56 @@ for i = 1 : length(ds_master_id_mapPCA)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-%     savefig(['promoted-', num2str(single_ds_index),'-', num2str(single_ds_id), '.fig'])
-%     close all
+    saveas(gcf, ['mapPCA-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    close
+end
+
+for i = 1 : length(ds_master_id_map2)
+    figure
+    
+    single_ds_id = ds_master_id_map2(i); 
+    single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
+    tp_set = 2; % range 1:3
+
+    dir_spike_count = [];
+    for dir = 1:length(grat_dirs)
+        for tp = tp_set
+            tp_spike_count = 0;
+            single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+            neuron_spike_count = zeros(size(single_dirtp,1),1);
+            for neuron = 1:size(single_dirtp,1)
+                for rep = 1:size(single_dirtp,2)
+                    neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
+                        length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
+                end
+            end
+            tp_spike_count = tp_spike_count + neuron_spike_count;
+        end
+        dir_spike_count = [dir_spike_count, tp_spike_count];
+    end
+
+    subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
+    for dir = 1:length(grat_dirs) 
+        subplot(3,3,subplot_num(1,dir))
+        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+        for rep = 1:size(single_dirtp,2)        
+            spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
+            rep_mark = rep .* ones(length(spike_time),1);
+            scatter(spike_time, rep_mark, 50, 'filled')
+            axis([0 10 0 7])
+            hold on
+        end
+    end
+
+    subplot(3,3,5)
+    theta = deg2rad(grat_dirs);
+    theta = [theta, theta(1)];
+    % radius = ds_spike_count(find(ds_index==single_ds_index),:);
+    radius = dir_spike_count(single_ds_index,:);
+    radius = [radius, radius(1)];
+    polarplot(theta, radius)
+    title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
+    
+    saveas(gcf, ['mapBoth-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    close
 end
