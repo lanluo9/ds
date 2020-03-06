@@ -46,13 +46,13 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-%% scatter plot of vector sums for two different gratings.
 [vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
 [vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
 
 % scatter((vector_mags_120), (vector_mags_240))
 
-%%
+%% scatter plot of vector sums for two different gratings.
+
 x_cutoff = 0.7;
 y_cutoff = 0.8;
 cutoff_coord = [x_cutoff, y_cutoff]; 
@@ -72,7 +72,7 @@ ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
 ds_cells'
 
-% savefile = append('ds_master_002_sorted_', datestr(now, 'yyyymmdd'), '.mat');
+% savefile = append('ds_master_002_ds_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
 
 %%
@@ -94,9 +94,7 @@ ds_master_id_mapEI = ds_map_ei(:,1);                                      % 15 m
 ds_slave_id_mapEI = ds_map_ei(:,2); 
 
 % ds_master_id_mapPCA = importdata('mapPCA_id.txt');                      % 12 mapped by map-analysis only
-% ds_master_id_mapPCA = [212; 2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 5133; 5898; 6841; 7442];
-ds_master_id_mapPCA = [2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 6841; 7442]; % lost 3 due to cleaning
-
+ds_master_id_mapPCA = [2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 6841; 7442]; 
 ds_slave_id_mapPCA = ds_master_id_mapPCA; 
 ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
 
@@ -106,65 +104,12 @@ ds_slave_id_map2 = intersect(ds_slave_id_mapEI, ds_slave_id_mapPCA);
 patch = ismember(ds_master_id_map2, ds_slave_id_map2) .* ds_master_id_map2;
 master_col = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
 slave_col = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; patch];
-
 ds_map_all = [master_col, slave_col]
 
 savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
 save(savefile, 'ds_cells', 'ds_map_all');
 
-% %% rasterplot by direction for single dsRGC w separate TPs
-% single_ds_id = ds_master_id_mapPCA(8); 
-% tp_set = 1; % range 1:length(grat_TPs), in this case 1:3
-% single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
-% 
-% dir_spike_count = [];
-% for dir = 1:length(grat_dirs)
-%     for tp = tp_set
-%         tp_spike_count = 0;
-%         single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-%         neuron_spike_count = zeros(size(single_dirtp,1),1);
-%         for neuron = 1:size(single_dirtp,1)
-%             for rep = 1:size(single_dirtp,2)
-%                 neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
-%                     length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
-%             end
-%         end
-%         tp_spike_count = tp_spike_count + neuron_spike_count;
-%     end
-%     dir_spike_count = [dir_spike_count, tp_spike_count];
-% end
-% 
-% % ds_spike_count = [];
-% % for i = 1:length(ds_index)
-% %     ds_spike_count = [ds_spike_count; dir_spike_count(ds_index(i),:)];
-% % end
-% 
-% subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
-% for dir = 1:length(grat_dirs) 
-%     subplot(3,3,subplot_num(1,dir))
-%     single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-%     for rep = 1:size(single_dirtp,2)        
-%         spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
-%         rep_mark = rep .* ones(length(spike_time),1);
-%         scatter(spike_time, rep_mark, 50, 'filled')
-%         axis([0 10 0 7])
-%         hold on
-%     end
-% end
-% 
-% subplot(3,3,5)
-% theta = deg2rad(grat_dirs);
-% theta = [theta, theta(1)];
-% % radius = ds_spike_count(find(ds_index==single_ds_index),:);
-% radius = dir_spike_count(single_ds_index,:);
-% radius = [radius, radius(1)];
-% polarplot(theta, radius)
-% title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
-
 %% ds-ness of mapped cells
-
-% 002-sorted ds cells regardless of mapping quality: 11 out of 27 cells have sad tuning curve
-% ds_master_id_mapPCA: 5 out of 15 cells have sad tuning curve
 
 for i = 1 : length(ds_master_id_mapEI)
     figure
@@ -216,8 +161,8 @@ for i = 1 : length(ds_master_id_mapEI)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-    close
+%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+%     close
 end
 
 %%
