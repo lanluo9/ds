@@ -93,7 +93,8 @@ ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
 ds_master_id_mapEI = ds_map_ei(:,1);                                      % 17 mapped by map_ei only, corr threshold 0.85
 ds_slave_id_mapEI = ds_map_ei(:,2); 
 
-ds_master_id_mapPCA = importdata('mapPCA_id.txt');                        % 15 mapped by map-analysis only
+% ds_master_id_mapPCA = importdata('mapPCA_id.txt');                      % 15 mapped by map-analysis only
+ds_master_id_mapPCA = [212; 2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 5133; 5898; 6841; 7442];
 ds_slave_id_mapPCA = ds_master_id_mapPCA; 
 ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
 
@@ -171,6 +172,7 @@ for i = 1 : length(ds_master_id_mapEI)
     single_ds_id = ds_master_id_mapEI(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
     if isempty(single_ds_index)
+        disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
     tp_set = 2; % range 1:3
@@ -214,8 +216,8 @@ for i = 1 : length(ds_master_id_mapEI)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-    close
+%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+%     close
 end
 
 %%
@@ -225,6 +227,7 @@ for i = 1 : length(ds_master_id_mapPCA)
     single_ds_id = ds_master_id_mapPCA(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
     if isempty(single_ds_index)
+        disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
     tp_set = 2; % range 1:3
@@ -268,8 +271,8 @@ for i = 1 : length(ds_master_id_mapPCA)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['mapPCA-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-    close
+%     saveas(gcf, ['mapPCA-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+%     close
 end
 
 %%
@@ -279,6 +282,7 @@ for i = 1 : length(ds_master_id_map2)
     single_ds_id = ds_master_id_map2(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
     if isempty(single_ds_index)
+        disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
     tp_set = 2; % range 1:3
@@ -322,6 +326,6 @@ for i = 1 : length(ds_master_id_map2)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['mapBoth-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-    close
+%     saveas(gcf, ['mapBoth-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+%     close
 end
