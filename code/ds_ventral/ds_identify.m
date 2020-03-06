@@ -109,8 +109,8 @@ if length(t1) > length(t2)
 end
 ds_map_all = [t1, t2];
 
-% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells', 'ds_map_all');
+savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
+save(savefile, 'ds_cells', 'ds_map_all');
 
 % %% rasterplot by direction for single dsRGC w separate TPs
 % single_ds_id = ds_master_id_mapPCA(8); 
