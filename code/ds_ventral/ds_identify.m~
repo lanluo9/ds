@@ -90,24 +90,30 @@ fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_li
 t = map_list(1:2,:)';
 t2 = t(~cellfun('isempty', t));
 ds_map_ei = cell2mat(reshape(t2,[length(t2)/2,2]));
-ds_master_id_mapEI = ds_map_ei(:,1);                                      % 15 mapped by map_ei only, corr threshold 0.85
+ds_master_id_mapEI = ds_map_ei(:,1);                                      % 17 mapped by map_ei only, corr threshold 0.85
 ds_slave_id_mapEI = ds_map_ei(:,2); 
 
-% ds_master_id_mapPCA = importdata('mapPCA_id.txt');                      % 12 mapped by map-analysis only
-% ds_master_id_mapPCA = [212; 2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 5133; 5898; 6841; 7442];
-ds_master_id_mapPCA = [2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 6841; 7442]; % lost 3 due to cleaning
-
+% ds_master_id_mapPCA = importdata('mapPCA_id.txt');                      % 15 mapped by map-analysis only
+ds_master_id_mapPCA = [212; 2027; 2612; 3108; 3257; 3318; 3588; 3664; 3707; 3948; 4381; 5133; 5898; 6841; 7442];
 ds_slave_id_mapPCA = ds_master_id_mapPCA; 
 ismember(ds_master_id_mapPCA, datarun_s.cell_ids)
 
-ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % 10 survivors of both map-analysis & map_ei
+ds_master_id_map2 = intersect(ds_master_id_mapEI, ds_master_id_mapPCA);   % 11 survivors of both map-analysis & map_ei
 ds_slave_id_map2 = intersect(ds_slave_id_mapEI, ds_slave_id_mapPCA);
 
-patch = ismember(ds_master_id_map2, ds_slave_id_map2) .* ds_master_id_map2;
-master_col = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
-slave_col = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; patch];
+t1 = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
+t2 = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; ds_slave_id_map2];
 
-ds_map_all = [master_col, slave_col]
+for i = 1 : length(ds_master_id_map2)
+    if ismember()
+    
+end
+
+if length(t1) > length(t2)
+    t3 = zeros(length(t1) - length(t2), 1);
+    t2 = [t2; t3];
+end
+ds_map_all = [t1, t2];
 
 savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
 save(savefile, 'ds_cells', 'ds_map_all');
