@@ -216,8 +216,8 @@ for i = 1 : length(ds_master_id_mapEI)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-%     close
+    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    close
 end
 
 %%

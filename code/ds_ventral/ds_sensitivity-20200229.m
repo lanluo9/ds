@@ -16,7 +16,7 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
 
-load('ds_cell_map_20200214.mat', 'ds_map_all');
+load('ds_cell_map_20200306.mat', 'ds_map_all');
 flag = find(ds_map_all(:,1)==0);
 ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
 ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
