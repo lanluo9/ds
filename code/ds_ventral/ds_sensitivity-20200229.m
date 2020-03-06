@@ -18,21 +18,16 @@ datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 load('ds_cell_map_20200306.mat', 'ds_map_all');
 flag = find(ds_map_all(:,1)==0);
-ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2);
+ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
 ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
-ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2);
+ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
 ds_map_all
 
 %% select cell & chop data000 into sections
 
-% ds_slave_id = ds_slave_id_mapPCA(8); % trust mapPCA more
-ds_slave_id = 3018;
-ds_slave_index = find(datarun.cell_ids == ds_slave_id); % but 000-map-002 does not contain such slave id
-spike_time = datarun.spikes{ds_slave_index, 1};
-
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
-tmp_triggers = datarun.triggers(switch_flag);
+tmp_triggers = [datarun.triggers(switch_flag); datarun.triggers(end)];
 switch_index = [];
 for i = 1 : length(tmp_triggers)
     switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
@@ -40,9 +35,11 @@ end
 section_end = [300; datarun.triggers(switch_index); datarun.duration];
 section_start = [0; datarun.triggers(1); datarun.triggers(switch_index + 1)];
 sections = [section_start, section_end, (section_end - section_start)];
-sections = [sections(1:12,:); [sections(12,2), sections(13,1), (sections(13,1)-sections(12,2))]; sections(13:end,:)];
+% sections(end,:) = 
+% t = datarun.triggers(end) + 4
 
-ndf = [99; 5;4;5; 4;4;4;4;4; 3;4;3;99; 3;2;2;99];
+%%
+ndf = [99; 5;5;5;5;5;5;5; 4;4;4;4;4; 3;3;3; 2; 99];
 flash_config = [0; 2.4;2.4;2.8; 2.2;2.4;2.2;2.8;2.4; 2.2;2.8;2.4;0; 2.8;4.2;4.8;0];
 nflash = [0; sections(2:12,3)./2; 0; sections(14,3)./2; sections(15:16,3)./4; 0];
 sections = [sections, ndf, flash_config, nflash];
@@ -53,6 +50,11 @@ marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
+
+ds_slave_id = ds_slave_id_mapPCA(8); % trust mapPCA more
+ds_slave_index = find(datarun.cell_ids == ds_slave_id); % but 000-map-002 does not contain such slave id
+spike_time = datarun.spikes{ds_slave_index, 1};
+
 tic
 for m = 1: (length(marker))
     subplot(length(marker), 1, m)  
