@@ -53,7 +53,7 @@ marker_seq = section_sort(:,7);
 slave_ds_id_all = unique(ds_map_all(:,2)); slave_ds_id_all(slave_ds_id_all == 0) = [];
 tic
 
-for i = 2 % length(slave_ds_id_all)
+for i = 1 : length(slave_ds_id_all)
     figure 
 
     ds_slave_id = slave_ds_id_all(i); 
@@ -101,7 +101,7 @@ for i = 2 % length(slave_ds_id_all)
         end
     end
     
-    title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(ds_slave_index), '. id = ', num2str(ds_slave_id)])
+%     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(ds_slave_index), '. id = ', num2str(ds_slave_id)])
     saveas(gcf, ['map_all-', num2str(ds_slave_index),'-', num2str(ds_slave_id), '.png'])
     close
 end
