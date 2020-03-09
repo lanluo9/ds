@@ -50,17 +50,18 @@ marker_seq = section_sort(:,7);
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 
-% slave_ds_id_all = unique(ds_map_all(:,2)); slave_ds_id_all(slave_ds_id_all == 0) = [];
-slave_ds_id_all = [3318 3664 3707 6841 3061 5629 5495];
+slave_ds_id_all = unique(ds_map_all(:,2)); slave_ds_id_all(slave_ds_id_all == 0) = [];
 
-for i = 1 : length(slave_ds_id_all)
-    ds_slave_id = slave_ds_id_all(i); 
-    ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
-    if ~isempty(ds_slave_index)
-        disp([num2str(ds_slave_id), '  found in slave datarun.cell_id'])
-        continue
-    end
-end
+% slave_ds_id_all = [3318 3664 3707 6841 3061 5629 5495]; % lost bc of slave cleaning
+% 
+% for i = 1 : length(slave_ds_id_all)
+%     ds_slave_id = slave_ds_id_all(i); 
+%     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
+%     if ~isempty(ds_slave_index)
+%         disp([num2str(ds_slave_id), '  found in slave datarun.cell_id'])
+%         continue
+%     end
+% end
 
 tic
 

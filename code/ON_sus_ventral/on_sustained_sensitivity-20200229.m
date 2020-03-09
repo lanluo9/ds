@@ -69,7 +69,7 @@ marker_seq = section_sort(:,7);
 %% sensitivity plot for ON sustained cell
 % merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 
-for i = 1 : 2 % size(on_sus_map_ei,1)
+for i = 3 : size(on_sus_map_ei,1)
     figure 
 
     ds_slave_id = on_sus_map_ei(i,2); 
