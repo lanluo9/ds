@@ -111,7 +111,7 @@ save(savefile, 'ds_cells', 'ds_map_all');
 
 %% ds-ness of mapped cells
 
-ds_master_id_test = 5133;
+ds_master_id_test = [5237 5718];
 
 for i = 1 : length(ds_master_id_test)
     figure
@@ -163,7 +163,7 @@ for i = 1 : length(ds_master_id_test)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
 %     close
 end
 
