@@ -1,29 +1,47 @@
-%% load data w changeable dataset_num & ds_now
+%% load master data
+
 clear
 clc
 
-dataset_num = '/data000-map-sorted'; 
+dataset_num = '03';
 date_num = '2020-02-29-0';
-
 prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/All_Staff/';
+% prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
+datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num);
 
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
-% datarun = load_ei(datarun, 'all', 'array_type', 519);
+datarun = load_ei(datarun, 'all', 'array_type', 519);
+datarun.names.stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s', dataset_num, '.txt');
 
-%% load ds cell identified in master 
+on_sus_cell_ids = importdata('0229-data003-ON-sustained-id.txt'); % map ON sustained cell master id
 
-load('ds_cell_map_20200306.mat', 'ds_map_all');
-flag = find(ds_map_all(:,1)==0);
-ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
-ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
-ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
-ds_map_all
+%% load slave data
 
-%% chop data000 into sections
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data000/data000');
+
+datarun_s = load_data(slave_path);
+datarun_s = load_neurons(datarun_s);
+datarun_s = load_params(datarun_s);
+datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
+
+%% map_ei
+
+[map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', on_sus_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
+fprintf('failed %d neurons out of %d neurons \n', length(failed_to_map_list), length(on_sus_cell_ids)); 
+fprintf('mapped %d neurons out of %d neurons \n', length(on_sus_cell_ids)-length(failed_to_map_list), length(on_sus_cell_ids)); 
+
+t = map_list(1:2,:)';
+t = t(~cellfun('isempty', t));
+on_sus_map_ei = cell2mat(reshape(t,[length(t)/2,2]));
+
+%% rename datarun_s as datarun for convenience
+
+datarun_master = datarun;
+datarun = datarun_s;
+
+%% select cell & chop data000 into sections
 
 gaps = round(diff(datarun.triggers));
 switch_flag = gaps ~= 2 & gaps ~= 4;
@@ -48,26 +66,13 @@ section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
-%% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
+%% sensitivity plot for ON sustained cell
+% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 
-% slave_ds_id_all = unique(ds_map_all(:,2)); slave_ds_id_all(slave_ds_id_all == 0) = [];
-slave_ds_id_all = [3318 3664 3707 6841 3061 5629 5495];
-
-for i = 1 : length(slave_ds_id_all)
-    ds_slave_id = slave_ds_id_all(i); 
-    ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
-    if ~isempty(ds_slave_index)
-        disp([num2str(ds_slave_id), '  found in slave datarun.cell_id'])
-        continue
-    end
-end
-
-tic
-
-for i = 1 : length(slave_ds_id_all)
+for i = 1 : 2 % size(on_sus_map_ei,1)
     figure 
 
-    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_id = on_sus_map_ei(i,2); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
@@ -112,9 +117,7 @@ for i = 1 : length(slave_ds_id_all)
         end
     end
     
-%     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(ds_slave_index), '. id = ', num2str(ds_slave_id)])
-    saveas(gcf, ['map_lost-', num2str(ds_slave_index),'-', num2str(ds_slave_id), '.png'])
+    saveas(gcf, ['map_ONsus-', num2str(ds_slave_index),'-', num2str(ds_slave_id), '.png'])
+    disp([num2str(ds_slave_id), ' figure saved'])
     close
 end
-    
-toc % takes 7-9 min to generate a single cell sensitivity plot. needs optim
