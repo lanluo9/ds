@@ -122,33 +122,29 @@ for i = 1 : length(ds_master_id_test)
         disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
-    tp_set = 1; % range 1:3
+    tp_set = 2; % range 1:3
 
-    dir_spike_count = [];
+    % should optimize this w cellfun to broadcast length function
+    dir_spike_count = zeros(length(datarun.cell_ids), length(grat_dirs));
     for dir = 1:length(grat_dirs)
-        for tp = tp_set
-            tp_spike_count = 0;
-            single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-            neuron_spike_count = zeros(size(single_dirtp,1),1);
-            for neuron = 1:size(single_dirtp,1)
-                for rep = 1:size(single_dirtp,2)
-                    neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
-                        length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
-                end
+        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
+        neuron_spike_count = zeros(size(single_dirtp,1),1);
+        for neuron = 1:size(single_dirtp,1)
+            for rep = 1:size(single_dirtp,2)
+                neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
+                    length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
             end
-            tp_spike_count = tp_spike_count + neuron_spike_count;
         end
-        dir_spike_count = [dir_spike_count, tp_spike_count];
+        dir_spike_count(:,dir) = neuron_spike_count;
     end
 
     subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
     for dir = 1:length(grat_dirs) 
         subplot(3,3,subplot_num(1,dir))
-        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-        for rep = 1:size(single_dirtp,2)        
+        for rep = 1:datarun.stimulus.repetitions        
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
-            rep_mark = rep .* ones(length(spike_time),1);
-            scatter(spike_time, rep_mark, 50, 'filled')
+            rep_mark = rep .* ones(length(spike_time), 1);
+            scatter(spike_time, rep_mark, 25, 'filled')
             axis([0 10 0 7])
             hold on
         end
@@ -157,13 +153,12 @@ for i = 1 : length(ds_master_id_test)
     subplot(3,3,5)
     theta = deg2rad(grat_dirs);
     theta = [theta, theta(1)];
-    % radius = ds_spike_count(find(ds_index==single_ds_index),:);
     radius = dir_spike_count(single_ds_index,:);
     radius = [radius, radius(1)];
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
 %     close
 end
 
