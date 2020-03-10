@@ -106,12 +106,12 @@ master_col = [ds_master_id_mapPCA; 0; ds_master_id_mapEI; 0; ds_master_id_map2];
 slave_col = [ds_slave_id_mapPCA; 0; ds_slave_id_mapEI; 0; patch];
 ds_map_all = [master_col, slave_col]
 
-savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
-save(savefile, 'ds_cells', 'ds_map_all');
+% savefile = append('ds_cell_map_', datestr(now, 'yyyymmdd'), '.mat');
+% save(savefile, 'ds_cells', 'ds_map_all');
 
 %% ds-ness of mapped cells
 
-ds_master_id_test = [5237 5718];
+ds_master_id_test = [3257];
 
 for i = 1 : length(ds_master_id_test)
     figure
@@ -122,7 +122,7 @@ for i = 1 : length(ds_master_id_test)
         disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
-    tp_set = 2; % range 1:3
+    tp_set = 1; % range 1:3
 
     dir_spike_count = [];
     for dir = 1:length(grat_dirs)
