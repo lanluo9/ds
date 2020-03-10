@@ -2,17 +2,15 @@
 clear
 clc
 
-dataset_num = '02-sorted';
-date_num = '2020-02-29-0';
-% /Volumes/dusom_fieldlab/lab/Experiments/Array/Analysis/2016-03-04-0/data003-sorted
+dataset_num = '03-sorted';
+date_num = '2016-03-04-0';
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, ...
     '/data0', dataset_num); 
 
-stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s', ...
-    dataset_num, '.txt');
+stimulus_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s03_test.txt');
 
 %% load data
 datarun = load_data(datapath);
