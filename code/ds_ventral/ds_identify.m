@@ -4,7 +4,7 @@ clc
 
 dataset_num = '02-sorted';
 date_num = '2020-02-29-0';
-
+% /Volumes/dusom_fieldlab/lab/Experiments/Array/Analysis/2016-03-04-0/data003-sorted
 prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
 

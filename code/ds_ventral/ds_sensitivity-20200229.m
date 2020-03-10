@@ -21,7 +21,7 @@ flag = find(ds_map_all(:,1)==0);
 ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
 ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
 ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
-ds_map_all
+% ds_map_all
 
 %% chop data000 into sections
 
