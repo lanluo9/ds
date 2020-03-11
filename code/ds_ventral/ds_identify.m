@@ -19,7 +19,9 @@ datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% process triggers and extract some stim params
-trigger_set = round(datarun.triggers);
+% trigger_set_ori = round(datarun.triggers);
+trigger_set = unique(round(datarun.triggers));
+
 trig_inds = find(mod(trigger_set, 10) == 0);
 user_defined_trigs = datarun.triggers(trig_inds);
 
@@ -51,7 +53,7 @@ end
 
 %% scatter plot of vector sums for two different gratings.
 
-x_cutoff = 0.7;
+x_cutoff = 0.8;
 y_cutoff = 0.8;
 cutoff_coord = [x_cutoff, y_cutoff]; 
 
@@ -109,12 +111,11 @@ ds_map_all = [master_col, slave_col]
 
 %% ds-ness of mapped cells
 
-ds_master_id_test = [3257];
 
-for i = 1 : length(ds_master_id_test)
+for i = 1 : length(ds_cell_ids)
     figure
     
-    single_ds_id = ds_master_id_test(i); 
+    single_ds_id = ds_cell_ids(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
     if isempty(single_ds_index)
         disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
@@ -143,7 +144,7 @@ for i = 1 : length(ds_master_id_test)
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
             rep_mark = rep .* ones(length(spike_time), 1);
             scatter(spike_time, rep_mark, 25, 'filled')
-            axis([0 10 0 7])
+            axis([0 10 0 5])
             hold on
         end
     end
@@ -156,8 +157,8 @@ for i = 1 : length(ds_master_id_test)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-%     saveas(gcf, ['mapEI-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
-%     close
+    saveas(gcf, ['repro0304-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    close
 end
 
 %%
