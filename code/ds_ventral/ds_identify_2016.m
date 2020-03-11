@@ -17,13 +17,10 @@ datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
-load('2016-03-04_s03.mat')
+% load('2016-03-04_s03.mat')
 
 %% process triggers and extract some stim params
-trigger_set_ori = round(datarun.triggers);
-trigger_set = (floor(datarun.triggers));
-% trig_inds = find(mod(trigger_set, 10) == 0);
-
+trigger_set = floor(datarun.triggers);
 trig_inds = [];
 for i = 0 : ceil(max(trigger_set ) / 10)
     trig_inds = [trig_inds, find(trigger_set/10 == i, 1)];
@@ -82,12 +79,12 @@ ds_cells'
 % save(savefile, 'ds_cells');
 
 %%
-slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data000-map-sorted/data000-map-sorted');
+slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data000-map/data000-map');
 
 datarun_s = load_data(slave_path);
 datarun_s = load_neurons(datarun_s);
 datarun_s = load_params(datarun_s);
-datarun_s = load_ei(datarun_s, 'all', 'array_type', 519);
+datarun_s = load_ei(datarun_s, 'all', 'array_type', 519); % there is no .ei in 000-map folder. so xiaoyang only did map-analysis
 
 [map_list, failed_to_map_list] = map_ei_custom2(datarun, datarun_s, 'master_cell_type', ds_cell_ids, 'slave_cell_type', 'all', 'troubleshoot', true);
 fprintf('failed to map %d neurons out of %d neurons \n', length(failed_to_map_list), length(ds_cell_ids)); 
