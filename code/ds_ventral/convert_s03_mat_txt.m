@@ -10,7 +10,7 @@ line_template = '(:DIRECTION 225 :TEMPORAL_PERIOD 120 :SPATIAL_PERIOD 240 :RGB #
 
 %% 
 
-fileID = fopen('s03.txt','w');
+fileID = fopen('s03_test.txt','w');
 fprintf(fileID, heading_str);
 
 line_end_str = ' :RGB #(0.50 0.50 0.50) :BACK_RGB #(0.25 0.25 0.25))\n';
@@ -18,7 +18,7 @@ sp = stim_out.spatial_period;
 
 for i = 1 : length(stim_out.trials)
     dir = stim_out.trials(i).direction;
-    tp = 10 * stim_out.trials(i).temporal_period; % tp naming convention btw 2016 vs 2019? 2019 = 120, 240
+    tp = stim_out.trials(i).temporal_period; % tp naming convention btw 2016 vs 2019? 2019 = 120, 240
     fprintf(fileID, ['(:DIRECTION ', num2str(dir), ' :TEMPORAL_PERIOD ', num2str(tp), ' :SPATIAL_PERIOD ', num2str(sp), line_end_str]);
     
 end

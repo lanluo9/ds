@@ -46,8 +46,8 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
-[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
+[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 12, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 24, 'SP', 240);
 
 % scatter((vector_mags_120), (vector_mags_240))
 
@@ -121,7 +121,7 @@ for i = 1 : length(ds_cell_ids)
         disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
-    tp_set = 2; % range 1:3
+    tp_set = 7; % range 1:9
 
     % should optimize this w cellfun to broadcast length function
     dir_spike_count = zeros(length(datarun.cell_ids), length(grat_dirs));
