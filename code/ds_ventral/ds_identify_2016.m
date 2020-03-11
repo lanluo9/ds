@@ -75,8 +75,8 @@ ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids];
 ds_cells'
 
-% savefile = append('ds_master_002_ds_', datestr(now, 'yyyymmdd'), '.mat');
-% save(savefile, 'ds_cells');
+savefile = append('ds_master_002_ds_', datestr(now, 'yyyymmdd'), '.mat');
+save(savefile, 'ds_cells');
 
 %%
 slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data000-map/data000-map');
