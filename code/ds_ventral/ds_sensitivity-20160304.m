@@ -58,7 +58,7 @@ slave_ds_id_mapped = importdata('slave_ds_id_mapped.txt');
 
 tic
 
-for i = 9 : length(slave_ds_id_mapped)
+for i = 1 : length(slave_ds_id_mapped)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
     ds_slave_id = slave_ds_id_mapped(i); 
@@ -105,6 +105,7 @@ for i = 9 : length(slave_ds_id_mapped)
     
     saveas(gcf, [num2str(ds_slave_id), '-sorted-pca.jpg'])
     savefig([num2str(ds_slave_id), '-sorted-pca.fig'])
+    print(num2str(ds_slave_id),'-dpdf','-fillpage')
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end
