@@ -63,6 +63,7 @@ for i = 1 : length(slave_ds_id_all)
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
+        close
         continue
     end
     
@@ -102,7 +103,7 @@ for i = 1 : length(slave_ds_id_all)
     
     saveas(gcf, [num2str(ds_slave_id), '-unsorted-pca.png'])
     savefig([num2str(ds_slave_id), '-unsorted-pca.fig'])
-    disp(['saved fig for ', ds_slave_id])
+    disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end
     
