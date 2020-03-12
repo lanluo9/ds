@@ -51,15 +51,17 @@ marker_seq = section_sort(:,7);
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
 
-load('ds_master_002_ds_20200311.mat')
-slave_ds_id_all = unique(ds_cells(2,:)); 
+% load('ds_master_002_ds_20200311.mat')
+% slave_ds_id_all = unique(ds_cells(2,:)); 
+
+slave_ds_id_mapped = importdata('slave_ds_id_mapped.txt');
 
 tic
 
-for i = 1 : length(slave_ds_id_all)
+for i = 9 : length(slave_ds_id_mapped)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
-    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_id = slave_ds_id_mapped(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
@@ -101,8 +103,8 @@ for i = 1 : length(slave_ds_id_all)
         end
     end
     
-    saveas(gcf, [num2str(ds_slave_id), '-unsorted-pca.jpg'])
-    savefig([num2str(ds_slave_id), '-unsorted-pca.fig'])
+    saveas(gcf, [num2str(ds_slave_id), '-sorted-pca.jpg'])
+    savefig([num2str(ds_slave_id), '-sorted-pca.fig'])
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end

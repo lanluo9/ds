@@ -43,13 +43,27 @@ section_sort = sortrows(sections, 7);
 load('ds_master_002_ds_20200311.mat')
 slave_ds_id_all = unique(ds_cells(2,:)); 
 
+
+%%
+exist = [];
+for i = 1 : length(slave_ds_id_all)
+    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
+    if ~isempty(ds_slave_index)
+        disp([num2str(ds_slave_id), ' exists in slave datarun.cell_id!'])
+        exist(end+1,1) = ds_slave_id;
+        continue
+    end
+end
 %%
 tic
 
-for i = 1 : length(slave_ds_id_all)
+slave_ds_id_mapped = importdata('slave_ds_id_mapped.txt');
+
+for i = 5 : length(slave_ds_id_mapped)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
-    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_id = slave_ds_id_mapped(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
@@ -60,8 +74,7 @@ for i = 1 : length(slave_ds_id_all)
     spike_time = datarun.spikes{ds_slave_index, 1};
 
     for section_id = 1:size(section_sort, 1)
-%         subplot(size(section_sort, 1), 1, m)
-        subaxis(size(section_sort, 1), 1, section_id, 'Spacing', 0.03, 'Padding', 0, 'Margin', 0);
+        subaxis(size(section_sort, 1), 1, section_id, 'Spacing', 0.001, 'Padding', 0, 'Margin', 0);
         
         section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
         section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
@@ -86,8 +99,8 @@ for i = 1 : length(slave_ds_id_all)
         axis off
     end
         
-    saveas(gcf, [num2str(ds_slave_id), '-unsorted-pca-stitch.jpg'])
-    savefig([num2str(ds_slave_id), '-unsorted-pca-stitch.fig'])
+    saveas(gcf, [num2str(ds_slave_id), '-sorted-pca-stitch.jpg'])
+    savefig([num2str(ds_slave_id), '-sorted-pca-stitch.fig'])
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end
