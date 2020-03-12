@@ -14,15 +14,6 @@ datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-% %% load ds cell identified in master 
-
-% % load('ds_cell_map_20200306.mat', 'ds_map_all');
-% flag = find(ds_map_all(:,1)==0);
-% ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
-% ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
-% ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
-% % ds_map_all
-
 %% chop data000 into sections
 
 gaps = round(diff(datarun.triggers));
@@ -46,14 +37,13 @@ sections = [sections, ndf, flash_config, nflash];
 
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
-marker = unique(section_sort(:,7));
-marker_seq = section_sort(:,7);
-
-%% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
+% marker = unique(section_sort(:,7));
+% marker_seq = section_sort(:,7);
 
 load('ds_master_002_ds_20200311.mat')
 slave_ds_id_all = unique(ds_cells(2,:)); 
 
+%%
 tic
 
 for i = 1 : length(slave_ds_id_all)
@@ -69,40 +59,35 @@ for i = 1 : length(slave_ds_id_all)
     
     spike_time = datarun.spikes{ds_slave_index, 1};
 
-    for m = 1: (length(marker))
-        subplot(length(marker), 1, m)  
-        marker_now = marker(m);
-        section_id_seq = find(marker_seq == marker_now, length(marker_seq));
+    for section_id = 1:size(section_sort, 1)
+%         subplot(size(section_sort, 1), 1, m)
+        subaxis(size(section_sort, 1), 1, section_id, 'Spacing', 0.03, 'Padding', 0, 'Margin', 0);
+        
+        section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
+        section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
 
-        for s = 1:length(section_id_seq)
-            section_id = section_id_seq(s); 
-            section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
-            section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
+        spike_time_section = spike_time(section_flag);
+        spike_time_section = spike_time_section - section_now(1);
 
-            spike_time_section = spike_time(section_flag);
-            spike_time_section = spike_time_section - section_now(1);
+        rep_len = 3;
+        rep_max = round(section_now(2) - section_now(1)) / rep_len;
 
-            rep_len = 3;
-            rep_max = round(section_now(2) - section_now(1)) / rep_len;
+        for rep = 1 : rep_max
+            rep_flag = spike_time_section >= (rep-1)*rep_len & spike_time_section <= rep*rep_len;
+            spike_time_rep = spike_time_section(rep_flag);
+            spike_time_rep = spike_time_rep - (rep-1)*rep_len;
 
-            
-            rep_step = 1;
-            for rep = 1 : rep_step : rep_max
-                rep_flag = spike_time_section >= (rep-1)*rep_len & spike_time_section <= rep*rep_len;
-                spike_time_rep = spike_time_section(rep_flag);
-                spike_time_rep = spike_time_rep - (rep-1)*rep_len;
-
-                rep_mark = rep * ones(length(spike_time_rep),1);
-                scatter(spike_time_rep, rep_mark, 5, 'filled')
-                axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
-                hold on
-            end
+            rep_mark = rep * ones(length(spike_time_rep),1);
+            scatter(spike_time_rep, rep_mark, 5, 'filled')
+            axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
             hold on
         end
+        hold on
+        axis off
     end
-    
-    saveas(gcf, [num2str(ds_slave_id), '-unsorted-pca.jpg'])
-    savefig([num2str(ds_slave_id), '-unsorted-pca.fig'])
+        
+    saveas(gcf, [num2str(ds_slave_id), '-unsorted-pca-stitch.jpg'])
+    savefig([num2str(ds_slave_id), '-unsorted-pca-stitch.fig'])
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end

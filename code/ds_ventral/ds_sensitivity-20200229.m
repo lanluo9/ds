@@ -66,7 +66,7 @@ slave_ds_id_all = unique(ds_map_all(:,2)); slave_ds_id_all(slave_ds_id_all == 0)
 tic
 
 for i = 1 : length(slave_ds_id_all)
-    figure 
+    figure('units','normalized','outerposition',[0 0 1 1]) 
 
     ds_slave_id = slave_ds_id_all(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
@@ -114,7 +114,7 @@ for i = 1 : length(slave_ds_id_all)
     end
     
 %     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(ds_slave_index), '. id = ', num2str(ds_slave_id)])
-    saveas(gcf, ['map_lost-', num2str(ds_slave_index),'-', num2str(ds_slave_id), '.png'])
+    saveas(gcf, ['map_lost-', num2str(ds_slave_index),'-', num2str(ds_slave_id), '.jpg'])
     close
 end
     
