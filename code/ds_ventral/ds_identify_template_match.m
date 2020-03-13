@@ -4,8 +4,8 @@ clc
 
 dataset_num = '02-sorted';
 
-prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
+% prefix_now = '/Volumes/dusom_fieldlab';
+prefix_now = '/Volumes/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/2019-11-21-0/data0', dataset_num, ...
     '/data0', dataset_num); 
