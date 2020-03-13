@@ -106,7 +106,7 @@ for i = 1 : length(slave_ds_id_all)
     
     saveas(gcf, [num2str(ds_slave_id), '.jpg'])
     savefig([num2str(ds_slave_id), '.fig'])
-    print(num2str(ds_slave_id),'-dpdf','-fillpage')
+    print(num2str(ds_slave_id), '-dpdf', '-fillpage')
     
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
