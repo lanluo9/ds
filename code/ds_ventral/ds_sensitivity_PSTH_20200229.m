@@ -49,18 +49,18 @@ section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
-%% trying single block PSTH (later w rasterplot side by side)
+%% PSTH 
 
 slave_ds_id_all = unique(ds_map_all(:,2)); 
 slave_ds_id_all(slave_ds_id_all == 0) = [];
 
-slave_ds_id_test = slave_ds_id_all(1);
+% slave_ds_id_test = slave_ds_id_all(1);
 tic
 
-for i = 1 : length(slave_ds_id_test)
+for i = 1 : length(slave_ds_id_all)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
-    ds_slave_id = slave_ds_id_test(i); 
+    ds_slave_id = slave_ds_id_all(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
@@ -70,12 +70,14 @@ for i = 1 : length(slave_ds_id_test)
     
     spike_time = datarun.spikes{ds_slave_index, 1};
 
-    for m = 1 %: (length(marker))
-%         subplot(length(marker), 1, m)  
-        marker_now = marker(11); %(m)
+    for m = 1 : (length(marker))
+        subplot(length(marker), 1, m)  
+%         subaxis(length(marker), 1, m, 'Spacing', 0.001, 'Padding', 0, 'Margin', 0);
+        marker_now = marker(m); 
         section_id_seq = find(marker_seq == marker_now, length(marker_seq));
 
         for s = 1:length(section_id_seq)
+            firing_rate = [];
             section_id = section_id_seq(s); 
             section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
             section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
@@ -92,10 +94,10 @@ for i = 1 : length(slave_ds_id_test)
                 rep_step = 2; % skip 2-4s of every period, plot only 0-2s
             end
             
-            len_bin = 0.010; % bin length (sec)
-            len_window = 2; % number of bins in a movmean window
-            prestim = 0; % buggy. must set to 0 atm
-            len_whole = 2 + prestim; % either way, whole length of firing rate = 3s
+            len_bin = 0.010;    % bin length (sec)
+            len_window = 2;     % number of bins in a movmean window
+            prestim = 0;        % buggy. must = 0 atm
+            len_whole = 2 + prestim; 
             nbin = len_whole / len_bin;
             edges = linspace(-prestim, rep_len, nbin);
 
@@ -108,25 +110,19 @@ for i = 1 : length(slave_ds_id_test)
                 [peristim_binned(rep, :), ~] = histcounts(spike_time_peristim, edges);
             end
             
-            firing_rate = movmean( sum(peristim_binned, 1), len_window) / (len_bin * len_window);
-            time_axis = (-prestim+len_bin) : len_bin : (2-len_bin); % plot peristim from -1s to 2s
-
-            plot(time_axis, firing_rate);
-            xlabel('seconds relative to stim')
-            ylabel('spike rate');
-
-            xlim([(-prestim - 0.05) (rep_len + 0.05)])
-            hold on
+            firing_rate(s,:) = movmean( sum(peristim_binned, 1), len_window) / (len_bin * len_window);
+            time_axis = (-prestim+len_bin) : len_bin : (2-len_bin); 
 
         end
+        plot(time_axis, mean(firing_rate, 1), 'r-');
+        xlim([(-prestim - 0.05) (rep_len + 0.05)])
+%         ylim([0 (max(firing_rate(:))+5)])
+        hold on
     end
     
-%     saveas(gcf, [num2str(ds_slave_id), '.jpg'])
-%     savefig([num2str(ds_slave_id), '.fig'])
-%     print(num2str(ds_slave_id), '-dpdf', '-fillpage')
-%     
-%     disp(['saved fig for ', num2str(ds_slave_id)])
-%     close
+    print(num2str(ds_slave_id), '-dpdf', '-fillpage')
+    disp(['saved fig for ', num2str(ds_slave_id)])
+    close
 end
 toc
 
