@@ -94,12 +94,12 @@ for i = 1 : length(slave_ds_id_test)
             
             len_bin = 0.010; % bin length (sec)
             len_window = 2; % number of bins in a movmean window
-            prestim = 1; % also plot 1 sec of firing rate before stim
+            prestim = 0; % buggy. must set to 0 atm
             len_whole = 2 + prestim; % either way, whole length of firing rate = 3s
             nbin = len_whole / len_bin;
-            edges = linspace
+            edges = linspace(-prestim, rep_len, nbin);
 
-            peristim_binned = zeros(rep_max/rep_step, nbin); % need to revise for 4s!
+            peristim_binned = zeros(rep_max/rep_step, nbin-1); 
             for rep = 1 : rep_step : rep_max
                 peristim_flag = spike_time_section >= ((rep-1)*rep_len - prestim) & spike_time_section <= rep*rep_len;
                 spike_time_peristim = spike_time_section(peristim_flag);
@@ -109,7 +109,7 @@ for i = 1 : length(slave_ds_id_test)
             end
             
             firing_rate = movmean( sum(peristim_binned, 1), len_window) / (len_bin * len_window);
-            time_axis = (-prestim) : len_bin : (2-len_bin); % plot peristim from -1s to 2s
+            time_axis = (-prestim+len_bin) : len_bin : (2-len_bin); % plot peristim from -1s to 2s
 
             plot(time_axis, firing_rate);
             xlabel('seconds relative to stim')
