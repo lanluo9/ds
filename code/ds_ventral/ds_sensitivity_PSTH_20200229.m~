@@ -6,8 +6,8 @@ clc
 dataset_num = '/data000-map-sorted'; 
 date_num = '2020-02-29-0';
 
-prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/All_Staff/';
+% prefix_now = '/Volumes/dusom_fieldlab';
+prefix_now = '/Volumes/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
 datarun = load_data(datapath);
@@ -51,6 +51,9 @@ marker_seq = section_sort(:,7);
 
 %% trying single block PSTH (later w rasterplot side by side)
 
+slave_ds_id_all = unique(ds_map_all(:,2)); 
+slave_ds_id_all(slave_ds_id_all == 0) = [];
+
 slave_ds_id_test = slave_ds_id_all(1);
 tic
 
@@ -69,7 +72,7 @@ for i = 1 : length(slave_ds_id_test)
 
     for m = 1 %: (length(marker))
 %         subplot(length(marker), 1, m)  
-        marker_now = marker(end); %(m)
+        marker_now = marker(11); %(m)
         section_id_seq = find(marker_seq == marker_now, length(marker_seq));
 
         for s = 1:length(section_id_seq)
@@ -90,21 +93,30 @@ for i = 1 : length(slave_ds_id_test)
             end
             
             len_bin = 0.010; % bin length (sec)
-            len_window = 2 % number of bins in a movmean window
-            len_whole = 3; % either way, whole length of firing rate = 3s
+            len_window = 2; % number of bins in a movmean window
+            prestim = 1; % also plot 1 sec of firing rate before stim
+            len_whole = 2 + prestim; % either way, whole length of firing rate = 3s
             nbin = len_whole / len_bin;
 
+            peristim_binned = zeros(rep_max/rep_step, nbin); % need to revise for 4s!
             for rep = 1 : rep_step : rep_max
-                peristim_flag = spike_time_section >= ((rep-1)*rep_len - 1) & spike_time_section <= rep*rep_len;
+                peristim_flag = spike_time_section >= ((rep-1)*rep_len - prestim) & spike_time_section <= rep*rep_len;
                 spike_time_peristim = spike_time_section(peristim_flag);
-                spike_time_peristim = spike_time_peristim - ((rep-1)*rep_len - 1);
+                spike_time_peristim = spike_time_peristim - ((rep-1)*rep_len - prestim);
                 
-                [peristim_binned, ~] = histcounts(spike_time_peristim, nbin);
-                
+                [peristim_binned(rep, :), ~] = histcounts(spike_time_peristim, nbin);
             end
             
-            
+            firing_rate = movmean( sum(peristim_binned, 1), len_window);
+            time_axis = (-prestim) : len_bin : (2-len_bin); % plot peristim from -1s to 2s
+
+            plot(time_axis, firing_rate);
+            xlabel('seconds relative to stim')
+            ylabel('spike rate');
+
+            xlim([(-prestim - 0.05) (rep_len + 0.05)])
             hold on
+
         end
     end
     
@@ -118,9 +130,6 @@ end
 toc
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
-
-slave_ds_id_all = unique(ds_map_all(:,2)); 
-slave_ds_id_all(slave_ds_id_all == 0) = [];
 
 tic
 
