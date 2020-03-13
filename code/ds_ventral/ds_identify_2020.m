@@ -4,8 +4,8 @@ clc
 
 dataset_num = '02-sorted';
 date_num = '2020-02-29-0';
-prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/dusom_fieldlab/All_Staff/';
+% prefix_now = '/Volumes/dusom_fieldlab';
+prefix_now = '/Volumes/All_Staff/';
 
 datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, ...
     '/data0', dataset_num); 
@@ -45,8 +45,8 @@ for g_dirs = 1:length(datarun.stimulus.params.DIRECTION)
     end
 end
 
-[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 12, 'SP', 240);
-[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 24, 'SP', 240);
+[vector_sums_120, vector_mags_120] = get_vector_sums(datarun, 'all', 'TP', 120, 'SP', 240);
+[vector_sums_240, vector_mags_240] = get_vector_sums(datarun, 'all', 'TP', 240, 'SP', 240);
 
 % scatter((vector_mags_120), (vector_mags_240))
 
@@ -120,7 +120,7 @@ for i = 1 : length(ds_cell_ids)
         disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
         continue
     end
-    tp_set = 9; % range 1:9
+    tp_set = 2; 
 
     % should optimize this w cellfun to broadcast length function
     dir_spike_count = zeros(length(datarun.cell_ids), length(grat_dirs));
@@ -142,8 +142,8 @@ for i = 1 : length(ds_cell_ids)
         for rep = 1:datarun.stimulus.repetitions        
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
             rep_mark = rep .* ones(length(spike_time), 1);
-            scatter(spike_time, rep_mark, 25, 'filled')
-            axis([0 10 0 5])
+            scatter(spike_time, rep_mark, 5, 'filled')
+            axis([0 10 0 (datarun.stimulus.repetitions+1)])
             hold on
         end
     end
@@ -156,7 +156,9 @@ for i = 1 : length(ds_cell_ids)
     polarplot(theta, radius)
     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
     
-    saveas(gcf, ['repro0304-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    saveas(gcf, ['0229-', num2str(single_ds_index),'-', num2str(single_ds_id), '.png'])
+    print(['0229-', num2str(single_ds_id)], '-dpdf', '-fillpage')
+    disp(['saved fig for ', num2str(single_ds_id)])
     close
 end
 
@@ -197,7 +199,7 @@ for i = 1 : length(ds_master_id_mapEI)
         for rep = 1:size(single_dirtp,2)        
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
             rep_mark = rep .* ones(length(spike_time),1);
-            scatter(spike_time, rep_mark, 50, 'filled')
+            scatter(spike_time, rep_mark, 5, 'filled')
             axis([0 10 0 7])
             hold on
         end
@@ -252,7 +254,7 @@ for i = 1 : length(ds_master_id_mapPCA)
         for rep = 1:size(single_dirtp,2)        
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
             rep_mark = rep .* ones(length(spike_time),1);
-            scatter(spike_time, rep_mark, 50, 'filled')
+            scatter(spike_time, rep_mark, 5, 'filled')
             axis([0 10 0 7])
             hold on
         end
@@ -307,7 +309,7 @@ for i = 1 : length(ds_master_id_map2)
         for rep = 1:size(single_dirtp,2)        
             spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
             rep_mark = rep .* ones(length(spike_time),1);
-            scatter(spike_time, rep_mark, 50, 'filled')
+            scatter(spike_time, rep_mark, 5, 'filled')
             axis([0 10 0 7])
             hold on
         end

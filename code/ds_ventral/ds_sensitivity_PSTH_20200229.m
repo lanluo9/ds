@@ -88,11 +88,11 @@ for i = 1 : length(slave_ds_id_all)
             rep_len = 2;
             rep_max = round(section_now(2) - section_now(1)) / rep_len;
 
-            if section_sort(section_id, 5) < 3  % period = 2s or 0s (dark)
-                rep_step = 1;
-            elseif section_sort(section_id, 5) >= 4 % period = 4s
-                rep_step = 2; % skip 2-4s of every period, plot only 0-2s
-            end
+                if section_sort(section_id, 5) < 3  % period = 2s or 0s (dark)
+                    rep_step = 1;
+                elseif section_sort(section_id, 5) >= 4 % period = 4s
+                    rep_step = 2; % skip 2-4s of every period, plot only 0-2s
+                end
             
             len_bin = 0.010;    % bin length (sec)
             len_window = 2;     % number of bins in a movmean window
@@ -112,12 +112,12 @@ for i = 1 : length(slave_ds_id_all)
             
             firing_rate(s,:) = movmean( sum(peristim_binned, 1), len_window) / (len_bin * len_window);
             time_axis = (-prestim+len_bin) : len_bin : (2-len_bin); 
-
         end
-        plot(time_axis, mean(firing_rate, 1), 'r-');
-        xlim([(-prestim - 0.05) (rep_len + 0.05)])
-%         ylim([0 (max(firing_rate(:))+5)])
-        hold on
+        
+    plot(time_axis, mean(firing_rate, 1), 'r-');
+    xlim([(-prestim - 0.05) (rep_len + 0.05)])
+%     ylim([0 3000])
+    hold on
     end
     
     print(num2str(ds_slave_id), '-dpdf', '-fillpage')
