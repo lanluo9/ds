@@ -5,21 +5,21 @@ clc
 dataset_num = '02-sorted';
 date_num = '2020-02-29-0';
 % prefix_now = '/Volumes/dusom_fieldlab';
-% prefix_now = '/Volumes/All_Staff/';
+prefix_now = '/Volumes/All_Staff/';
 % prefix_now = '/dusom_fieldlab/All_Staff/';
 % prefix_now = '/Z:';
 
 % \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab
 % Z:\lab
 % D:\RRR\Grad\Rotation\GF_lab\lab_Mac
+% datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
 
-datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
-% datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]; 
-% stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
+datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]; 
+stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
 
 %% load data
 datarun = load_data(datapath);
-% datarun = load_neurons(datarun);
+datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 datarun = load_ei(datarun, 'all', 'array_type', 519);
 
