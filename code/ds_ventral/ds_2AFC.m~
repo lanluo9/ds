@@ -73,9 +73,7 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 range_null = section_idx(find(section_idx(:,end)==990), 1:2)
 marker = unique(section_idx(:,end), 'stable');
 
-% range_flash = [];
-% for i = 2 : length(marker)
-%     range_flash = [range_flash; section_idx(find(section_idx(:,end)==marker(i)), 1:2)];
-% end
+for i = 1 : 
+range_flash = section_idx(find(section_idx(:,end)==marker(i)), 1:2)
 
 
