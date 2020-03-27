@@ -40,7 +40,7 @@ sections(end+1, :) = [datarun.triggers(end)+4, datarun.duration, datarun.duratio
 
 ndf = [99; 5;5;5;5;5;5;5; 4;4;4;4;4; 3;3;3; 2; 99];
 flash_config = [0; 2.2;2.8;2.4;2.1;2.2;2.4;2.8; 2.2;2.4;2.8;2.2;2.1; 2.2;2.4;4.8; 4.2; 0];
-nflash = [0; sections(2:15,3)./2; sections(16:17,3)./4; 0];
+nflash = [sections(1:15,3)./2; sections(16:17,3)./4; sections(end,3)./2];
 sections = [sections, ndf, flash_config, nflash];
 
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
@@ -48,8 +48,16 @@ section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
 marker_seq = section_sort(:,7);
 
-%% merge sections w same flash intensity. cuts off 2-4s
+%% 
 
 slave_ds_id_all = unique(ds_map_all(:,2)); 
 slave_ds_id_all(slave_ds_id_all == 0) = [];
-slave_ds_id_all
+% slave_ds_id_all
+
+ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
+spike_time = datarun.spikes{ds_slave_index, 1};
+
+% chop dark session into 2 s
+
+
+% merge sections w same flash intensity. cuts off 2-4s
