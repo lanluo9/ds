@@ -1,4 +1,5 @@
 %% load data 
+
 clear
 clc
 
@@ -18,7 +19,7 @@ datarun = load_params(datarun);
 
 load('ds_cell_map_20200306.mat', 'ds_map_all');
 flag = find(ds_map_all(:,1)==0);
-ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
+ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); % ismember(ds_slave_id_mapPCA, datarun.cell_ids)
 ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
 ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
 % ds_map_all
@@ -46,27 +47,23 @@ sections = [sections, ndf, flash_config, nflash];
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 
-%% 
+%% for a single cell
+
 slave_ds_id_all = unique(ds_map_all(:,2)); 
 slave_ds_id_all(slave_ds_id_all == 0) = [];
 % slave_ds_id_all
-
 ds_slave_index = find(datarun.cell_ids == slave_ds_id_all(1)); 
-spike_time = datarun.spikes{ds_slave_index, 1};
 
-%%
+spike_time = datarun.spikes{ds_slave_index, 1};
 binsize = 0.020; % divide into 20 ms bins
 binnum = datarun.duration / binsize;
 edges = linspace(0, datarun.duration, binnum);
 [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each bin
-% histcounts(binned,[0,1,2,3,4,5,6,7]) % see bins w 0-7 spikes within them
+% histcounts(binned,[0:1:max(binned)+1]) % see bins w certain number of spikes within them
 
-trial_len = 2 / binsize; % every trial = 2s = 100 bins
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
-
-%%
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
-marker = unique(section_idx(:,end), 'stable');
+% marker = unique(section_idx(:,end), 'stable');
 
 % range_null = section_idx(find(section_idx(:,end)==990), 1:2)
 % range_flash = [];
@@ -78,12 +75,14 @@ marker = unique(section_idx(:,end), 'stable');
 % of starting points
 
 %% null = 1st dark session. flash = marker==52.1
-range_null = section_idx(1, 1:2) + [1,0];
-range_flash = section_idx(3, 1:2) + [1,0];
-% stack all (2s | 100 bins) trials
+% range_null = section_idx(1, 1:2) + [1,0];
+% range_flash = section_idx(3, 1:2) + [1,0];
+
+% add 4s exceptions!! change step size
+trial_len = 2 / binsize; % every trial = 2s = 100 bins
 ntrial = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
 
-sum_null = zeros(ntrial(1), trial_len);
+sum_null = zeros(ntrial(1), trial_len); % stack all trials (2s aka 100 bins) 
 for t = 1 : ntrial(1)
     trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
     sum_null(t,:) = trial_null;
