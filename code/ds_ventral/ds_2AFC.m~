@@ -101,13 +101,29 @@ sum_flash = sum(sum_flash,1);
 % data = [1 2 3 4 5];
 % y = datasample(data,5,'Replace',false)
 
-trial_num_null = [1:ntrial(1)];
-trial_num_flash = [1:ntrial(3)];
+trial_num_null = [1 : ntrial(1)];
+trial_num_flash = [1 : ntrial(3)];
 sample_size = min(length(trial_num_null), length(trial_num_flash));
-order_null = datasample(trial_num_null,sample_size,'Replace',false);
-order_flash = datasample(trial_num_flash,sample_size,'Replace',false);
 
+order_null = datasample(trial_num_null, sample_size, 'Replace', false);
+order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
 
+corrpos = zeros(sample_size, 1);
+% san = zeros(sample_size, 1);
+for t = 1 : sample_size
+    trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
+    other_null = sum_null - trial_null;
+    mean_null = other_null ./ (length(trial_num_null) - 1);
+    
+    trial_flash = [binned(trial_len*(t-1)+section_idx(3,1)+1 : trial_len*t+section_idx(3,1))];
+    other_flash = sum_flash - trial_flash;
+    mean_flash = other_flash ./ (length(trial_num_flash) - 1);
+    
+    discriminant = (mean_flash - mean_null)';
+    corrpos(t) = (trial_flash - trial_null) * discriminant;
+%     san(t) = trial_flash * discriminant - trial_null * discriminant;
+end
+% san == corrpos
 
 
 
