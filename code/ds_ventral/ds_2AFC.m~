@@ -78,24 +78,36 @@ marker = unique(section_idx(:,end), 'stable');
 % of starting points
 
 %% null = 1st dark session. flash = marker==52.1
-range_null = section_idx(1, 1:2);
-range_flash = section_idx(3, 1:2);
+range_null = section_idx(1, 1:2) + [1,0];
+range_flash = section_idx(3, 1:2) + [1,0];
 % stack all (2s | 100 bins) trials
-trial_num = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
+ntrial = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
 
-sum_null = zeros(trial_num(1), trial_len);
-for t = 1 : trial_num(1)
-    trial_null = [binned(trial_len*(t-1)+1 : trial_len*t)];
+sum_null = zeros(ntrial(1), trial_len);
+for t = 1 : ntrial(1)
+    trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
     sum_null(t,:) = trial_null;
 end
 sum_null = sum(sum_null,1);
-%%
-sum_flash = zeros(trial_num(3), trial_len);
-for t = 1 : trial_num(3)
-    trial_null = [binned(trial_len*(t-1)+1 : trial_len*t)];
+
+sum_flash = zeros(ntrial(3), trial_len);
+for t = 1 : ntrial(3)
+    trial_flash = [binned(trial_len*(t-1)+section_idx(3,1)+1 : trial_len*t+section_idx(3,1))];
     sum_flash(t,:) = trial_null;
 end
 sum_flash = sum(sum_flash,1);
+
+%% random null & flash trial w/o replace
+% data = [1 2 3 4 5];
+% y = datasample(data,5,'Replace',false)
+
+trial_num_null = [1:ntrial(1)];
+trial_num_flash = [1:ntrial(3)];
+sample_size = min(length(trial_num_null), length(trial_num_flash));
+order_null = datasample(trial_num_null,sample_size,'Replace',false);
+order_flash = datasample(trial_num_flash,sample_size,'Replace',false);
+
+
 
 
 
