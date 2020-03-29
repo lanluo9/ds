@@ -55,7 +55,7 @@ ds_slave_index = find(datarun.cell_ids == slave_ds_id_all(1));
 spike_time = datarun.spikes{ds_slave_index, 1};
 
 %%
-binsize = 0.020;
+binsize = 0.020; % divide into 20 ms bins
 binnum = datarun.duration / binsize;
 edges = linspace(0, datarun.duration, binnum);
 [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each bin
@@ -65,17 +65,45 @@ trial_len = 2 / binsize; % every trial = 2s = 100 bins
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
 
 %%
-trial_num = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
-
-% index sections w same flash intensity. cut off 2-4s
-
-range_null = section_idx(find(section_idx(:,end)==990), 1:2)
 marker = unique(section_idx(:,end), 'stable');
 
+% range_null = section_idx(find(section_idx(:,end)==990), 1:2)
 % range_flash = [];
 % for i = 2 : length(marker)
 %     range_flash = [range_flash; section_idx(find(section_idx(:,end)==marker(i)), 1:2)];
 % end
+
+% index sections w same flash intensity. cut off 2-4s == select only half
+% of starting points
+
+%% null = 1st dark session. flash = marker==52.1
+range_null = section_idx(1, 1:2);
+range_flash = section_idx(3, 1:2);
+% stack all (2s | 100 bins) trials
+trial_num = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
+
+sum_null = zeros(trial_num(1), trial_len);
+for t = 1 : trial_num(1)
+    trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
+    sum_null(t,:) = trial_null;
+end
+sum_null = sum(sum_null,1);
+
+sum_flash = zeros(trial_num(3), trial_len);
+for t = 1 : trial_num(3)
+    trial_null = [binned(trial_len*(t-1)+section_idx(3,1)+1 : trial_len*t+section_idx(3,1))];
+    sum_flash(t,:) = trial_null;
+end
+sum_flash = sum(sum_flash,1);
+
+%% random null & flash trial w/o replace
+data = [1 2 3 4 5];
+y = datasample(data,5,'Replace',false)
+
+
+
+
+
 
 
