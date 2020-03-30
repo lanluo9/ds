@@ -66,9 +66,10 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 
 %% iterate flash intensities
 
-% trial_len = unique(floor(section_idx(fid_seq(1),7))) / binsize;
-trial_len = 2 / binsize; % for now, pretend all trial length = 2s
+trial_len = 2 / binsize; % pretend all trial length = 2s
+binned
 
+ntrial = round(section_idx(:,8));
 sum_null = zeros(ntrial(1), trial_len); 
 for t = 1 : ntrial(1)
     trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
@@ -82,7 +83,6 @@ for t = 1 : ntrial(2)
 end
 sum_null_end = sum(sum_null,1);
 
-ntrial = round(section_idx(:,8));
 marker = unique(section_idx(:,end), 'stable');
 Pc = zeros(length(marker)-1 ,1);
 for flash_intensity = 2 : length(marker) % exclude dark==990
