@@ -228,12 +228,9 @@ Pc_var_2 = std(Pc,1,2)
 %%
 % flash_intensity_seq = marker(2:end);
 x = 1 : length(marker)-1;
-errorbar(x, Pc_avg, Pc_var, 'b')
+errorbar(x, Pc_avg, Pc_var)
 hold on
-errorbar(x, Pc_avg_2, Pc_var_2, '--r')
-hold on
-yline(1,'-.g');
-yline(0.84,'-.g');
+errorbar(x, Pc_avg_2, Pc_var_2)
 xticks(x)
-xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
+xticklabels({'-3\pi','-2\pi','-\pi','0','\pi','2\pi','3\pi'})
 xtickangle(45)
