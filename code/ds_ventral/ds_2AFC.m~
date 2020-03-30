@@ -33,11 +33,11 @@ switch_index = [];
 for i = 1 : length(tmp_triggers)
     switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
 end
-section_end = [300; datarun.triggers(switch_index); datarun.duration];
+section_end = [300; datarun.triggers(switch_index); (datarun.duration-30)];
 section_start = [0; datarun.triggers(1); datarun.triggers(switch_index + 1)];
 sections = [section_start, section_end, (section_end - section_start)];
 sections(end, 2:3) = [datarun.triggers(end)+4, datarun.triggers(end)+4 - sections(end, 1)];
-sections(end+1, :) = [datarun.triggers(end)+4, datarun.duration, datarun.duration - (datarun.triggers(end)+4)];
+sections(end+1, :) = [datarun.triggers(end)+4, datarun.duration-30, datarun.duration-30 - (datarun.triggers(end)+4)];
 
 ndf = [99; 5;5;5;5;5;5;5; 4;4;4;4;4; 3;3;3; 2; 99];
 flash_config = [0; 2.2;2.8;2.4;2.1;2.2;2.4;2.8; 2.2;2.4;2.8;2.2;2.1; 2.2;2.4;4.8; 4.2; 0];
@@ -62,69 +62,77 @@ edges = linspace(0, datarun.duration, binnum);
 % histcounts(binned,[0:1:max(binned)+1]) % see bins w certain number of spikes within them
 
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
-
-%%
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
-marker = unique(section_idx(:,end), 'stable');
 
-% range_null = section_idx(find(section_idx(:,end)==990), 1:2)
-% range_flash = [];
-% for i = 2 : length(marker)
-%     range_flash = [range_flash; section_idx(find(section_idx(:,end)==marker(i)), 1:2)];
-% end
+%% iterate flash intensities
 
-% index sections w same flash intensity. cut off 2-4s == select only half
-% of starting points
-
-%% null = 1st dark session. flash = marker==52.1
-range_null = section_idx(1, 1:2) + [1,0];
-range_flash = section_idx(3, 1:2) + [1,0];
-% stack all (2s | 100 bins) trials
-trial_len = 2 / binsize; % every trial = 2s = 100 bins
-ntrial = floor((section_idx(:,2) - section_idx(:,1)) / trial_len);
-
-sum_null = zeros(ntrial(1), trial_len);
+sum_null = zeros(ntrial(1), trial_len); 
 for t = 1 : ntrial(1)
-    trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
+    trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
     sum_null(t,:) = trial_null;
 end
-sum_null = sum(sum_null,1);
-
-sum_flash = zeros(ntrial(3), trial_len);
-for t = 1 : ntrial(3)
-    trial_flash = [binned(trial_len*(t-1)+section_idx(3,1)+1 : trial_len*t+section_idx(3,1))];
-    sum_flash(t,:) = trial_null;
+sum_null_start = sum(sum_null,1);
+sum_null = zeros(ntrial(2), trial_len); 
+for t = 1 : ntrial(2)
+    trial_null = binned(trial_len*(t-1)+section_idx(2,1)+1 : trial_len*t+section_idx(2,1));
+    sum_null(t,:) = trial_null;
 end
-sum_flash = sum(sum_flash,1);
+sum_null_end = sum(sum_null,1);
 
-%% random null & flash trial w/o replace
-% data = [1 2 3 4 5];
-% y = datasample(data,5,'Replace',false)
+ntrial = round(section_idx(:,8));
+marker = unique(section_idx(:,end), 'stable');
+for flash_intensity = 2 : length(marker) % exclude dark==990
+    fid = section_idx(:,end)==marker(flash_intensity);
+    fid_seq = find(fid==1);
+    if section_idx(fid_seq(1),6) == 5
+        nid = 1; sum_null = sum_null_start;
+    else
+        nid = 2; sum_null = sum_null_end;
+    end
+    
+    trial_len = unique(floor(section_idx(fid_seq(1),7))) / binsize;
+    
 
-trial_num_null = [1 : ntrial(1)];
-trial_num_flash = [1 : ntrial(3)];
+    
+end
+
+for i = 1 : length(fid_seq)
+    sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len);
+    for t = 1 : ntrial(fid_seq(i))
+        trial_flash = binned(trial_len*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*t+section_idx(fid_seq(i),1));
+        sum_flash_section{i}(t,:) = trial_flash;
+    end
+    sum_flash_section{i} = sum(sum_flash_section{i},1);
+end
+sum_flash_section = sum(sum_flash_section{:})
+
+trial_num_null = 1 : ntrial(1);
+trial_num_flash = 1 : ntrial(3);
 sample_size = min(length(trial_num_null), length(trial_num_flash));
 
 order_null = datasample(trial_num_null, sample_size, 'Replace', false);
 order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
 
 corrpos = zeros(sample_size, 1);
-% san = zeros(sample_size, 1);
 for t = 1 : sample_size
-    trial_null = [binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1))];
+    trial_null = [binned(trial_len*(order_null(t)-1)+section_idx(1,1)+1 : trial_len*order_null(t)+section_idx(1,1))];
     other_null = sum_null - trial_null;
     mean_null = other_null ./ (length(trial_num_null) - 1);
     
-    trial_flash = [binned(trial_len*(t-1)+section_idx(3,1)+1 : trial_len*t+section_idx(3,1))];
-    other_flash = sum_flash - trial_flash;
+    trial_flash = [binned(trial_len*(order_null(t)-1)+section_idx(3,1)+1 : trial_len*order_null(t)+section_idx(3,1))];
+    other_flash = sum_flash_section - trial_flash;
     mean_flash = other_flash ./ (length(trial_num_flash) - 1);
     
     discriminant = (mean_flash - mean_null)';
     corrpos(t) = (trial_flash - trial_null) * discriminant;
-%     san(t) = trial_flash * discriminant - trial_null * discriminant;
 end
-% san == corrpos
-
 corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
 Pc = corr / length(corrpos);
 
+% range_null = section_idx(section_idx(:,end)==990, 1:2)
+% range_flash = [];
+% for i = 2 : length(marker)
+%     range_flash = [range_flash; section_idx(find(section_idx(:,end)==marker(i)), 1:2)];
+% end
+% range_null = section_idx(1, 1:2) + [1,0];
+% range_flash = section_idx(3, 1:2) + [1,0];
