@@ -66,6 +66,9 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 
 %% iterate flash intensities
 
+% trial_len = unique(floor(section_idx(fid_seq(1),7))) / binsize;
+trial_len = 2 / binsize;
+
 sum_null = zeros(ntrial(1), trial_len); 
 for t = 1 : ntrial(1)
     trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
@@ -81,6 +84,7 @@ sum_null_end = sum(sum_null,1);
 
 ntrial = round(section_idx(:,8));
 marker = unique(section_idx(:,end), 'stable');
+Pc = zeros(length(marker)-1 ,1);
 for flash_intensity = 2 : length(marker) % exclude dark==990
     fid = section_idx(:,end)==marker(flash_intensity);
     fid_seq = find(fid==1);
@@ -90,49 +94,46 @@ for flash_intensity = 2 : length(marker) % exclude dark==990
         nid = 2; sum_null = sum_null_end;
     end
     
-    trial_len = unique(floor(section_idx(fid_seq(1),7))) / binsize;
-    
-
-    
-end
-
-for i = 1 : length(fid_seq)
-    sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len);
-    for t = 1 : ntrial(fid_seq(i))
-        trial_flash = binned(trial_len*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*t+section_idx(fid_seq(i),1));
-        sum_flash_section{i}(t,:) = trial_flash;
+    sum_flash_seq = zeros(1, trial_len);
+    for i = 1 : length(fid_seq)
+        sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len);
+        for t = 1 : ntrial(fid_seq(i))
+            trial_flash = binned(trial_len*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*t+section_idx(fid_seq(i),1));
+            sum_flash_section{i}(t,:) = trial_flash;
+        end
+        sum_flash_section{i} = sum(sum_flash_section{i},1);
+        sum_flash_seq = sum_flash_seq + sum_flash_section{i};
     end
-    sum_flash_section{i} = sum(sum_flash_section{i},1);
-end
-sum_flash_section = sum(sum_flash_section{:})
-
-trial_num_null = 1 : ntrial(1);
-trial_num_flash = 1 : ntrial(3);
-sample_size = min(length(trial_num_null), length(trial_num_flash));
-
-order_null = datasample(trial_num_null, sample_size, 'Replace', false);
-order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
-
-corrpos = zeros(sample_size, 1);
-for t = 1 : sample_size
-    trial_null = [binned(trial_len*(order_null(t)-1)+section_idx(1,1)+1 : trial_len*order_null(t)+section_idx(1,1))];
-    other_null = sum_null - trial_null;
-    mean_null = other_null ./ (length(trial_num_null) - 1);
     
-    trial_flash = [binned(trial_len*(order_null(t)-1)+section_idx(3,1)+1 : trial_len*order_null(t)+section_idx(3,1))];
-    other_flash = sum_flash_section - trial_flash;
-    mean_flash = other_flash ./ (length(trial_num_flash) - 1);
+    trial_num_null = 1 : ntrial(nid);
+    trial_num_flash = 1 : sum(ntrial(fid));
+    sample_size = min(length(trial_num_null), length(trial_num_flash));
+    order_null = datasample(trial_num_null, sample_size, 'Replace', false);
+    order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
     
-    discriminant = (mean_flash - mean_null)';
-    corrpos(t) = (trial_flash - trial_null) * discriminant;
-end
-corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
-Pc = corr / length(corrpos);
+    corrpos = zeros(sample_size, 1);
+    for t = 1 : sample_size
+        trial_null = binned(trial_len*(order_null(t)-1)+section_idx(nid,1)+1 : trial_len*order_null(t)+section_idx(nid,1));
+        other_null = sum_null - trial_null;
+        mean_null = other_null ./ (length(trial_num_null) - 1);
 
-% range_null = section_idx(section_idx(:,end)==990, 1:2)
-% range_flash = [];
-% for i = 2 : length(marker)
-%     range_flash = [range_flash; section_idx(find(section_idx(:,end)==marker(i)), 1:2)];
-% end
-% range_null = section_idx(1, 1:2) + [1,0];
-% range_flash = section_idx(3, 1:2) + [1,0];
+        if order_null(t) <= ntrial(fid_seq(1))
+            trial_flash = binned(trial_len*(order_null(t)-1)+section_idx(fid_seq(1),1)+1 : ...
+                trial_len*order_null(t)+section_idx(fid_seq(1),1));
+        else
+            trial_flash = binned(trial_len*(order_null(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 : ...
+                trial_len*(order_null(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1));
+        end
+        other_flash = sum_flash_section - trial_flash;
+        mean_flash = other_flash ./ (length(trial_num_flash) - 1);
+
+        discriminant = (mean_flash - mean_null)';
+        corrpos(t) = (trial_flash - trial_null) * discriminant;
+    end
+    corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
+    Pc(flash_intensity - 1) = corr / length(corrpos);
+    
+end
+
+Pc
+
