@@ -66,8 +66,9 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 
 %% iterate flash intensities
 
-% trial_len = unique(floor(section_idx(fid_seq(1),7))) / binsize;
-trial_len = 2 / binsize; % for now, pretend all trial length = 2s
+trial_len = 2 / binsize; % pretend all trial length = 2s
+% modify binned: fill 0 into (2-4)s of 4s trials
+
 
 ntrial = round(section_idx(:,8));
 sum_null = zeros(ntrial(1), trial_len); 
@@ -94,26 +95,19 @@ for flash_intensity = 2 : length(marker) % exclude dark==990
         nid = 2; sum_null = sum_null_end;
     end
     
-    if floor(section_idx(fid_seq(1),7)) == 4
-        scale = 2; % account for 4s trials
-    else
-        scale = 1;
-    end
-    
-    sum_flash_seq = zeros(1, trial_len*scale);
+    sum_flash_seq = zeros(1, trial_len);
     for i = 1 : length(fid_seq)
-        sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len*scale);
+        sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len);
         for t = 1 : ntrial(fid_seq(i))
-            trial_flash = binned(trial_len*scale*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*scale*t+section_idx(fid_seq(i),1));
+            trial_flash = binned(trial_len*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*t+section_idx(fid_seq(i),1));
             sum_flash_section{i}(t,:) = trial_flash;
         end
         sum_flash_section{i} = sum(sum_flash_section{i},1);
         sum_flash_seq = sum_flash_seq + sum_flash_section{i};
     end
-    sum_flash_seq = sum_flash_seq(1, trial_len); % take only 0-2s of 4s trials
     
     trial_num_null = 1 : ntrial(nid);
-    trial_num_flash = 1 : scale : scale*sum(ntrial(fid));
+    trial_num_flash = 1 : sum(ntrial(fid));
     sample_size = min(length(trial_num_null), length(trial_num_flash));
     order_null = datasample(trial_num_null, sample_size, 'Replace', false);
     order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
@@ -124,17 +118,12 @@ for flash_intensity = 2 : length(marker) % exclude dark==990
         other_null = sum_null - trial_null;
         mean_null = other_null ./ (length(trial_num_null) - 1);
 
-        if scale == 1
-            if order_flash(t) <= ntrial(fid_seq(1))
-                trial_flash = binned(trial_len*(order_flash(t)-1)+section_idx(fid_seq(1),1)+1 : ...
-                    trial_len*order_flash(t)+section_idx(fid_seq(1),1));
-            else
-                trial_flash = binned(trial_len*(order_flash(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 : ...
-                    trial_len*(order_flash(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1));
-            end
-        elseif scale == 2
+        if order_flash(t) <= ntrial(fid_seq(1))
             trial_flash = binned(trial_len*(order_flash(t)-1)+section_idx(fid_seq(1),1)+1 : ...
-                    trial_len*order_flash(t)+section_idx(fid_seq(1),1));
+                trial_len*order_flash(t)+section_idx(fid_seq(1),1));
+        else
+            trial_flash = binned(trial_len*(order_flash(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 : ...
+                trial_len*(order_flash(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1));
         end
         other_flash = sum_flash_seq - trial_flash;
         mean_flash = other_flash ./ (length(trial_num_flash) - 1);
