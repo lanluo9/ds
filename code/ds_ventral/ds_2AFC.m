@@ -40,6 +40,8 @@ sections = [sections, ndf, flash_config, nflash];
 
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
+
+binsize = 0.020; 
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 
@@ -339,8 +341,8 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 
 %% iterate across cells
 cell_excluded = 0;
-figure
 for c = 1 : length(ds_slave_id_seq)
+    figure
     ds_slave_index = find(datarun.cell_ids == ds_slave_id_seq(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     
@@ -399,7 +401,7 @@ for c = 1 : length(ds_slave_id_seq)
             for t = 1 : sample_size
                 trial_null = binned(trial_len*(order_null(t)-1)+section_idx(nid,1)+1 : trial_len*order_null(t)+section_idx(nid,1));
                 other_null = sum_null - trial_null;
-                mean_null = other_null ./ (length(trial_num_null) - 1) - mean_all; % zero-mean
+                mean_null = other_null ./ (length(trial_num_null) - 1) - mean_all .* length(trial_num_null) ./ (length(trial_num_null) - 1); % zero-mean
 
                 if scale == 1
                     if order_flash(t) <= ntrial(fid_seq(1))
@@ -414,10 +416,10 @@ for c = 1 : length(ds_slave_id_seq)
                             trial_len*order_flash(t)+section_idx(fid_seq(1),1));
                 end
                 other_flash = sum_flash_seq - trial_flash;
-                mean_flash = other_flash ./ (length(trial_num_flash) - 1) - mean_all;
+                mean_flash = other_flash ./ (length(trial_num_flash) - 1) - mean_all .* length(trial_num_flash) ./ (length(trial_num_flash) - 1);
 
                 discriminant = (mean_flash - mean_null)';
-                corrpos(t) = (trial_flash - trial_null) * discriminant;
+                corrpos(t) = (trial_flash - trial_null) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
             end
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
             Pc(flash_intensity - 1, test) = corr / length(corrpos);
