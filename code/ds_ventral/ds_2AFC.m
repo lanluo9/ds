@@ -385,9 +385,12 @@ for c = 1 : length(ds_slave_id_seq)
                 sum_flash_seq = sum_flash_seq + sum_flash_section{i};
             end
             sum_flash_seq = sum_flash_seq(1 : trial_len); % take only 0-2s of 4s trials
-
+            
+            sum_all = sum_flash_seq + sum_null;
             trial_num_null = 1 : ntrial(nid);
             trial_num_flash = 1 : scale : scale*sum(ntrial(fid));
+            mean_all = sum_all ./ (length(trial_num_null) + length(trial_num_null));
+            
             sample_size = min(length(trial_num_null), length(trial_num_flash));
             order_null = datasample(trial_num_null, sample_size, 'Replace', false);
             order_flash = datasample(trial_num_flash, sample_size, 'Replace', false);
@@ -396,7 +399,7 @@ for c = 1 : length(ds_slave_id_seq)
             for t = 1 : sample_size
                 trial_null = binned(trial_len*(order_null(t)-1)+section_idx(nid,1)+1 : trial_len*order_null(t)+section_idx(nid,1));
                 other_null = sum_null - trial_null;
-                mean_null = other_null ./ (length(trial_num_null) - 1);
+                mean_null = other_null ./ (length(trial_num_null) - 1) - mean_all; % zero-mean
 
                 if scale == 1
                     if order_flash(t) <= ntrial(fid_seq(1))
@@ -411,7 +414,7 @@ for c = 1 : length(ds_slave_id_seq)
                             trial_len*order_flash(t)+section_idx(fid_seq(1),1));
                 end
                 other_flash = sum_flash_seq - trial_flash;
-                mean_flash = other_flash ./ (length(trial_num_flash) - 1);
+                mean_flash = other_flash ./ (length(trial_num_flash) - 1) - mean_all;
 
                 discriminant = (mean_flash - mean_null)';
                 corrpos(t) = (trial_flash - trial_null) * discriminant;
