@@ -555,34 +555,7 @@ for c = 1 : length(slave_ds_id_all)
     Pc_avg = mean(Pc,2);
     Pc_var = std(Pc,1,2);
     
-%     if max(Pc_avg) >= 0.84
-        cell_included = cell_included + 1;
-        x = 1 : length(marker)-1;
-        errorbar(x, Pc_avg, Pc_var)
-        hold on
-        yline(1,'-.g'); yline(0.84,'-.g');
-        xticks(x)
-        xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
-        xtickangle(45)
-%     end
-    hold on
-end
-% toc
-
-% compare performance across cells
-cell_included_2 = 0;
-figure
-for c = 1 : length(slave_ds_id_all)
-    ds_slave_index = find(datarun.cell_ids == slave_ds_id_all(c)); 
-
-    spike_time = datarun.spikes{ds_slave_index, 1};
-    binsize = 0.020; % divide into 20 ms bins
-    binnum = datarun.duration / binsize;
-    edges = linspace(0, datarun.duration, binnum);
-    [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each bin
-
-    trial_len = 2 / binsize; % for now, pretend all trial length = 2s
-    ntrial = round(section_idx(:,8));
+    
     sum_null = zeros(ntrial(1), trial_len); 
     for t = 1 : ntrial(1)
         trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
@@ -662,19 +635,22 @@ for c = 1 : length(slave_ds_id_all)
         end
     end
 
-    Pc_avg = mean(Pc,2);
-    Pc_var = std(Pc,1,2);
+    Pc_avg2 = mean(Pc,2);
+    Pc_var2 = std(Pc,1,2);
     
-    if max(Pc_avg) >= 0.84
-        cell_included_2 = cell_included_2 + 1;
-        x = 1 : length(marker)-1;
-        errorbar(x, Pc_avg, Pc_var)
-        hold on
-        yline(1,'-.g'); yline(0.84,'-.g');
-        xticks(x)
-        xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
-        xtickangle(45)
-    end
+    x = 1 : length(marker)-1;
+    errorbar(x, Pc_avg, Pc_var, 'b')
     hold on
+    errorbar(x, Pc_avg2, Pc_var2, '--r')
+    yline(1,'-.g'); yline(0.84,'-.g');
+    xticks(x)
+    xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
+    xtickangle(45)
+    
+    saveas(gcf, ['cp_perf-', num2str(slave_ds_id_all(c)), '.png'])
+    print(['cp_perf-', num2str(slave_ds_id_all(c))], '-dpdf', '-fillpage')
+    disp(['saved fig for ', num2str(slave_ds_id_all(c))])
+    close
+    
 end
 toc

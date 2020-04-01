@@ -647,7 +647,7 @@ for c = 1 : length(slave_ds_id_all)
     xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
     xtickangle(45)
     
-    saveas(gcf, ['cp_perf-', num2str(ds_slave_index),'-', num2str(slave_ds_id_all(c)), '.png'])
+    saveas(gcf, ['cp_perf-', num2str(slave_ds_id_all(c)), '.png'])
     print(['cp_perf-', num2str(slave_ds_id_all(c))], '-dpdf', '-fillpage')
     disp(['saved fig for ', num2str(slave_ds_id_all(c))])
     close
