@@ -16,7 +16,7 @@ datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 ds_master_slave_id = importdata('20200229_ds_map_final.txt'); 
-ds_slave_id_seq = ds_master_slave_id(:,2);
+ds_slave_id_seq = ds_master_slave_id(:,2); % 20200229 data
 
 %% chop data000 into sections
 
@@ -134,13 +134,20 @@ for c = 1 : length(ds_slave_id_seq)
     Pc_var = std(Pc,1,2);
     
     if max(Pc_avg) >= 0.84
-        x = 1 : length(marker)-1;
+        x = 1 : length(marker)-3; % exclude dark & 1ms flash (990, 52.1, 42.1)
+        flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
+        Pc_avg = Pc_avg(~flash_1ms);
+        Pc_var = Pc_var(~flash_1ms);
+
+%         x = 1 : length(marker)-1;
         errorbar(x, Pc_avg, Pc_var)
         hold on
         yline(1,'-.g'); yline(0.84,'-.g');
         xticks(x)
-        xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
+%         xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
+        xticklabels({'52.2','52.4','52.8','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})        
         xtickangle(45)
+        ylim([0.4, 1.05])
         
         saveas(gcf, ['Pc-', num2str(ds_slave_id_seq(c)), '.png'])
         print(['Pc-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
@@ -148,7 +155,6 @@ for c = 1 : length(ds_slave_id_seq)
         close
     else
         cell_excluded = cell_excluded + 1;
+        close
     end
-    hold on
 end
-toc

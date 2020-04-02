@@ -3,8 +3,8 @@
 clear
 clc
 
-dataset_num = '/data000-map-sorted'; 
-date_num = '2020-02-29-0';
+dataset_num = '/data000-map'; 
+date_num = '2016-03-04-0';
 
 % prefix_now = '/Volumes/dusom_fieldlab';
 prefix_now = '/Volumes/All_Staff/';
@@ -15,34 +15,34 @@ datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-ds_master_slave_id = importdata('20200229_ds_map_final.txt'); 
-ds_slave_id_seq = ds_master_slave_id(:,2);
+ds_slave_id_seq = importdata('slave_2016.txt'); % 20160304 data
 
 %% chop data000 into sections
 
 gaps = round(diff(datarun.triggers));
-switch_flag = gaps ~= 2 & gaps ~= 4;
+flash_period = 3;
+switch_flag = gaps ~= flash_period;
 tmp_triggers = datarun.triggers(switch_flag);
 switch_index = [];
 for i = 1 : length(tmp_triggers)
     switch_index = [switch_index, find(datarun.triggers == tmp_triggers(i))];
 end
-section_end = [300; datarun.triggers(switch_index); (datarun.duration-30)];
+section_end = [300; datarun.triggers(switch_index); datarun.duration];
 section_start = [0; datarun.triggers(1); datarun.triggers(switch_index + 1)];
 sections = [section_start, section_end, (section_end - section_start)];
-sections(end, 2:3) = [datarun.triggers(end)+4, datarun.triggers(end)+4 - sections(end, 1)];
-sections(end+1, :) = [datarun.triggers(end)+4, datarun.duration-30, datarun.duration-30 - (datarun.triggers(end)+4)];
+sections(end, 2:3) = [datarun.triggers(end)+flash_period, datarun.triggers(end)+flash_period - sections(end, 1)];
+% sections(end+1, :) = [datarun.triggers(end)+flash_period, datarun.duration, datarun.duration - (datarun.triggers(end)+flash_period)];
 
-ndf = [99; 5;5;5;5;5;5;5; 4;4;4;4;4; 3;3;3; 2; 99];
-flash_config = [0; 2.2;2.8;2.4;2.1;2.2;2.4;2.8; 2.2;2.4;2.8;2.2;2.1; 2.2;2.4;4.8; 4.2; 0];
-nflash = [sections(1:15,3)./2; sections(16:17,3)./4; sections(end,3)./2];
+ndf = [99; 5;5;5; 4;4;4;4;4; 3;3;3; 2;2; 1;0];
+flash_config = [0; 3.2;3.4;3.8; 3.2;3.3;3.4;3.6;3.8; 3.2;3.4;3.8; 3.2;3.4; 3.2;3.2];
+nflash = [150; sections(2:end,3)./flash_period];
 sections = [sections, ndf, flash_config, nflash];
 
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 
 binsize = 0.020; 
-trial_len = 2 / binsize; % pretend all trial length = 2s
+trial_len = 3 / binsize; % all trial length = 3s
 binnum = datarun.duration / binsize;
 edges = linspace(0, datarun.duration, binnum);
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
@@ -50,21 +50,20 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 ntrial = round(section_idx(:,8));
 
 %% iterate across cells
-cell_excluded = 0;
-sum_null = zeros(ntrial(1), trial_len); 
-for t = 1 : ntrial(1)
-    trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
-    sum_null(t,:) = trial_null;
-end
-sum_null = sum(sum_null,1);
 
+cell_excluded = 0;
 for c = 1 : length(ds_slave_id_seq)
     figure
     ds_slave_index = find(datarun.cell_ids == ds_slave_id_seq(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
     
-
+    sum_null = zeros(ntrial(1), trial_len); 
+    for t = 1 : ntrial(1)
+        trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
+        sum_null(t,:) = trial_null;
+    end
+    sum_null = sum(sum_null,1);
 
     ntest = 1000;
     marker = unique(section_idx(:,end), 'stable');
@@ -140,8 +139,10 @@ for c = 1 : length(ds_slave_id_seq)
         hold on
         yline(1,'-.g'); yline(0.84,'-.g');
         xticks(x)
-        xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
+        xticklabels({'5.002','5.004','5.008','4.002','4.003','4.004','4.006','4.008',...
+            '3.002','3.004','3.008','2.002','2.004','1.002','0.002'})
         xtickangle(45)
+        ylim([0.45, 1.03])
         
         saveas(gcf, ['Pc-', num2str(ds_slave_id_seq(c)), '.png'])
         print(['Pc-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
@@ -149,7 +150,7 @@ for c = 1 : length(ds_slave_id_seq)
         close
     else
         cell_excluded = cell_excluded + 1;
+        disp(['cell excluded ', num2str(ds_slave_id_seq(c))])
+        close
     end
-    hold on
 end
-toc
