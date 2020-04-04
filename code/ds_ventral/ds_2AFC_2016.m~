@@ -57,14 +57,13 @@ xpos = right_edge - r;
 x = (x0 - xpos)' / xunit;
 
 scatter(x, ones(length(x),1))
-xline(-3);
-xline(-2);
-xline(-1);
-xline(0);
+xline(-3)
+xline(-2)
+xline(-1)
+xline(0)
 % conjecture: used marker(2:end-2), aka from 53.2 to 23.4
 
-intensity = 10.^x;
-plot(intensity)
+intensity = 10
 
 %% iterate across cells
 
