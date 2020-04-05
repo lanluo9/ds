@@ -47,7 +47,17 @@ binnum = datarun.duration / binsize;
 edges = linspace(0, datarun.duration, binnum);
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
+marker = unique(section_idx(:,end), 'stable');
 ntrial = round(section_idx(:,8));
+
+%%
+load('xm.mat')
+marker_match = marker(2:end) - mod(floor(marker(2:end)),10) + 3;
+flash_1ms = abs(marker_match - floor(marker_match))-0.1 < 1e-4;
+marker_match = marker_match(~flash_1ms);
+
+temp_id = ismembertol(x_n_marker(:,2), marker_match, 1e-4);
+x = x_n_marker(temp_id,1);
 
 %% iterate across cells
 
@@ -66,10 +76,9 @@ for c = 1 : length(ds_slave_id_seq)
     sum_null = sum(sum_null,1);
 
     ntest = 1000;
-    marker = unique(section_idx(:,end), 'stable');
     Pc = zeros(length(marker)-1 ,ntest);
     for test = 1 : ntest
-        for flash_intensity = 2 : length(marker) % exclude dark==990
+        for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
@@ -134,8 +143,8 @@ for c = 1 : length(ds_slave_id_seq)
     Pc_var = std(Pc,1,2);
     
     if max(Pc_avg) >= 0.84
-        x = 1 : length(marker)-3; % exclude dark & 1ms flash (990, 52.1, 42.1)
-        flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
+%         x = 1 : length(marker)-3; % exclude dark & 1ms flash (990, 52.1, 42.1)
+%         flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
         Pc_avg = Pc_avg(~flash_1ms);
         Pc_var = Pc_var(~flash_1ms);
 
@@ -143,14 +152,16 @@ for c = 1 : length(ds_slave_id_seq)
         errorbar(x, Pc_avg, Pc_var)
         hold on
         yline(1,'-.g'); yline(0.84,'-.g');
-        xticks(x)
+%         xticks(x)
 %         xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
-        xticklabels({'52.2','52.4','52.8','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})        
-        xtickangle(45)
+%         xticklabels({'52.2','52.4','52.8','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})        
+%         xtickangle(45)
+        xlabel('log(intensity)')
+        ylabel('probability correct')
         ylim([0.4, 1.05])
         
-        saveas(gcf, ['Pc-', num2str(ds_slave_id_seq(c)), '.png'])
-        print(['Pc-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
+        saveas(gcf, ['log_intensity-', num2str(ds_slave_id_seq(c)), '.png'])
+        print(['log_intensity-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
         disp(['saved fig for ', num2str(ds_slave_id_seq(c))])
         close
     else

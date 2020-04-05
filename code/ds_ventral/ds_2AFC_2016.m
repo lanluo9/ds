@@ -57,14 +57,12 @@ xpos = right_edge - r;
 x = (x0 - xpos)' / xunit;
 
 scatter(x, ones(length(x),1))
-xline(-3);
-xline(-2);
-xline(-1);
-xline(0);
+xline(-3); xline(-2); xline(-1); xline(0);
 % conjecture: used marker(2:end-2), aka from 53.2 to 23.4
 
 intensity = 10.^x;
-plot(intensity)
+x_n_marker = [x, marker(2:14)];
+% save xm x_n_marker
 
 %% iterate across cells
 
@@ -151,18 +149,20 @@ for c = 1 : length(ds_slave_id_seq)
     Pc_var = std(Pc,1,2);
     
     if max(Pc_avg) >= 0.84
-        x = 1 : length(marker)-1;
-        errorbar(x, Pc_avg, Pc_var)
+%         x = 1 : length(marker)-1;
+        errorbar(x, Pc_avg(1:end-2), Pc_var(1:end-2))
         hold on
         yline(1,'-.g'); yline(0.84,'-.g');
-        xticks(x)
-        xticklabels({'5.002','5.004','5.008','4.002','4.003','4.004','4.006','4.008',...
-            '3.002','3.004','3.008','2.002','2.004','1.002','0.002'})
-        xtickangle(45)
+%         xticks(x)
+%         xticklabels({'5.002','5.004','5.008','4.002','4.003','4.004','4.006','4.008',...
+%             '3.002','3.004','3.008','2.002','2.004','1.002','0.002'})
+%         xtickangle(45)
+        xlabel('log(intensity)')
+        ylabel('probability correct')
         ylim([0.45, 1.03])
         
-        saveas(gcf, ['Pc-', num2str(ds_slave_id_seq(c)), '.png'])
-        print(['Pc-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
+        saveas(gcf, ['log_intensity-', num2str(ds_slave_id_seq(c)), '.png'])
+        print(['log_intensity-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
         disp(['saved fig for ', num2str(ds_slave_id_seq(c))])
         close
     else
