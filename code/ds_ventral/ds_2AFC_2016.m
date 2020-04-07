@@ -48,6 +48,7 @@ edges = linspace(0, datarun.duration, binnum);
 section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
 section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 ntrial = round(section_idx(:,8));
+marker = unique(section_idx(:,end), 'stable');
 
 %% convert x axis to Rh*/rod
 
@@ -55,19 +56,19 @@ x0 = 854; xunit = -251; r = 13;
 right_edge = [40,120,196,301, 344,376,420,452, 544,620,694,774,927];
 xpos = right_edge - r;
 x = (x0 - xpos)' / xunit;
+intensity = 10.^x;
 
-scatter(x, ones(length(x),1))
-xline(-3); xline(-2); xline(-1); xline(0);
+% scatter(x, ones(length(x),1))
+% xline(-3); xline(-2); xline(-1); xline(0);
 % conjecture: used marker(2:end-2), aka from 53.2 to 23.4
 
-intensity = 10.^x;
 x_n_marker = [x, marker(2:14)];
 % save xm x_n_marker
 
 %% iterate across cells
 
 cell_excluded = 0;
-for c = 1 : length(ds_slave_id_seq)
+for c = 1 : 2 %length(ds_slave_id_seq)
     figure
     ds_slave_index = find(datarun.cell_ids == ds_slave_id_seq(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
@@ -81,7 +82,6 @@ for c = 1 : length(ds_slave_id_seq)
     sum_null = sum(sum_null,1);
 
     ntest = 1000;
-    marker = unique(section_idx(:,end), 'stable');
     Pc = zeros(length(marker)-1 ,ntest);
     for test = 1 : ntest
         for flash_intensity = 2 : length(marker) % exclude dark==990
@@ -161,10 +161,10 @@ for c = 1 : length(ds_slave_id_seq)
         ylabel('probability correct')
         ylim([0.45, 1.03])
         
-        saveas(gcf, ['log_intensity-', num2str(ds_slave_id_seq(c)), '.png'])
-        print(['log_intensity-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
-        disp(['saved fig for ', num2str(ds_slave_id_seq(c))])
-        close
+%         saveas(gcf, ['log_intensity-', num2str(ds_slave_id_seq(c)), '.png'])
+%         print(['log_intensity-', num2str(ds_slave_id_seq(c))], '-dpdf', '-fillpage')
+%         disp(['saved fig for ', num2str(ds_slave_id_seq(c))])
+%         close
     else
         cell_excluded = cell_excluded + 1;
         disp(['cell excluded ', num2str(ds_slave_id_seq(c))])
