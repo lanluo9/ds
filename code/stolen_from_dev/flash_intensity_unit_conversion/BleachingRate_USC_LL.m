@@ -96,7 +96,7 @@ UnBleachedPigment = exp(-AbsorptionRate * Time)
  
 % calculate bleaching rate
 TotalRodPigment = 1.4e8; % pigment content is thought to be ~1e8 to 3e8
-BleachingRate = TotalRodPigment * (1-UnBleachedPigment) / Time;
+BleachingRate = TotalRodPigment * (1-UnBleachedPigment) / Time
 
 
 
