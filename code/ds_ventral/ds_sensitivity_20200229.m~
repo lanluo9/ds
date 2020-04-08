@@ -49,8 +49,8 @@ sections = [sections, ndf, flash_config, nflash];
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 marker = unique(section_sort(:,7));
-flash_1ms = abs( abs(marker - floor(marker)) - 0.1) < 1e-4;
-marker = marker(~flash_1ms); % exlude 1 ms flashes
+flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
+
 marker_seq = section_sort(:,7);
 
 %% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
@@ -106,9 +106,9 @@ for i = 1 : length(ds_slave_id_seq)
         end
     end
     
-%     saveas(gcf, [num2str(ds_slave_id), '-sensi-exclude1ms.jpg'])
-%     savefig([num2str(ds_slave_id), '-sensi-exclude1ms.fig'])
-    print([num2str(ds_slave_id), '-sensi-exclude1ms'], '-dpdf', '-fillpage')
+%     saveas(gcf, [num2str(ds_slave_id), '.jpg'])
+    savefig([num2str(ds_slave_id), '-sensi.fig'])
+    print(num2str(ds_slave_id), '-dpdf', '-fillpage')
     
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
