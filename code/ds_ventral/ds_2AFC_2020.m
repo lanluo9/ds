@@ -173,7 +173,7 @@ end
 
 %% test Discriminant shape
 
-for c = 1 
+for c = 2
 %     figure
     ds_slave_index = find(datarun.cell_ids == ds_slave_id_seq(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
@@ -278,10 +278,13 @@ for c = 1
 end
 
 %%
+% intensity_seq = [3,4,5,7,8,9,10,11,12,13];
+intensity_seq = 1:10;
 figure('units','normalized','outerposition',[0 0 1 1]) 
-for i = 2:13
-%     subplot(12,1,i-1)
-    subaxis(12,1,i-1, 'Spacing', 0.001, 'Padding', 0, 'Margin', 0);
-    D_intensity = D_all{i,1};
+for i = 1:10
+    subplot(10,1,i)
+    D_intensity = D_all{intensity_seq(i),1};
     plot(D_intensity)
+    set(gca,'XTick',[], 'YTick', [])
 end
+saveas(gcf, [num2str(ds_slave_id_seq(c)), '-discriminant-exclude1ms.jpg'])
