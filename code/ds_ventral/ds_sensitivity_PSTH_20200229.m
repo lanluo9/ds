@@ -17,12 +17,8 @@ datarun = load_params(datarun);
 
 %% load ds cell identified in master 
 
-load('ds_cell_map_20200306.mat', 'ds_map_all');
-flag = find(ds_map_all(:,1)==0);
-ds_slave_id_mapPCA = ds_map_all(1:(flag(1)-1), 2); ismember(ds_slave_id_mapPCA, datarun.cell_ids)
-ds_slave_id_mapEI = ds_map_all((flag(1)+1):(flag(2)-1), 2);
-ds_slave_id_map2 = ds_map_all((flag(2)+1):end, 2); ds_slave_id_map2(ds_slave_id_map2 == 0) = [];
-% ds_map_all
+ds_master_slave_id = importdata('20200229_ds_map_final.txt'); 
+ds_slave_id_seq = sort(ds_master_slave_id(:,2)); % 20200229 data
 
 %% chop data000 into sections
 
@@ -51,16 +47,12 @@ marker_seq = section_sort(:,7);
 
 %% PSTH 
 
-slave_ds_id_all = unique(ds_map_all(:,2)); 
-slave_ds_id_all(slave_ds_id_all == 0) = [];
-
-% slave_ds_id_test = slave_ds_id_all(1);
 tic
 
-for i = 1 : length(slave_ds_id_all)
+for i = 1 : length(ds_slave_id_seq)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
-    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_id = ds_slave_id_seq(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
@@ -116,24 +108,24 @@ for i = 1 : length(slave_ds_id_all)
         
     plot(time_axis, mean(firing_rate, 1), 'r-');
     xlim([(-prestim - 0.05) (rep_len + 0.05)])
-%     ylim([0 3000])
+    ylim([0 4050])
     hold on
     end
     
-    print(num2str(ds_slave_id), '-dpdf', '-fillpage')
+    print([num2str(ds_slave_id), '-PSTH'], '-dpdf', '-fillpage')
     disp(['saved fig for ', num2str(ds_slave_id)])
     close
 end
 toc
 
-%% merge sections w same NDF and flash_config. x_axis=2 after cutting off 2-4s
+%% sensitivity rasterplot
 
 tic
 
-for i = 1 : length(slave_ds_id_all)
+for i = 1 : length(ds_slave_id_seq)
     figure('units','normalized','outerposition',[0 0 1 1]) 
 
-    ds_slave_id = slave_ds_id_all(i); 
+    ds_slave_id = ds_slave_id_seq(i); 
     ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
     if isempty(ds_slave_index)
         disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])

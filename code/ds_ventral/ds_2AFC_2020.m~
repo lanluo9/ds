@@ -178,19 +178,19 @@ for c = 1
     ds_slave_index = find(datarun.cell_ids == ds_slave_id_seq(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
-    
+
     sum_null = zeros(ntrial(1), trial_len); 
     for t = 1 : ntrial(1)
         trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
         sum_null(t,:) = trial_null;
     end
     sum_null = sum(sum_null,1);
+    D_all = cell(length(marker),1);
 
     ntest = 1000;
-    D_all = cell(length(marker),1);
     Pc = zeros(length(marker)-1 ,ntest);
     for test = 1 : ntest
-        for flash_intensity = 1 : length(marker) % exclude dark==990. should improve by excluding 1ms here
+        for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
@@ -246,13 +246,15 @@ for c = 1
 
                 discriminant = (mean_flash - mean_null)';
                 D_fid((test-1)*60 + t, :) = discriminant;
-                D_all{flash_intensity,1} = mean(D_fid,1)
                 corrpos(t) = (trial_flash - trial_null) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
             end
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
             Pc(flash_intensity - 1, test) = corr / length(corrpos);
+            D_all{flash_intensity,1} = mean(D_fid,1);
+
         end
     end
+
 
     Pc_avg = mean(Pc,2);
     Pc_var = std(Pc,1,2);
@@ -275,3 +277,8 @@ for c = 1
     end
 end
 
+%%
+for i = 2:13
+    subplot(13,1,i)
+    
+end

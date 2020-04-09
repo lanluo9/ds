@@ -277,3 +277,11 @@ for c = 1
     end
 end
 
+%%
+figure('units','normalized','outerposition',[0 0 1 1]) 
+for i = 2:13
+%     subplot(12,1,i-1)
+    subaxis(12,1,i-1, 'Spacing', 0.001, 'Padding', 0, 'Margin', 0);
+    D_intensity = D_all{i,1};
+    plot(D_intensity)
+end
