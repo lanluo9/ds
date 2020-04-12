@@ -278,8 +278,8 @@ for c = 2
 end
 
 %%
-% intensity_seq = [3,4,5,7,8,9,10,11,12,13];
-intensity_seq = 1:10;
+intensity_seq = [3,4,5,7,8,9,10,11,12,13];
+% intensity_seq = 1:10;
 figure('units','normalized','outerposition',[0 0 1 1]) 
 for i = 1:10
     subplot(10,1,i)

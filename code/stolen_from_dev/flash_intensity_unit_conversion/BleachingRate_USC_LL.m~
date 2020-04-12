@@ -2,7 +2,7 @@
 % START HERE
 
 % Set physical constants
-SpeedOfLight = 3e8; % m/s
+SpeedOfLight = 3e8;
 PlanksConstant = 6.626e-34;
 WaveLengthRange = 778:-2:380; % in nm
 OpsinPhotosensitivity = 9.6e-21; % m^2 
@@ -87,7 +87,7 @@ EffectivePhotonFlux = dot(PhotonFlux,RodPhotonSensitivity([401:-1:1])');
 PhotonCatchRate = EffectivePhotonFlux * RodCollectingArea
 
 %% compute based on time
-Time = 10 * 1; % in second, bc speed of light is in m/s
+Time = 10 * 1; % in second
 UnBleachedPigment = exp(-AbsorptionRate * Time)
  
 % compute based on amount of unbleached pigment
