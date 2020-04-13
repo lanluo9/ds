@@ -44,6 +44,8 @@ powerNDF0_5 = [0.51e-6, 54.5e-9, 3.37e-9, 0.405e-9, 0.046e-9, 0.006e-9];
 PowerMeasured = powerNDF0_5;
 PowerScaled = [powerNDF0_5(1), powerNDF0_5(1)/1e1, powerNDF0_5(1)/1e2, powerNDF0_5(1)/1e3, powerNDF0_5(1)/1e4, powerNDF0_5(1)/1e5];
 
+AbsorptionRate = zeros(length(powerNDF0_5),1);
+PhotonCatchRate = zeros(length(powerNDF0_5),1);
 for i = 1 : length(powerNDF0_5)
     Powers = PowerMeasured(i);
 %     Powers = PowerScaled(i);
@@ -56,9 +58,29 @@ for i = 1 : length(powerNDF0_5)
 
     Intensity = (SummedMonitorSpectra .* WavelengthsCorrected') ./ (PlanksConstant * SpeedOfLight);
     PhotonFlux = Intensity ./ spot_area;
-    AbsorptionRate = OpsinPhotosensitivity * dot(PhotonFlux,RodPhotonSensitivity([401:-1:1])');
+    AbsorptionRate(i) = OpsinPhotosensitivity * dot(PhotonFlux, RodPhotonSensitivity([401:-1:1])');
     RodCollectingArea = 0.5e-12; % MOUSE m^2
-    EffectivePhotonFlux = dot(PhotonFlux,RodPhotonSensitivity([401:-1:1])');
-    PhotonCatchRate = EffectivePhotonFlux * RodCollectingArea;
-    log_activated_rhodopsin_per_rod_per_sec(i) = log(PhotonCatchRate);
+    EffectivePhotonFlux = dot(PhotonFlux, RodPhotonSensitivity([401:-1:1])');
+    PhotonCatchRate(i) = EffectivePhotonFlux * RodCollectingArea;
+%     log_activated_rhodopsin_per_rod_per_sec(i) = log(PhotonCatchRate);
 end
+
+tmp = 0:1:5;
+rate_by_ndf = [tmp', AbsorptionRate, PhotonCatchRate];
+
+%% compute based on time
+
+load('xm.mat')
+NDF = floor(x_n_marker(:,2)./10);
+flash_s = 0.01 * mod(x_n_marker(:,2), 1);
+
+BleachingRate = zeros(size(x_n_marker,1), 1);
+for i = 1 : size(x_n_marker,1)
+    ndf_id = find(rate_by_ndf(:,1)==NDF(i));
+    Time = flash_s(i); % in second, bc speed of light is in m/s
+    UnBleachedPigment = exp(-AbsorptionRate(ndf_id) * Time);
+%     UnBleachedPigment = exp(-PhotonCatchRate(ndf_id) * Time) % ???
+    TotalRodPigment = 1.4e8; % pigment content is thought to be ~1e8 to 3e8
+    BleachingRate(i) = TotalRodPigment * (1-UnBleachedPigment) / Time
+end
+log(BleachingRate)
