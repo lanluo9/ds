@@ -12,16 +12,16 @@ prefix_now = '/Volumes/All_Staff/';
 % \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab
 % Z:\lab
 % D:\RRR\Grad\Rotation\GF_lab\lab_Mac
-datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
+% datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
 
-% datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]; 
+datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]; 
 stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
 
 %% load data
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
-% datarun = load_ei(datarun, 'all', 'array_type', 519);
+datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% process triggers and extract some stim params
 trigger_set = round(datarun.triggers);
@@ -76,12 +76,9 @@ ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids]';
 % ds_cells
+
 % savefile = append('ds_master_002_ds_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
-
-%% load latency txt
-
-
 
 %% use vector_sums_120 & vector_sums_240 as preferred direction
 
