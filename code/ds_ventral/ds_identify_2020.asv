@@ -9,7 +9,7 @@ clc
 % datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]
 % stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
 
-% cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
+cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
 datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
 stimulus_path = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/stimuli/s02-sorted.txt';
 
@@ -81,7 +81,8 @@ divide = find(normal_latency(:,1)==0);
 ds_master_normal = normal_latency(1:(divide-1), 1);
 ds_master_latency = normal_latency((divide+1):end, 1);
 
-%% plot normal vs long latency DSI vec
+%% plot normal vs long latency DSI vector
+
 
 %% use vector_sums_120 & vector_sums_240 as preferred direction
 
