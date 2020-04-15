@@ -14,11 +14,15 @@ cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Ana
 
 % datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
 % datapath = '/data002-sorted';
-datapath = '\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted\data002-sorted';
+% datapath = '/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2020-02-29-0/data002-sorted/data002-sorted';
+datapath = '\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted';
 datarun = load_data(datapath);
+datarun.names.rrs_prefix = datapath;
+datarun.names.short_name = datapath;
+datarun.names.rrs_neurons_path = datapath;
 
 %% load data
-datarun = load_data(datapath);
+% datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
