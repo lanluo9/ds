@@ -12,11 +12,13 @@ wavelengths = 400:1:800;
 WavelengthsCorrected = wavelengths * 1e-9; % nm -> m
 
 % UDT Information
-cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
+cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab
+cd All_Staff/lab/Experiments/Calibration/2013-07-19
+% cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
 load cal_udt_spectrum;
 
 spot_area = 0.011^2 * pi;
-cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
+% cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
 load LED_spectrum
 LED_spectrum = LED_spectrum ./ norm(LED_spectrum);
 RGBMatrix = LED_spectrum;
@@ -53,8 +55,8 @@ for i = 1 : length(powerNDF0_5)
     CalibratedRGBMatrix = TruePowerScalers .* RGBMatrix;
     SummedMonitorSpectra = CalibratedRGBMatrix';
 
-    Powers
-    CheckPower = dot(CalibratedRGBMatrix, cal_udt_spectrum(:,2))
+    Powers;
+    CheckPower = dot(CalibratedRGBMatrix, cal_udt_spectrum(:,2));
 
     Intensity = (SummedMonitorSpectra .* WavelengthsCorrected') ./ (PlanksConstant * SpeedOfLight);
     PhotonFlux = Intensity ./ spot_area;
@@ -70,6 +72,7 @@ rate_by_ndf = [tmp', AbsorptionRate, PhotonCatchRate];
 
 %% compute based on time
 
+cd D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/ds_ventral/
 load('xm.mat')
 NDF = floor(x_n_marker(:,2)./10);
 flash_s = 0.01 * mod(x_n_marker(:,2), 1);
@@ -81,6 +84,7 @@ for i = 1 : size(x_n_marker,1)
     UnBleachedPigment = exp(-AbsorptionRate(ndf_id) * Time);
 %     UnBleachedPigment = exp(-PhotonCatchRate(ndf_id) * Time) % ???
     TotalRodPigment = 1.4e8; % pigment content is thought to be ~1e8 to 3e8
-    BleachingRate(i) = TotalRodPigment * (1-UnBleachedPigment) / Time
+    BleachingRate(i) = TotalRodPigment * (1-UnBleachedPigment) / Time;
 end
+BleachingRate
 log(BleachingRate)

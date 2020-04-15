@@ -6,22 +6,15 @@ clc
 % prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff';
 % prefix_now = '/dusom_fieldlab/All_Staff';
-% cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
-
-% datapath_mac = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]
+% datapath = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]
 % stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
 
+% cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
 datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
-% datapath = '/data002-sorted';
-% datapath = '/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2020-02-29-0/data002-sorted/data002-sorted';
-% datapath = '\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted';
-datarun = load_data(datapath);
-% datarun.names.rrs_prefix = datapath;
-% datarun.names.short_name = datapath;
-% datarun.names.rrs_neurons_path = datapath;
+stimulus_path = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/stimuli/s02-sorted.txt';
 
 %% load data
-% datarun = load_data(datapath);
+datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
@@ -32,7 +25,7 @@ trig_inds = find(mod(trigger_set, 10) == 0);
 user_defined_trigs = datarun.triggers(trig_inds);
 
 datarun.names.stimulus_path = stimulus_path;
-datarun = load_stim(datarun, 'user_defined_trigger_set', trig_inds);
+datarun = load_stim_gdf(datarun, 'user_defined_trigger_set', trig_inds);
 
 %%
 num_stim = length(datarun.stimulus.combinations);
@@ -68,8 +61,8 @@ cutoff_coord = [x_cutoff, y_cutoff];
 close
 scatter((vector_mags_120), (vector_mags_240))
 hold on
-xline(x_cutoff);
-yline(y_cutoff);
+% xline(x_cutoff);
+% yline(y_cutoff);
 
 x_finder = find(vector_mags_120 > cutoff_coord(1));
 y_finder = find(vector_mags_240 > cutoff_coord(2));
@@ -78,12 +71,17 @@ selected_indices = intersect(x_finder, y_finder);
 ds_cell_ids = datarun.cell_ids(selected_indices);
 ds_index = selected_indices;
 ds_cells = [ds_index; ds_cell_ids]';
-% ds_cells
+ds_cells
 % savefile = append('ds_master_002_ds_', datestr(now, 'yyyymmdd'), '.mat');
 % save(savefile, 'ds_cells');
 
 %% load latency txt
+normal_latency = importdata('latency.txt')
+divide = find(normal_latency(:,1)==0);
+ds_master_normal = normal_latency(1:(divide-1), 1);
+ds_master_latency = normal_latency((divide+1):end, 1);
 
+%% plot normal vs long latency DSI vector
 
 
 %% use vector_sums_120 & vector_sums_240 as preferred direction
