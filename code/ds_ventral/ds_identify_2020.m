@@ -6,20 +6,19 @@ clc
 % prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff';
 % prefix_now = '/dusom_fieldlab/All_Staff';
-% cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff
-cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
+% cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted
 
 % datapath_mac = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data0', dataset_num, '/data0', dataset_num]
 % stimulus_path = [prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/stimuli/s02-sorted.txt'];
 
-% datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
+datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data002-sorted/data002-sorted';
 % datapath = '/data002-sorted';
 % datapath = '/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2020-02-29-0/data002-sorted/data002-sorted';
-datapath = '\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted';
+% datapath = '\dusom_fieldlab\All_Staff\lab\Experiments\Array\Analysis\2020-02-29-0\data002-sorted';
 datarun = load_data(datapath);
-datarun.names.rrs_prefix = datapath;
-datarun.names.short_name = datapath;
-datarun.names.rrs_neurons_path = datapath;
+% datarun.names.rrs_prefix = datapath;
+% datarun.names.short_name = datapath;
+% datarun.names.rrs_neurons_path = datapath;
 
 %% load data
 % datarun = load_data(datapath);
