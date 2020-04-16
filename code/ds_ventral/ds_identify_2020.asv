@@ -103,85 +103,36 @@ for i = 1:3
     selected_indices{3} = find(tmp, length(tmp))'
 end
 
-%% speed tuning?
-
-tp_axis = [120, 240, 480]; 
-
-dsi_all = [mean(vector_mags_120(selected_indices{1})), mean(vector_mags_240(selected_indices{1})), mean(vector_mags_480(selected_indices{1}))];
-dsi_normal = [mean(vector_mags_120(selected_indices{2})), mean(vector_mags_240(selected_indices{2})), mean(vector_mags_480(selected_indices{2}))];
-dsi_latency = [mean(vector_mags_120(selected_indices{3})), mean(vector_mags_240(selected_indices{3})), mean(vector_mags_480(selected_indices{3}))];
-
-error_all = [std(vector_mags_120(selected_indices{1})), std(vector_mags_240(selected_indices{1})), std(vector_mags_480(selected_indices{1}))];
-error_normal = [std(vector_mags_120(selected_indices{2})), std(vector_mags_240(selected_indices{2})), std(vector_mags_480(selected_indices{2}))];
-error_latency = [std(vector_mags_120(selected_indices{3})), std(vector_mags_240(selected_indices{3})), std(vector_mags_480(selected_indices{3}))];
-
-h = errorbar(tp_axis, dsi_all, error_all, 'b', 'LineWidth', 3)
-% alpha(h, 0.2)
-% h.FaceAlpha = 0.2;
-hold on
-errorbar(tp_axis, dsi_normal, error_normal, 'g', 'LineWidth', 2)
-hold on
-errorbar(tp_axis, dsi_latency, error_latency, 'r--', 'LineWidth', 1)
-xticks(tp_axis)
-xticklabels({'120','240','480'})
-xlabel('TP')
-ylabel('DSI magnitude')
-
-%%
-
-errorbar(tp_axis, dsi_normal, error_normal, 'g', 'LineWidth', 2)
-hold on
-errorbar(tp_axis, dsi_latency, error_latency, 'r--', 'LineWidth', 1)
-xticks(tp_axis)
-xticklabels({'120','240','480'})
-xlabel('TP')
-ylabel('DSI magnitude')
-
 %% histogram of DSI magnitude
 
+% figureHandle = figure;
 bins = 20;
-figure
-subplot(3,3,1)
+subplot(1,3,1)
 hist(vector_mags_120(selected_indices{1}), bins)
 xlim([0.7 1.6])
-subplot(3,3,2)
+subplot(1,3,2)
 hist(vector_mags_120(selected_indices{2}), bins)
 xlim([0.7 1.6])
-subplot(3,3,3)
+subplot(1,3,3)
 hist(vector_mags_120(selected_indices{3}), bins)
 xlim([0.7 1.6])
 
-% figure
-subplot(3,3,4)
-hist(vector_mags_240(selected_indices{1}), bins)
-xlim([0.8 1.6])
-subplot(3,3,5)
-hist(vector_mags_240(selected_indices{2}), bins)
-xlim([0.8 1.6])
-subplot(3,3,6)
-hist(vector_mags_240(selected_indices{3}), bins)
-xlim([0.8 1.6])
+figure
+subplot(1,3,1)
+hist(vector_mags_120(selected_indices{1}), bins)
+xlim([0.7 1.6])
+subplot(1,3,2)
+hist(vector_mags_120(selected_indices{2}), bins)
+xlim([0.7 1.6])
+subplot(1,3,3)
+hist(vector_mags_120(selected_indices{3}), bins)
+xlim([0.7 1.6])
 
-% figure
-subplot(3,3,7)
-hist(vector_mags_480(selected_indices{1}), bins)
-xlim([0.8 2.3])
-subplot(3,3,8)
-hist(vector_mags_480(selected_indices{2}), bins)
-xlim([0.8 2.3])
-subplot(3,3,9)
-hist(vector_mags_480(selected_indices{3}), bins)
-xlim([0.8 2.3])
-
-
+% axesHandles = findobj(get(figureHandle,'Children'), 'flat','Type','axes'); % Extract axes handles of all subplots from figure
+% axis(axesHandles,'square') % Set axis property to square
 
 %% use vector_sums_120 & vector_sums_240 as preferred direction
 
-selected_indices = [];
-ds_master_all = [ds_master_normal; ds_master_latency];
-tmp = ismember(datarun.cell_ids, ds_master_all);
-selected_indices = find(tmp, length(tmp))';
-    
 pref_dir_120 = vector_sums_120(selected_indices,:);
 pref_dir_240 = vector_sums_240(selected_indices,:);
 pref_dir_480 = vector_sums_480(selected_indices,:);
@@ -211,6 +162,13 @@ end
 axesHandles = findobj(get(figureHandle,'Children'), 'flat','Type','axes'); % Extract axes handles of all subplots from figure
 axis(axesHandles,'square') % Set axis property to square
 
+%% speed tuning?
+
+tp_axis = [120, 240, 480]; 
+for i = 1 : length(selected_indices)
+    plot(tp_axis, [vector_mags_120(selected_indices(i)), vector_mags_240(selected_indices(i)), vector_mags_480(selected_indices(i))])
+    hold on
+end
 
 %%
 slave_path = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, '/data000-map-sorted/data000-map-sorted');
