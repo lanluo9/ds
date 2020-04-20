@@ -173,8 +173,6 @@ subplot(3,3,9)
 hist(vector_mags_480(selected_indices{3}), bins)
 xlim([0.8 2.3])
 
-
-
 %% use vector_sums_120 & vector_sums_240 as preferred direction
 
 selected_indices = [];
