@@ -4,9 +4,9 @@ clc
 clear 
 
 % Set physical constants
-SpeedOfLight = 3e8;
+SpeedOfLight = 3e8; % m/s
 PlanksConstant = 6.626e-34;
-WaveLengthRange = 778:-2:380; % in nm
+WaveLengthRange = 778:-2:380; % dnm
 OpsinPhotosensitivity = 9.6e-21; % m^2 
 wavelengths = 400:1:800;
 WavelengthsCorrected = wavelengths * 1e-9; % nm -> m
@@ -49,8 +49,8 @@ PowerScaled = [powerNDF0_5(1), powerNDF0_5(1)/1e1, powerNDF0_5(1)/1e2, powerNDF0
 AbsorptionRate = zeros(length(powerNDF0_5),1);
 PhotonCatchRate = zeros(length(powerNDF0_5),1);
 for i = 1 : length(powerNDF0_5)
-    Powers = PowerMeasured(i);
-%     Powers = PowerScaled(i);
+%     Powers = PowerMeasured(i);
+    Powers = PowerScaled(i);
     TruePowerScalers = Powers ./ (cal_udt_spectrum(:,2)' * RGBMatrix');
     CalibratedRGBMatrix = TruePowerScalers .* RGBMatrix;
     SummedMonitorSpectra = CalibratedRGBMatrix';
@@ -64,11 +64,10 @@ for i = 1 : length(powerNDF0_5)
     RodCollectingArea = 0.5e-12; % MOUSE m^2
     EffectivePhotonFlux = dot(PhotonFlux, RodPhotonSensitivity([401:-1:1])');
     PhotonCatchRate(i) = EffectivePhotonFlux * RodCollectingArea;
-%     log_activated_rhodopsin_per_rod_per_sec(i) = log(PhotonCatchRate);
 end
 
 tmp = 0:1:5;
-rate_by_ndf = [tmp', AbsorptionRate, PhotonCatchRate];
+rate_by_ndf = [tmp', PhotonCatchRate];
 
 %% compute based on time
 
@@ -77,14 +76,13 @@ load('xm.mat')
 NDF = floor(x_n_marker(:,2)./10);
 flash_s = 0.01 * mod(x_n_marker(:,2), 1);
 
-BleachingRate = zeros(size(x_n_marker,1), 1);
+rh_per_rod = zeros(size(x_n_marker,1), 1);
 for i = 1 : size(x_n_marker,1)
     ndf_id = find(rate_by_ndf(:,1)==NDF(i));
-    Time = flash_s(i); % in second, bc speed of light is in m/s
-    UnBleachedPigment = exp(-AbsorptionRate(ndf_id) * Time);
-%     UnBleachedPigment = exp(-PhotonCatchRate(ndf_id) * Time) % ???
-    TotalRodPigment = 1.4e8; % pigment content is thought to be ~1e8 to 3e8
-    BleachingRate(i) = TotalRodPigment * (1-UnBleachedPigment) / Time;
+    time = flash_s(i); % in second, bc speed of light is in m/s
+    rh_per_rod(i) = PhotonCatchRate(ndf_id) * time;
 end
-BleachingRate
-log(BleachingRate)
+rh_per_rod
+[log(rh_per_rod)+3, x_n_marker(:,1)]
+[rh_per_rod*1000, x_n_marker(:,2)]
+

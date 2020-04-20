@@ -1,0 +1,5 @@
+t = 0 : .01 : 2*pi;
+polarplot(t, sin(2*t).*cos(2*t));
+hold on
+polarplot(t, sin(2*t).*cos(2*t)+1);
+polarplot(t, sin(2*t).*cos(2*t));
