@@ -83,6 +83,6 @@ for i = 1 : size(x_n_marker,1)
     rh_per_rod(i) = PhotonCatchRate(ndf_id) * time;
 end
 rh_per_rod
-[log(rh_per_rod)+3, x_n_marker(:,1)]
-[rh_per_rod*1000, x_n_marker(:,2)]
+[log(rh_per_rod), x_n_marker]
+% [rh_per_rod*1000, x_n_marker(:,2)]
 

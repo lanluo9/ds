@@ -179,7 +179,7 @@ ds_slave_all = [ds_slave_normal; ds_slave_latency];
 %     end
 % end
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%% 
 % %% test Discriminant shape
 % 
 % for c = 2
