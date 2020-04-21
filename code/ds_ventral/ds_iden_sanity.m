@@ -78,11 +78,11 @@ ds_master_normal = normal_latency(1:(divide-1), 1);
 ds_master_latency = normal_latency((divide+1):end, 1);
 ds_master_all = [ds_master_normal; ds_master_latency];
 
-%% central sudoku plot superimposed
+%% tuning curve && vector sum across TPs
 
 for i = 1 : length(ds_master_all)
-    figure
-    
+    figure('units','normalized','outerposition',[0 0 1 1]) 
+
     single_ds_id = ds_master_all(i); 
     single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
     if isempty(single_ds_index)
@@ -96,6 +96,7 @@ for i = 1 : length(ds_master_all)
         title_flag = 'long latency';
     end
     
+    subplot(1,2,1)
     for j = 1:3
         tp_set = j;
         if tp_set == 1
@@ -127,66 +128,22 @@ for i = 1 : length(ds_master_all)
         hold on        
     end
     
-    line([0, vector_sums_120(single_ds_index,1)], [0, vector_sums_120(single_ds_index,2)],'Color', color)
-    line([0, vector_sums_240(single_ds_index,1)], [0, vector_sums_240(single_ds_index,2)],'Color', color)
-    line([0, vector_sums_480(single_ds_index,1)], [0, vector_sums_480(single_ds_index,2)],'Color', color)
+    subplot(1,2,2)
+    dir_120 = atan2d(vector_sums_120(single_ds_index,2),vector_sums_120(single_ds_index,1));
+    dir_240 = atan2d(vector_sums_240(single_ds_index,2),vector_sums_240(single_ds_index,1));
+    dir_480 = atan2d(vector_sums_480(single_ds_index,2),vector_sums_480(single_ds_index,1));
+    dir_seq = sort([dir_120, dir_240, dir_480]);
+    dir_diff = max(dir_seq) - min(dir_seq);
+    line([0, vector_sums_120(single_ds_index,1)], [0, vector_sums_120(single_ds_index,2)],'Color', [1 0 0])
+    hold on
+    line([0, vector_sums_240(single_ds_index,1)], [0, vector_sums_240(single_ds_index,2)],'Color', [0 1 0])
+    line([0, vector_sums_480(single_ds_index,1)], [0, vector_sums_480(single_ds_index,2)],'Color', [0 0 1])
+    legend('TP=120', 'TP=240', 'TP=480')
+    xlim([-1.8, 1.8])
+    ylim([-1.8, 1.8])
     
-    title([title_flag ' ' num2str(single_ds_id)])
-%     saveas(gcf, ['ds_across_TPs-', num2str(single_ds_id), '.jpg'])
-%     print(['ds_across_TPs-', num2str(single_ds_id)], '-dpdf', '-fillpage')
+    title([title_flag ' ' num2str(single_ds_id) ' preferred direction change in deg: ' num2str(dir_diff)])
+    saveas(gcf, [title_flag, ' ds_across_TPs-', num2str(single_ds_id), '.jpg'])
     disp(['plotted fig for ', num2str(single_ds_id)])
-%     close
-end
-
-%% ds-ness of mapped cells
-
-for i = 1 : length(ds_cell_ids)
-    figure
-    
-    single_ds_id = ds_cell_ids(i); 
-    single_ds_index = ds_cells(1, ds_cells(2,:)==single_ds_id);
-    if isempty(single_ds_index)
-        disp([num2str(single_ds_id), ' not found in datarun.cell_id'])
-        continue
-    end
-    tp_set = 2; 
-
-    % should optimize this w cellfun to broadcast length function
-    dir_spike_count = zeros(length(datarun.cell_ids), length(grat_dirs));
-    for dir = 1:length(grat_dirs)
-        single_dirtp = gratingrun.direction(dir).temporal_period(tp_set).spike_times;
-        neuron_spike_count = zeros(size(single_dirtp,1),1);
-        for neuron = 1:size(single_dirtp,1)
-            for rep = 1:size(single_dirtp,2)
-                neuron_spike_count(neuron,1) = neuron_spike_count(neuron,1) + ...
-                    length(gratingrun.direction(dir).temporal_period(tp_set).spike_times{neuron,rep});
-            end
-        end
-        dir_spike_count(:,dir) = neuron_spike_count;
-    end
-
-    subplot_num = [6 3 2 1 4 7 8 9; grat_dirs];
-    for dir = 1:length(grat_dirs) 
-        subplot(3,3,subplot_num(1,dir))
-        for rep = 1:datarun.stimulus.repetitions        
-            spike_time = gratingrun.direction(dir).temporal_period(tp_set).spike_times{single_ds_index, rep};
-            rep_mark = rep .* ones(length(spike_time), 1);
-            scatter(spike_time, rep_mark, 5, 'filled')
-            axis([0 10 0 (datarun.stimulus.repetitions+1)])
-            hold on
-        end
-    end
-
-    subplot(3,3,5)
-    theta = deg2rad(grat_dirs);
-    theta = [theta, theta(1)];
-    radius = dir_spike_count(single_ds_index,:);
-    radius = [radius, radius(1)];
-    polarplot(theta, radius)
-%     title(['data0', num2str(dataset_num), '. dsRGC index = ', num2str(single_ds_index), '. id = ', num2str(single_ds_id), '. TP = ', num2str(tp_set)])
-    
-%     saveas(gcf, ['ds_across_TPs-', num2str(single_ds_id), '.jpg'])
-%     print(['ds_across_TPs-', num2str(single_ds_id)], '-dpdf', '-fillpage')
-%     disp(['saved fig for ', num2str(single_ds_id)])
-%     close
+    close
 end
