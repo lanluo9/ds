@@ -149,7 +149,7 @@ for c = 1 : 2 % 1 : length(ds_slave_normal)
                         trial_flash_post = binned(trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2 + 1 : ...
                             trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1));
                     end
-                elseif scale == 2
+                elseif scale == 2 % BUG in dim
                     trial_flash_post = binned(trial_len*(order_post(t)-1)+section_idx(fid_seq(1),1) - trial_len/2 + 1 : ...
                             trial_len*order_post(t)+section_idx(fid_seq(1),1) );
                 end

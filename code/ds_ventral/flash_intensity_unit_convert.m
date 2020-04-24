@@ -16,8 +16,8 @@ cd \\duhsnas-pri.dhe.duke.edu\dusom_fieldlab
 cd All_Staff/lab/Experiments/Calibration/2013-07-19
 % cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
 load cal_udt_spectrum;
-
 spot_area = 0.011^2 * pi;
+
 % cd /Volumes/All_Staff/lab/Experiments/Calibration/2013-07-19
 load LED_spectrum
 LED_spectrum = LED_spectrum ./ norm(LED_spectrum);
