@@ -308,14 +308,21 @@ disp('done')
 
 %% test Discriminant shape for low performance cells
 
-% low_perf = sort(ds_slave_normal);
-% low_perf = low_perf(5:end);
+low_perf = sort(ds_slave_normal);
+low_perf = low_perf(5:end);
 
 for c = 1 : length(ds_slave_normal)
 
     ds_slave_index = find(datarun.cell_ids == ds_slave_normal(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
+
+%     sum_null = zeros(ntrial(1), trial_len); 
+%     for t = 1 : ntrial(1)
+%         trial_null = binned(trial_len*(t-1)+section_idx(1,1)+1 : trial_len*t+section_idx(1,1));
+%         sum_null(t,:) = trial_null;
+%     end
+%     sum_null = sum(sum_null,1);
     D_all = cell(length(marker),1);
 
     ntest = 1000;
@@ -325,7 +332,7 @@ for c = 1 : length(ds_slave_normal)
 %             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
-            D_fid = zeros(ntest*120, 50);
+            D_fid = zeros(ntest*120, 100);
             
             if floor(section_idx(fid_seq(1),7)) == 4
                 scale = 2; % account for 4s trials
@@ -399,22 +406,22 @@ for c = 1 : length(ds_slave_normal)
         end
     end
 
+
     Pc_avg = mean(Pc,2);
     Pc_var = std(Pc,1,2);
+    
     Pc_avg = Pc_avg(~flash_1ms);
     Pc_var = Pc_var(~flash_1ms);
     
-    intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
-    % intensity_seq = 1:10;
-    figure('units','normalized','outerposition',[0 0 1 1]) 
-    for i = 1:10
-        subplot(10,1,i)
-        D_intensity = D_all{intensity_seq(i),1};
-        plot(D_intensity)
-        set(gca,'XTick',[], 'YTick', [])
-    end
-    saveas(gcf, [num2str(ds_slave_normal(c)), '-discriminant-exclude1ms-postasnull.png'])
-    close
-    disp(['saved fig for ', num2str(ds_slave_normal(c))])
 end
-disp('done')
+
+intensity_seq = [3,4,5,7,8,9,10,11,12,13];
+% intensity_seq = 1:10;
+figure('units','normalized','outerposition',[0 0 1 1]) 
+for i = 1:10
+    subplot(10,1,i)
+    D_intensity = D_all{intensity_seq(i),1};
+    plot(D_intensity)
+    set(gca,'XTick',[], 'YTick', [])
+end
+saveas(gcf, [num2str(ds_slave_normal(c)), '-discriminant-exclude1ms-postasnull.jpg'])
