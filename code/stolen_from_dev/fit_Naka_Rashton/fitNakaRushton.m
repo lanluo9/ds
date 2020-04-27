@@ -15,18 +15,25 @@ if nargin < 2
 end
 
 % parse arguments
-getArgs(varargin,{'dispFit=0','evalFit=[]'});
+% getArgs(varargin,{'dispFit=0','evalFit=[]'});
+% cannot find getArgs, so:
+dispFit = 0;
+evalFit = [];
 
 % find contrast that evokes closest to half-maximal response
 rMid = ((max(r)-min(r))/2) + min(r);
 [dummy,rMidIndex] = min(abs(r-rMid));
 initC50 = c(rMidIndex(1));
 
-% parmaeters
+% parameters
              %Rmax          c50     n     offsets x 5
-initParams = [max(r)        initC50 2  min(r)];
-minParams =  [0             0       1  -inf];
-maxParams =  [inf           1       5  inf];
+% initParams = [max(r)        initC50 2     min(r)];
+% minParams =  [0             0       1     -inf];
+% maxParams =  [1             1       5     inf];
+
+initParams = [0.5           initC50   2     0.5];
+minParams =  [0.5          -inf       -inf  0.5];
+maxParams =  [0.5           max(c)    inf   0.5];
 
 % set model type
 m.fixedN = 0;

@@ -207,13 +207,7 @@ titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,f
 title(sprintf(titleStr));
 saveas(gcf, [num2str(ds_slave_normal(2)), '-2AFC-fit', '.png'])
 
-%% solve detection threshold | BUG HERE
-syms th
-eqn = fit.Rmax * ((th.^fit.n) ./ ((th.^fit.n) + fit.c50.^fit.n)) + fit.offset - 0.84 == 0;
-% S = simplify(solve(eqn))
-% S = solve(eqn,th,'Real',true)
-V = vpasolve(eqn,th,[min(c) max(c)])
-
+%% solve t
 %% flash vs null trial
 % 
 % % cell_excluded = 0;
