@@ -9,15 +9,13 @@ close
 % % prefix_now = '/Volumes/dusom_fieldlab';
 % prefix_now = '/Volumes/All_Staff/';
 % datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
-
 datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data000-map-sorted/data000-map-sorted';
 
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 
-% ds_master_slave_id = importdata('20200229_ds_map_final.txt'); 
-% ds_slave_id_seq = ds_master_slave_id(:,2); % 20200229 data
+on_sus_cell_ids = importdata('0229-data003-ON-sustained-id.txt'); % map ON sustained cell master id
 
 %% chop data000 into sections
 
@@ -60,38 +58,27 @@ marker_match = marker_match(~flash_1ms);
 temp_id = ismembertol(x_n_marker(:,2), marker_match, 1e-4);
 x = x_n_marker(temp_id,1);
 
-%% load latency txt
-normal_latency = importdata('latency.txt')
-divide = find(normal_latency(:,1)==0);
-ds_slave_normal = normal_latency(1:(divide-1), 2);
-ds_slave_latency = normal_latency((divide+1):end, 2);
-ds_slave_all = [ds_slave_normal; ds_slave_latency];
-
 %% use 1-2s as null trial for normal latency cells
 
-ds_slave_normal = sort(ds_slave_normal);
-ds_slave_now = 
-% cell_excluded = 0;
+ds_slave_now = on_sus_cell_ids;
+
 for cellnum = 1 : length(ds_slave_now)
 %     figure('units','normalized','outerposition',[0 0 1 1]) 
-%     figure
     ds_slave_index = find(datarun.cell_ids == ds_slave_now(cellnum)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
     
     ntest = 1000;
     Pc = zeros(length(marker)-1 ,ntest);
+    projection = zeros(length(marker)-1 ,ntest, 2);
+
     for test = 1 : ntest
         for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
-%             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
             
-            if floor(section_idx(fid_seq(1),7)) == 4
-                scale = 2; % account for 4s trials
-            else
-                scale = 1;
-            end
+            if floor(section_idx(fid_seq(1),7)) == 4, scale = 2; % account for 4s trials
+            else, scale = 1; end
 
             sum_flash_seq = zeros(1, trial_len*scale);
             for i = 1 : length(fid_seq)
@@ -116,7 +103,7 @@ for cellnum = 1 : length(ds_slave_now)
             order_post = datasample(trial_num_post, sample_size, 'Replace', false);
             order_pre = datasample(trial_num_pre, sample_size, 'Replace', false);
 
-            corrpos = zeros(sample_size, 1);
+            corrpos = zeros(sample_size, 3);
             for t = 1 : sample_size
                 if scale == 1
                     if order_pre(t) <= ntrial(fid_seq(1))
@@ -149,86 +136,71 @@ for cellnum = 1 : length(ds_slave_now)
                 mean_flash_post = other_flash_post ./ (length(trial_num_post) - 1) - mean_all .* length(trial_num_post) ./ (length(trial_num_post) - 1);
                 
                 discriminant = (mean_flash_pre - mean_flash_post)';
-                corrpos(t) = (trial_flash_pre - trial_flash_post) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
+                corrpos(t,1) = (trial_flash_pre - trial_flash_post) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
+                corrpos(t,2) = trial_flash_pre * discriminant;
+                corrpos(t,3) = trial_flash_post * discriminant;
             end
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
+%                 projection = zeros(length(marker)-1 ,ntest, 2);
+
             Pc(flash_intensity - 1, test) = corr / length(corrpos);
         end
     end
 
     Pc_avg = mean(Pc,2);
     Pc_var = std(Pc,1,2);
-    
-%     if max(Pc_avg) >= 0.84
-%         x = 1 : length(marker)-3; % exclude dark & 1ms flash (990, 52.1, 42.1)
-%         flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
-        Pc_avg = Pc_avg(~flash_1ms);
-        Pc_var = Pc_var(~flash_1ms);
-        c = x;
-        r = Pc_avg;
-        fit = fitNakaRushton(c,r)
+    Pc_avg = Pc_avg(~flash_1ms);
+    Pc_var = Pc_var(~flash_1ms);
+    c = x;
+    r = Pc_avg;
+    fit = fitNakaRushton(c,r)
 
-        hold on
-        c = linspace(min(x), max(x), 10^3);
-        Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
-        line([min(x), max(x)], [1, 1],'Color', [0 1 0])
-        line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
-        plot(c, Pc_fit, 'b--', 'LineWidth', 1)
-%         scatter(c, Pc_avg, 'r')
-        errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
+    hold on
+    c = linspace(min(x), max(x), 10^3);
+    Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
+    line([min(x), max(x)], [1, 1],'Color', [0 1 0])
+    line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
+    plot(c, Pc_fit, 'b--', 'LineWidth', 1)
+    errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
 
-        ylim([0.4, 1.05])
-        titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
-        title(sprintf(titleStr));
-        xlabel('log(intensity)')
-        ylabel('probability correct')
-        ylim([0.4, 1.05])
-        saveas(gcf, [num2str(ds_slave_normal(cellnum)), '-2AFC-fit', '.png'])
-
-%         x = 1 : length(marker)-1;
-%         yline(1,'-.g'); yline(0.84,'-.g');
-%         xticks(x)
-%         xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
-%         xticklabels({'52.2','52.4','52.8','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})        
-%         xtickangle(45)
-                
-%         saveas(gcf, [num2str(ds_slave_normal(cellnum)), '-2AFC-post_as_null', '.png'])
-% %         print(['log_intensity-', num2str(ds_slave_normal(cellnum))], '-dpdf', '-fillpage')
-        disp(['saved fig for ', num2str(ds_slave_normal(cellnum))])
-        close
-%     else
-%         cell_excluded = cell_excluded + 1;
-%         disp([num2str(ds_slave_id_seq(cellnum)),' excluded due to low Pc'])
-% %         close
-%     end
+    ylim([0.4, 1.05])
+    titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
+    title(sprintf(titleStr));
+    xlabel('log(intensity)')
+    ylabel('probability correct')
+    ylim([0.4, 1.05])
+    saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit' '.png'])
+    disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
+    close
 end
 disp('done')
 
-%% fit single cell Naka Rushton
-c = x;
-r = Pc_avg;
-fit = fitNakaRushton(c,r)
+%%
+% %% fit single cell Naka Rushton
+% c = x;
+% r = Pc_avg;
+% fit = fitNakaRushton(c,r)
+% 
+% hold on
+% Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
+% line([min(x), max(x)], [1, 1],'Color', [0 1 0])
+% line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
+% plot(c, Pc_fit, 'b--')
+% scatter(c, Pc_avg, 'r')
+% 
+% ylim([0.4, 1.05])
+% titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
+% title(sprintf(titleStr));
+% saveas(gcf, [num2str(ds_slave_normal(2)), '-2AFC-fit', '.png'])
+% 
+% %% solve detection threshold | BUG HERE
+% syms th
+% eqn = fit.Rmax * ((th.^fit.n) ./ ((th.^fit.n) + fit.c50.^fit.n)) + fit.offset - 0.84 == 0;
+% % S = simplify(solve(eqn))
+% % S = solve(eqn,th,'Real',true)
+% V = vpasolve(eqn,th,[min(c) max(c)])
 
-hold on
-Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
-line([min(x), max(x)], [1, 1],'Color', [0 1 0])
-line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
-plot(c, Pc_fit, 'b--')
-scatter(c, Pc_avg, 'r')
-
-ylim([0.4, 1.05])
-titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
-title(sprintf(titleStr));
-saveas(gcf, [num2str(ds_slave_normal(2)), '-2AFC-fit', '.png'])
-
-%% solve detection threshold | BUG HERE
-syms th
-eqn = fit.Rmax * ((th.^fit.n) ./ ((th.^fit.n) + fit.c50.^fit.n)) + fit.offset - 0.84 == 0;
-% S = simplify(solve(eqn))
-% S = solve(eqn,th,'Real',true)
-V = vpasolve(eqn,th,[min(c) max(c)])
-
-%% flash vs null trial
+% %% flash vs null trial
 % 
 % % cell_excluded = 0;
 % for c = length(ds_slave_normal)-1 : length(ds_slave_normal)

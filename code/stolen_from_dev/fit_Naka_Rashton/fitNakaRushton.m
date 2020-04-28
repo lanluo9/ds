@@ -1,5 +1,5 @@
 % fitNakaRushton.m
-%
+% http://gru.stanford.edu/svn/matlab/fitNakaRushton.m
 %        $Id:$ 
 %      usage: fit = fitNakaRushton(c,r)
 %         by: justin gardner
