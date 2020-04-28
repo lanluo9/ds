@@ -70,11 +70,12 @@ ds_slave_all = [ds_slave_normal; ds_slave_latency];
 %% use 1-2s as null trial for normal latency cells
 
 ds_slave_normal = sort(ds_slave_normal);
+ds_slave_now = 
 % cell_excluded = 0;
-for c = 2 % 3 % 1 : length(ds_slave_normal)
+for cellnum = 1 : length(ds_slave_now)
 %     figure('units','normalized','outerposition',[0 0 1 1]) 
 %     figure
-    ds_slave_index = find(datarun.cell_ids == ds_slave_normal(c)); 
+    ds_slave_index = find(datarun.cell_ids == ds_slave_now(cellnum)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
     
@@ -163,28 +164,41 @@ for c = 2 % 3 % 1 : length(ds_slave_normal)
 %         flash_1ms = abs(marker(2:end) - floor(marker(2:end)))-0.1 < 1e-4;
         Pc_avg = Pc_avg(~flash_1ms);
         Pc_var = Pc_var(~flash_1ms);
+        c = x;
+        r = Pc_avg;
+        fit = fitNakaRushton(c,r)
 
-%         x = 1 : length(marker)-1;
-        errorbar(x, Pc_avg, Pc_var)
         hold on
+        c = linspace(min(x), max(x), 10^3);
+        Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
         line([min(x), max(x)], [1, 1],'Color', [0 1 0])
         line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
+        plot(c, Pc_fit, 'b--', 'LineWidth', 1)
+%         scatter(c, Pc_avg, 'r')
+        errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
+
+        ylim([0.4, 1.05])
+        titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
+        title(sprintf(titleStr));
+        xlabel('log(intensity)')
+        ylabel('probability correct')
+        ylim([0.4, 1.05])
+        saveas(gcf, [num2str(ds_slave_normal(cellnum)), '-2AFC-fit', '.png'])
+
+%         x = 1 : length(marker)-1;
 %         yline(1,'-.g'); yline(0.84,'-.g');
 %         xticks(x)
 %         xticklabels({'52.1','52.2','52.4','52.8','42.1','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})
 %         xticklabels({'52.2','52.4','52.8','42.2','42.4','42.8','32.2','32.4','34.8','24.2'})        
 %         xtickangle(45)
-        xlabel('log(intensity)')
-        ylabel('probability correct')
-        ylim([0.4, 1.05])
-        
-%         saveas(gcf, [num2str(ds_slave_normal(c)), '-2AFC-post_as_null', '.png'])
-% %         print(['log_intensity-', num2str(ds_slave_normal(c))], '-dpdf', '-fillpage')
-%         disp(['saved fig for ', num2str(ds_slave_normal(c))])
-%         close
+                
+%         saveas(gcf, [num2str(ds_slave_normal(cellnum)), '-2AFC-post_as_null', '.png'])
+% %         print(['log_intensity-', num2str(ds_slave_normal(cellnum))], '-dpdf', '-fillpage')
+        disp(['saved fig for ', num2str(ds_slave_normal(cellnum))])
+        close
 %     else
 %         cell_excluded = cell_excluded + 1;
-%         disp([num2str(ds_slave_id_seq(c)),' excluded due to low Pc'])
+%         disp([num2str(ds_slave_id_seq(cellnum)),' excluded due to low Pc'])
 % %         close
 %     end
 end
@@ -207,7 +221,13 @@ titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,f
 title(sprintf(titleStr));
 saveas(gcf, [num2str(ds_slave_normal(2)), '-2AFC-fit', '.png'])
 
-%% solve t
+%% solve detection threshold | BUG HERE
+syms th
+eqn = fit.Rmax * ((th.^fit.n) ./ ((th.^fit.n) + fit.c50.^fit.n)) + fit.offset - 0.84 == 0;
+% S = simplify(solve(eqn))
+% S = solve(eqn,th,'Real',true)
+V = vpasolve(eqn,th,[min(c) max(c)])
+
 %% flash vs null trial
 % 
 % % cell_excluded = 0;
