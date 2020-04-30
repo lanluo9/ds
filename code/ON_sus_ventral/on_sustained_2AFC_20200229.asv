@@ -433,7 +433,7 @@ disp('done')
 
 ds_slave_now = on_sus_cell_ids;
 
-for c = 1 : length(ds_slave_now)
+for c = 1 : 2 %length(ds_slave_now)
 
     ds_slave_index = find(datarun.cell_ids == ds_slave_now(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
@@ -444,8 +444,11 @@ for c = 1 : length(ds_slave_now)
     Pc = zeros(length(marker)-1 ,ntest);
 %     for test = 1 : ntest
         for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
+%             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
+%             D_fid = zeros(ntest*120, 50);
+%             proj_fid = pi * ones(max(ntrial(3:end)), 2);
             proj_fid = [];
             
             if floor(section_idx(fid_seq(1),7)) == 4
@@ -521,6 +524,11 @@ for c = 1 : length(ds_slave_now)
 
         end
 %     end
+
+%     Pc_avg = mean(Pc,2);
+%     Pc_var = std(Pc,1,2);
+%     Pc_avg = Pc_avg(~flash_1ms);
+%     Pc_var = Pc_var(~flash_1ms);
     
     intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
     figure('units','normalized','outerposition',[0 0 1 1]) 
@@ -530,11 +538,13 @@ for c = 1 : length(ds_slave_now)
         proj_pre = proj_all{intensity_seq(i),1}(:,1);
         proj_post = proj_all{intensity_seq(i),1}(:,2);
         proj_combo = [proj_pre; proj_post];
-        binsize = ceil(max(proj_post)-min(proj_post))/10;
+        binsize = 0.05; % , (ceil(max(proj_pre)-min(proj_pre)))/binsize
         
-        histogram(proj_pre, ceil(max(proj_pre)-min(proj_pre))/binsize, 'FaceColor','r', 'EdgeColor','w')
+        histogram(proj_pre, 25, 'FaceColor','r', 'EdgeColor','w')
         hold on
-        histogram(proj_post, ceil(max(proj_post)-min(proj_post))/binsize, 'FaceColor','b', 'EdgeColor','w')
+        histogram(proj_post, 50, 'FaceColor','b', 'EdgeColor','w')
+%         h = histogram(proj_combo, (ceil(max(proj_combo)-min(proj_combo)))/binsize, 'FaceColor','m', 'EdgeColor','w');
+%         h.FaceAlpha = 0.2;  
         set(gca, 'YTick', []) % turn off axis 
     end
     print([num2str(ds_slave_now(c)), '-projection-prepost'], '-dpdf', '-fillpage')
@@ -544,15 +554,21 @@ for c = 1 : length(ds_slave_now)
     proj_mean = [];
     for i = 1 : length(intensity_seq)
         subplot(length(intensity_seq),1,i)
-            
-        proj_pre = proj_all{intensity_seq(i),1}(:,1);
-        proj_post = proj_all{intensity_seq(i),1}(:,2);
+        
         proj_combo = [proj_pre; proj_post];
+        binsize = 0.05; % , (ceil(max(proj_pre)-min(proj_pre)))/binsize
         proj_mean(i,c) = mean(proj_combo);
         
+%         histogram(proj_pre, 50, 'FaceColor','r', 'EdgeColor','w')
+%         hold on
+%         histogram(proj_post, 50, 'FaceColor','b', 'EdgeColor','w')
+        hold off
         h = histogram(proj_combo, 25, 'FaceColor','m', 'EdgeColor','w');
         hold on
         vline(proj_mean(i,c),'black')
+%         line([proj_mean(i), proj_mean(i)],[0, 500], 'Color', [0 1 0])
+%         line([SP SP],get(hax,'YLim'),'Color',[1 0 0])
+%         h.FaceAlpha = 0.2;  
         set(gca, 'YTick', []) % turn off axis 
     end
     print([num2str(ds_slave_now(c)), '-projection-combo'], '-dpdf', '-fillpage')
