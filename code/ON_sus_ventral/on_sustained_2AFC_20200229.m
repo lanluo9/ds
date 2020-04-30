@@ -315,9 +315,11 @@ disp('done')
 % low_perf = sort(ds_slave_normal);
 % low_perf = low_perf(5:end);
 
-for c = 1 : length(ds_slave_normal)
+ds_slave_now = on_sus_cell_ids;
 
-    ds_slave_index = find(datarun.cell_ids == ds_slave_normal(c)); 
+for c = 1 : length(ds_slave_now)
+
+    ds_slave_index = find(datarun.cell_ids == ds_slave_now(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
     D_all = cell(length(marker),1);
@@ -330,6 +332,7 @@ for c = 1 : length(ds_slave_normal)
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
             D_fid = zeros(ntest*120, 50);
+%             proj_fid = zeros(ntest*120, 2);
             
             if floor(section_idx(fid_seq(1),7)) == 4
                 scale = 2; % account for 4s trials
@@ -393,8 +396,11 @@ for c = 1 : length(ds_slave_normal)
                 mean_flash_post = other_flash_post ./ (length(trial_num_post) - 1) - mean_all .* length(trial_num_post) ./ (length(trial_num_post) - 1);
                 
                 discriminant = (mean_flash_pre - mean_flash_post)';
-                D_fid((test-1)*60 + t, :) = discriminant;
                 corrpos(t) = (trial_flash_pre - trial_flash_post) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
+                
+                D_fid((test-1)*60 + t, :) = discriminant;
+%                 proj_fid((test-1)*60 + t, 1) = trial_flash_pre * discriminant;
+%                 proj_fid((test-1)*60 + t, 2) = trial_flash_post * discriminant;
             end
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
             Pc(flash_intensity - 1, test) = corr / length(corrpos);
@@ -425,24 +431,24 @@ disp('done')
 
 %% test projection dist bc of low performance cells
 
-% low_perf = sort(ds_slave_normal);
-% low_perf = low_perf(5:end);
+ds_slave_now = on_sus_cell_ids;
 
-for c = 1 : length(ds_slave_normal)
+for c = 1 : length(ds_slave_now)
 
-    ds_slave_index = find(datarun.cell_ids == ds_slave_normal(c)); 
+    ds_slave_index = find(datarun.cell_ids == ds_slave_now(c)); 
     spike_time = datarun.spikes{ds_slave_index, 1};
     [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
-    D_all = cell(length(marker),1);
+    proj_all = cell(length(marker),1);
 
     ntest = 1000;
     Pc = zeros(length(marker)-1 ,ntest);
-    for test = 1 : ntest
+%     for test = 1 : ntest
         for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
 %             nid = 1; 
             fid = section_idx(:,end)==marker(flash_intensity);
             fid_seq = find(fid==1);
-            D_fid = zeros(ntest*120, 50);
+%             D_fid = zeros(ntest*120, 50);
+%             proj_fid = pi * ones(max(ntrial(3:end)), 2);
             
             if floor(section_idx(fid_seq(1),7)) == 4
                 scale = 2; % account for 4s trials
@@ -506,15 +512,17 @@ for c = 1 : length(ds_slave_normal)
                 mean_flash_post = other_flash_post ./ (length(trial_num_post) - 1) - mean_all .* length(trial_num_post) ./ (length(trial_num_post) - 1);
                 
                 discriminant = (mean_flash_pre - mean_flash_post)';
-                D_fid((test-1)*60 + t, :) = discriminant;
                 corrpos(t) = (trial_flash_pre - trial_flash_post) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
+                
+                proj_fid(t, 1) = trial_flash_pre * discriminant;
+                proj_fid(t, 2) = trial_flash_post * discriminant;
             end
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
             Pc(flash_intensity - 1, test) = corr / length(corrpos);
-            D_all{flash_intensity,1} = mean(D_fid,1);
+            proj_all{flash_intensity,1} = proj_fid;
 
         end
-    end
+%     end
 
     Pc_avg = mean(Pc,2);
     Pc_var = std(Pc,1,2);
@@ -522,16 +530,15 @@ for c = 1 : length(ds_slave_normal)
     Pc_var = Pc_var(~flash_1ms);
     
     intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
-    % intensity_seq = 1:10;
     figure('units','normalized','outerposition',[0 0 1 1]) 
     for i = 1:10
         subplot(10,1,i)
-        D_intensity = D_all{intensity_seq(i),1};
-        plot(D_intensity)
-        set(gca,'XTick',[], 'YTick', [])
+%         D_intensity = D_all{intensity_seq(i),1};
+%         plot(D_intensity)
+        set(gca,'XTick',[], 'YTick', []) % turn off axis 
     end
-    saveas(gcf, [num2str(ds_slave_normal(c)), '-discriminant-exclude1ms-postasnull.png'])
-    close
-    disp(['saved fig for ', num2str(ds_slave_normal(c))])
+%     saveas(gcf, [num2str(ds_slave_normal(c)), '-discriminant-exclude1ms-postasnull.png'])
+%     close
+%     disp(['saved fig for ', num2str(ds_slave_normal(c))])
 end
 disp('done')
