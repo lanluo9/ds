@@ -522,26 +522,23 @@ for c = 1 : length(ds_slave_now)
         end
 %     end
     
-    intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
+%     intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
     figure('units','normalized','outerposition',[0 0 1 1]) 
     for i = 1 : length(intensity_seq)
         subplot(length(intensity_seq),1,i)
         
         proj_pre = proj_all{intensity_seq(i),1}(:,1);
         proj_post = proj_all{intensity_seq(i),1}(:,2);
-        proj_combo = [proj_pre; proj_post];
-        binsize = ceil(max(proj_post)-min(proj_post))/10;
         
-        histogram(proj_pre, ceil(max(proj_pre)-min(proj_pre))/binsize, 'FaceColor','r', 'EdgeColor','w')
+        histogram(proj_pre, 25, 'FaceColor','r', 'EdgeColor','w')
         hold on
-        histogram(proj_post, ceil(max(proj_post)-min(proj_post))/binsize, 'FaceColor','b', 'EdgeColor','w')
+        histogram(proj_post, 20, 'FaceColor','b', 'EdgeColor','w')
         set(gca, 'YTick', []) % turn off axis 
     end
     print([num2str(ds_slave_now(c)), '-projection-prepost'], '-dpdf', '-fillpage')
     close
     
     figure('units','normalized','outerposition',[0 0 1 1]) 
-    proj_mean = [];
     for i = 1 : length(intensity_seq)
         subplot(length(intensity_seq),1,i)
             
@@ -549,13 +546,34 @@ for c = 1 : length(ds_slave_now)
         proj_post = proj_all{intensity_seq(i),1}(:,2);
         proj_combo = [proj_pre; proj_post];
         proj_mean(i,c) = mean(proj_combo);
+        proj_median(i,c) = median(proj_combo);
         
-        h = histogram(proj_combo, 25, 'FaceColor','m', 'EdgeColor','w');
+        h = histogram(proj_combo, 25, 'FaceColor','g', 'EdgeColor','w');
         hold on
-        vline(proj_mean(i,c),'black')
+        vline(proj_mean(i,c),'m')
+        vline(proj_median(i,c),'b')
         set(gca, 'YTick', []) % turn off axis 
     end
     print([num2str(ds_slave_now(c)), '-projection-combo'], '-dpdf', '-fillpage')
+    close
+
+    figure('units','normalized','outerposition',[0 0 1 1]) 
+    for i = 1 : length(intensity_seq)
+        subplot(length(intensity_seq),1,i)
+            
+        proj_pre = proj_all{intensity_seq(i),1}(:,1);
+        proj_post = proj_all{intensity_seq(i),1}(:,2);
+        proj_diff = proj_pre - proj_post;
+        proj_diff_mean(i,c) = mean(proj_diff);
+        proj_diff_median(i,c) = median(proj_diff);
+        
+        h = histogram(proj_diff, 25, 'FaceColor','cyan', 'EdgeColor','w');
+        hold on
+        vline(proj_diff_mean(i,c),'m')
+        vline(proj_diff_median(i,c),'b')
+        set(gca, 'YTick', []) % turn off axis 
+    end
+    print([num2str(ds_slave_now(c)), '-projection-diff'], '-dpdf', '-fillpage')
     close
     disp(['saved fig for ', num2str(ds_slave_now(c))])
 end
