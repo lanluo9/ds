@@ -40,15 +40,6 @@ sections = [sections, ndf, flash_config, nflash];
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
 
-binsize = 0.020; 
-trial_len = 2 / binsize; % pretend all trial length = 2s
-binnum = datarun.duration / binsize;
-edges = linspace(0, datarun.duration, binnum);
-section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
-section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
-marker = unique(section_idx(:,end), 'stable');
-ntrial = round(section_idx(:,8));
-
 %%
 load('xm.mat')
 marker_match = marker(2:end) - mod(floor(marker(2:end)),10) + 3;
@@ -57,6 +48,132 @@ marker_match = marker_match(~flash_1ms);
 
 temp_id = ismembertol(x_n_marker(:,2), marker_match, 1e-4);
 x = x_n_marker(temp_id,1);
+
+
+%% test binsize
+
+binsize_seq = [0.020, 0.050, 0.100, 0.300, 0.500];
+ds_slave_now = on_sus_cell_ids;
+
+for b = 1 : length(binsize_seq)
+
+    binsize = binsize_seq(b); % bin window = 20 ms
+    trial_len = 2 / binsize; % pretend all trial length = 2s
+    binnum = datarun.duration / binsize;
+    edges = linspace(0, datarun.duration, binnum);
+    section_idx = [round(section_sort(:,1)/binsize), round(section_sort(:,2)/binsize), section_sort];
+    section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
+    marker = unique(section_idx(:,end), 'stable');
+    ntrial = round(section_idx(:,8));
+
+    for cellnum = 1 : length(ds_slave_now)
+    %     figure('units','normalized','outerposition',[0 0 1 1]) 
+        ds_slave_index = find(datarun.cell_ids == ds_slave_now(cellnum)); 
+        spike_time = datarun.spikes{ds_slave_index, 1};
+        [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
+
+        ntest = 1000;
+        Pc = zeros(length(marker)-1 ,ntest);
+        for test = 1 : ntest
+            for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
+                fid = section_idx(:,end)==marker(flash_intensity);
+                fid_seq = find(fid==1);
+
+                if floor(section_idx(fid_seq(1),7)) == 4, scale = 2; % account for 4s trials
+                else, scale = 1; end
+
+                sum_flash_seq = zeros(1, trial_len*scale);
+                for i = 1 : length(fid_seq)
+                    sum_flash_section{i} = zeros(ntrial(fid_seq(i)), trial_len*scale);
+                    for t = 1 : ntrial(fid_seq(i))
+                        trial_flash_full = binned(trial_len*scale*(t-1)+section_idx(fid_seq(i),1)+1 : trial_len*scale*t+section_idx(fid_seq(i),1));
+                        sum_flash_section{i}(t,:) = trial_flash_full;
+                    end
+                    sum_flash_section{i} = sum(sum_flash_section{i},1);
+                    sum_flash_seq = sum_flash_seq + sum_flash_section{i};
+                end
+                sum_flash_seq = sum_flash_seq(1 : trial_len); % take only 0-2s of 4s trials
+                sum_flash_pre = sum_flash_seq(1 : length(sum_flash_seq)/2); % pre (0-1s) as flash trial
+                sum_flash_post = sum_flash_seq(length(sum_flash_seq)/2 + 1 : end); % post (1-2s) as null trial
+
+                sum_all = sum_flash_pre + sum_flash_post;
+                trial_num_post = 1 : scale : scale*sum(ntrial(fid));
+                trial_num_pre = 1 : scale : scale*sum(ntrial(fid));
+                mean_all = sum_all ./ (length(trial_num_post) + length(trial_num_pre)); 
+
+                sample_size = min(length(trial_num_post), length(trial_num_pre));
+                order_post = datasample(trial_num_post, sample_size, 'Replace', false);
+                order_pre = datasample(trial_num_pre, sample_size, 'Replace', false);
+
+                corrpos = zeros(sample_size, 1);
+                for t = 1 : sample_size
+                    if scale == 1
+                        if order_pre(t) <= ntrial(fid_seq(1))
+                            trial_flash_pre = binned(trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 : ...
+                                trial_len*order_pre(t)+section_idx(fid_seq(1),1) - trial_len/2);
+                        else
+                            trial_flash_pre = binned(trial_len*(order_pre(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 : ...
+                                trial_len*(order_pre(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2);
+                        end
+                    elseif scale == 2
+                        trial_flash_pre = binned(trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 : ...
+                                trial_len*order_pre(t)+section_idx(fid_seq(1),1) - trial_len/2);
+                    end
+                    other_flash_pre = sum_flash_pre - trial_flash_pre;
+                    mean_flash_pre = other_flash_pre ./ (length(trial_num_pre) - 1) - mean_all .* length(trial_num_pre) ./ (length(trial_num_pre) - 1);
+
+                    if scale == 1
+                        if order_post(t) <= ntrial(fid_seq(1))
+                            trial_flash_post = binned(trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 :...
+                                trial_len*order_post(t)+section_idx(fid_seq(1),1));
+                        else
+                            trial_flash_post = binned(trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2 + 1 : ...
+                                trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1));
+                        end
+                    elseif scale == 2 
+                        trial_flash_post = binned(trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 : ...
+                                trial_len*order_post(t)+section_idx(fid_seq(1),1));
+                    end
+                    other_flash_post = sum_flash_post - trial_flash_post;
+                    mean_flash_post = other_flash_post ./ (length(trial_num_post) - 1) - mean_all .* length(trial_num_post) ./ (length(trial_num_post) - 1);
+
+                    discriminant = (mean_flash_pre - mean_flash_post)';
+                    corrpos(t) = (trial_flash_pre - trial_flash_post) * discriminant; % no need to zero mean trial_flash & _null because they cancel out
+                end
+                corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
+                Pc(flash_intensity - 1, test) = corr / length(corrpos);
+            end
+        end
+
+        Pc_avg = mean(Pc,2);
+        Pc_var = std(Pc,1,2);
+        Pc_avg = Pc_avg(~flash_1ms);
+        Pc_var = Pc_var(~flash_1ms);
+        c = x;
+        r = Pc_avg;
+        fit = fitNakaRushton(c,r)
+
+        hold on
+        c = linspace(min(x), max(x), 10^3);
+        Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
+        line([min(x), max(x)], [1, 1],'Color', [0 1 0])
+        line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
+        plot(c, Pc_fit, 'b--', 'LineWidth', 1)
+        errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
+
+        ylim([0.4, 1.05])
+        titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
+        title(sprintf(titleStr));
+        xlabel('log(intensity)')
+        ylabel('probability correct')
+        ylim([0.4, 1.05])
+        saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit-' num2str(1000*binsize_seq(b)) '.png'])
+        disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
+        close
+    end
+end
+disp('done')
+
 
 %% use 1-2s as null trial for normal latency cells & fit curve
 
@@ -168,6 +285,7 @@ for cellnum = 1 : length(ds_slave_now)
     close
 end
 disp('done')
+
 
 %% use matching pre and post in a single 2s trial
 
