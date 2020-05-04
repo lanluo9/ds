@@ -550,7 +550,8 @@ disp('done')
 
 %% test projection dist bc of low performance cells
 
-ds_slave_now = on_sus_cell_ids;
+% ds_slave_now = on_sus_cell_ids;
+ds_slave_now = ds_slave_normal;
 
 for c = 1 : length(ds_slave_now)
 
