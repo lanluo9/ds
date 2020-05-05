@@ -52,7 +52,7 @@ x = x_n_marker(temp_id,1);
 
 %% test binsize
 
-binsize_seq = [0.020, 0.050, 0.100, 0.200, 0.400, 0.500]; % 0.300 will give non-int trial_len
+binsize_seq = [0.020, 0.050, 0.100, 0.200, 0.400, 0.500]; % 0.300 will give non-int trial_len, try 250 later
 pc = struct;
 ds_slave_now = on_sus_cell_ids;
 
@@ -187,7 +187,40 @@ disp('calc done')
 
 %% binsize impact on Pc
 
+T = struct2table(pc);
+sortedT = sortrows(T, 'cellid');
+pc_sorted = table2struct(sortedT);
 
+load('xm.mat')
+marker_match = marker(2:end) - mod(floor(marker(2:end)),10) + 3;
+flash_1ms = abs(marker_match - floor(marker_match))-0.1 < 1e-4;
+marker_match = marker_match(~flash_1ms);
+temp_id = ismembertol(x_n_marker(:,2), marker_match, 1e-4);
+log_intensity = x_n_marker(temp_id,1);
+
+color = prism(6);
+
+for cellnum = 1 : length(ds_slave_now)
+    for b = 1 : length(binsize_seq)
+        n = (cellnum - 1) * length(binsize_seq) + b;
+        Pc_avg = pc_sorted(n).Pc_avg;
+        Pc_var = pc_sorted(n).Pc_var;
+        plot(log_intensity, Pc_avg, 'Color', color(b,:), 'LineWidth', 2)
+%         errorbar(log_intensity, Pc_avg, Pc_var, 'Color', color(b,:), 'LineWidth', 2)
+        hold on
+    end
+    line([min(log_intensity), max(log_intensity)], [0.84, 0.84],'Color', [0 1 0])
+    
+    ylim([0.4, 1.05])
+    xlabel('log(intensity)')
+    ylabel('probability correct')
+    legend({'20','50','100','200','400','500'},'Location','southeast')
+    legend('boxoff')
+    
+    saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit-binsize' '.png'])
+    disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
+    close
+end    
 
 
 %% use 1-2s as null trial for normal latency cells & fit curve
