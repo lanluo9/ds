@@ -76,7 +76,7 @@ log_intensity = x_n_marker(temp_id,1);
 
 %% test simple spike counter (0-300 ms after flash)
 
-binsize = 20;
+binsize = 0.020;
 trial_len = 2 / binsize; % pretend all trial length = 2s
 binnum = datarun.duration / binsize;
 edges = linspace(0, datarun.duration, binnum);
@@ -85,7 +85,7 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 marker = unique(section_idx(:,end), 'stable');
 ntrial = round(section_idx(:,8));
 
-counter_range = [200,300,400]; % expect ~200 to work
+counter_range = [0.200,0.300,0.400]; % expect ~200 to work
 pc = struct;
 
 ds_slave_now = sort(ds_slave_normal);
