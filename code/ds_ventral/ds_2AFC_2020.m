@@ -85,10 +85,10 @@ section_idx(:,end) = (section_idx(:,6) * 10 + section_idx(:,7));
 marker = unique(section_idx(:,end), 'stable');
 ntrial = round(section_idx(:,8));
 
-counter_range = [200,300,400,500]; % expect ~200 to work
+counter_range = [200,300,400]; % expect ~200 to work
 pc = struct;
-ds_slave_all = sort(ds_slave_all);
-ds_slave_now = ds_slave_all;
+
+ds_slave_now = sort(ds_slave_normal);
 
 for r = 1 : length(counter_range)    
     range = counter_range(r);
@@ -104,10 +104,10 @@ for r = 1 : length(counter_range)
         spike_time = datarun.spikes{ds_slave_index, 1};
         [binned, ~] = histcounts(spike_time, edges); % binned = vector of nspike in each 20 ms bin
 
-        ntest = 1000;
+        ntest = 10;
         Pc = zeros(length(marker)-1 ,ntest);
         for test = 1 : ntest
-            for flash_intensity = 2 : length(marker) % exclude dark==990. should improve by excluding 1ms here
+            for flash_intensity = length(marker) :-1: 2 % exclude dark==990. should improve by excluding 1ms here
                 fid = section_idx(:,end)==marker(flash_intensity);
                 fid_seq = find(fid==1);
 
@@ -142,14 +142,14 @@ for r = 1 : length(counter_range)
                     if scale == 1
                         if order_pre(t) <= ntrial(fid_seq(1))
                             trial_flash_pre = binned(trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 : ...
-                                trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 + range/binsize);
+                                trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1) + range/binsize);
                         else
                             trial_flash_pre = binned(trial_len*(order_pre(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 : ...
-                                trial_len*(order_pre(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1)+1 + range/binsize);
+                                trial_len*(order_pre(t)-ntrial(fid_seq(1))-1)+section_idx(fid_seq(2),1) + range/binsize);
                         end
                     elseif scale == 2
                         trial_flash_pre = binned(trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 : ...
-                                trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1)+1 + range/binsize);
+                                trial_len*(order_pre(t)-1)+section_idx(fid_seq(1),1) + range/binsize);
                     end
                     counter_pre = sum(trial_flash_pre(:));
 %                     other_flash_pre = sum_flash_pre - trial_flash_pre;
@@ -158,21 +158,21 @@ for r = 1 : length(counter_range)
                     if scale == 1
                         if order_post(t) <= ntrial(fid_seq(1))
                             trial_flash_post = binned(trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 :...
-                                trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 + range/binsize);
+                                trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + range/binsize);
                         else
                             trial_flash_post = binned(trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2 + 1 : ...
-                                trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2 + 1 + range/binsize);
+                                trial_len*(order_post(t)-ntrial(fid_seq(1)))+section_idx(fid_seq(2),1) - trial_len/2 + range/binsize);
                         end
                     elseif scale == 2 
                         trial_flash_post = binned(trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 : ...
-                                trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + 1 + range/binsize);
+                                trial_len*order_post(t)+section_idx(fid_seq(1),1) - trial_len/2 + range/binsize);
                     end
                     counter_post = sum(trial_flash_post(:));
 %                     other_flash_post = sum_flash_post - trial_flash_post;
 %                     mean_flash_post = other_flash_post ./ (length(trial_num_post) - 1) - mean_all .* length(trial_num_post) ./ (length(trial_num_post) - 1);
 
 %                     discriminant = (mean_flash_pre - mean_flash_post)';
-                    corrpos(t) = counter_pre - counter_post; 
+                    corrpos(t) = counter_pre - counter_post;
                 end
                 corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
                 Pc(flash_intensity - 1, test) = corr / length(corrpos);
@@ -181,7 +181,7 @@ for r = 1 : length(counter_range)
 
         Pc_avg = mean(Pc,2);
         Pc_var = std(Pc,1,2);
-        Pc_avg = Pc_avg(~flash_1ms);
+        Pc_avg = Pc_avg(~flash_1ms)
         Pc_var = Pc_var(~flash_1ms);
         pc(n).Pc_avg = Pc_avg;
         pc(n).Pc_var = Pc_var;
@@ -214,7 +214,7 @@ for cellnum = 1 : length(ds_slave_now)
     ylim([0.4, 1.05])
     xlabel('log(intensity)')
     ylabel('probability correct')
-    legend({'200','300','400','500'},'Location','southeast')
+    legend({'200','300','400'},'Location','southeast')
     legend('boxoff')
     
     saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit-counter-range' '.png'])
