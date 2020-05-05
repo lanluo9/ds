@@ -52,12 +52,14 @@ x = x_n_marker(temp_id,1);
 
 %% test binsize
 
-binsize_seq = [0.020, 0.050, 0.100, 0.300, 0.500];
+binsize_seq = [0.020, 0.050, 0.100, 0.200, 0.400, 0.500]; % 0.300 will give non-int trial_len
+pc = struct;
 ds_slave_now = on_sus_cell_ids;
 
 for b = 1 : length(binsize_seq)
-
-    binsize = binsize_seq(b); % bin window = 20 ms
+    
+    binsize = binsize_seq(b); % bin window = 20 ms - 500 ms
+    
     trial_len = 2 / binsize; % pretend all trial length = 2s
     binnum = datarun.duration / binsize;
     edges = linspace(0, datarun.duration, binnum);
@@ -67,6 +69,12 @@ for b = 1 : length(binsize_seq)
     ntrial = round(section_idx(:,8));
 
     for cellnum = 1 : length(ds_slave_now)
+        
+        n = (b-1)*length(ds_slave_now) + cellnum;
+        pc(n).binsize = binsize;
+        pc(n).cellid = ds_slave_now(cellnum);
+        disp(['calculating for cell ' num2str(ds_slave_now(cellnum)) ' binsize ' num2str(binsize)])
+        
     %     figure('units','normalized','outerposition',[0 0 1 1]) 
         ds_slave_index = find(datarun.cell_ids == ds_slave_now(cellnum)); 
         spike_time = datarun.spikes{ds_slave_index, 1};
@@ -149,30 +157,37 @@ for b = 1 : length(binsize_seq)
         Pc_var = std(Pc,1,2);
         Pc_avg = Pc_avg(~flash_1ms);
         Pc_var = Pc_var(~flash_1ms);
-        c = x;
-        r = Pc_avg;
-        fit = fitNakaRushton(c,r)
+        pc(n).Pc_avg = Pc_avg;
+        pc(n).Pc_var = Pc_var;
+%         c = x;
+%         r = Pc_avg;
+%         fit = fitNakaRushton(c,r)
 
-        hold on
-        c = linspace(min(x), max(x), 10^3);
-        Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
-        line([min(x), max(x)], [1, 1],'Color', [0 1 0])
-        line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
-        plot(c, Pc_fit, 'b--', 'LineWidth', 1)
-        errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
-
-        ylim([0.4, 1.05])
-        titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
-        title(sprintf(titleStr));
-        xlabel('log(intensity)')
-        ylabel('probability correct')
-        ylim([0.4, 1.05])
-        saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit-' num2str(1000*binsize_seq(b)) '.png'])
-        disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
-        close
+%         hold on
+%         c = linspace(min(x), max(x), 10^3);
+%         Pc_fit = fit.Rmax * ((c.^fit.n) ./ ((c.^fit.n) + fit.c50.^fit.n)) + fit.offset;
+%         line([min(x), max(x)], [1, 1],'Color', [0 1 0])
+%         line([min(x), max(x)], [0.84, 0.84],'Color', [0 1 0])
+%         plot(c, Pc_fit, 'b--', 'LineWidth', 1)
+%         errorbar(x, Pc_avg, Pc_var, 'Color', [1 0 0])
+% 
+%         ylim([0.4, 1.05])
+%         titleStr = sprintf('c50: %0.2f n: %0.2f\n  Rmax: %0.2f offset: %0.2f', fit.c50,fit.n, fit.Rmax,fit.offset);
+%         title(sprintf(titleStr));
+%         xlabel('log(intensity)')
+%         ylabel('probability correct')
+%         ylim([0.4, 1.05])
+%         saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-fit-' num2str(1000*binsize_seq(b)) '.png'])
+%         disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
+%         close
     end
+    disp(['done calculating for binsize ' num2str(binsize)])
 end
-disp('done')
+disp('calc done')
+
+%% binsize impact on Pc
+
+
 
 
 %% use 1-2s as null trial for normal latency cells & fit curve
