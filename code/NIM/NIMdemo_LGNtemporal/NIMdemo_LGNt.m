@@ -1,5 +1,8 @@
 
 %% Setup
+clear
+clc
+
 % Load data
 load LGN_FFdata
 
