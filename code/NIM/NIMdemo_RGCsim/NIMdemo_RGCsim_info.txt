@@ -1,0 +1,11 @@
+Information about rgcsim_demo
+
+This is data from a simulated experiment where a temporally varying white noise is presented to an ON-OFF retinal ganglion cell, as presented in our paper: McFarland et al (2013) PLoS CB, Figures 1,3.
+
+Variables present in rgc_simdata.mat
+
+-- stim: stimulus
+-- spiketimes: generates spike times (in units of seconds)
+-- stim_dt: time interval of the stimulus update (in sec)
+-- sim_dt: resolution that simulation was run. This was run at 8 times the time resolution of the stimulus, and note that spike times fall in the middle of each bin
+

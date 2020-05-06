@@ -1,0 +1,15 @@
+Information about LGNtemporal
+
+The data in LGN_FFdata.mat was processed from experiments performed in the Alonso lab at SUNY School of Optometry from the LGN of anesthetized cat, and described in several publications, most relevantly:
+
+-- Butts DA, Weng C, Jin JZ, Alonso JM, Paninski L (2011) Temporal precision in the visual pathway through the interplay of excitation and stimulus-driven suppression. J. Neurosci. 31: 11313-27.
+
+This neuron was recorded in the context of full-field temporal white noise. A two minute sequence is used to fit the model (FFstim, FFspks) and 64 repeats were performed (FFstimR, FFspksR), where the spike times of each repeat are separated from eachother with a '-1'. The stimulus refresh rate was roughly 120 Hz, but given precisely by the time interval DTstim. This data cannot be used for other purposes than this model demo.
+
+-- FFstim: temporal stimulus (120 sec)
+-- FFspks: spike times in seconds
+-- FFstim: temporal stimulus that was repeated (10 sec)
+-- FFspksR: spike times in seconds, 64 repeats
+-- DTstim: time interval of the stimulus update (in sec)
+
+Note that the modeling presented here is not identical to that in 2011, which used an older version of the model, but one that had a "PSC term", which allowed it to do slightly better in fitting the temporal sequence. We have not included the PSC term in the updated model distributed here, although it is possible that we may do so in the future.
