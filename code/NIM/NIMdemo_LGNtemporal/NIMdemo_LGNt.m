@@ -73,7 +73,7 @@ GLM0.display_model('Xstims',Xstim,'Robs',Robs)
 [LN0.eval_model( Robs, Xstim, test_inds )  GLM0.eval_model( Robs, Xstim, test_inds )]
 % Also available in fit-structures
 [LN0.fit_props.LL GLM0.fit_props.LL]
-	
+
 %% NIM: linear plus suppressive; like Butts et al (2011)
 % Add an inhibitory input (with delayed copy of GLM filter and fit 
 delayed_filt = NIM.shift_mat_zpad( LN0.subunits(1).filtK, 4 );
