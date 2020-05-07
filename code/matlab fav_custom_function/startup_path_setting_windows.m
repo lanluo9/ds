@@ -5,6 +5,11 @@
 % javarmpath('C:\Users\Katherine\Desktop\matlab\vision.jar')
 
 
+% addpath(genpath('D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds'))
+% addpath(genpath('D:\RRR\Grad\Rotation\GF_lab\code'))
+% javaaddpath('D:\RRR\Grad\Rotation\GF_lab\code\Vision.jar')
+
 addpath(genpath('D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds'))
 addpath(genpath('D:\RRR\Grad\Rotation\GF_lab\code'))
 javaaddpath('D:\RRR\Grad\Rotation\GF_lab\code\Vision.jar')
+clc

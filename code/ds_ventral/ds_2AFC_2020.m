@@ -824,7 +824,7 @@ for cellnum = 1 : length(ds_slave_now)
             
             corr = sum(corrpos>0) + 1/2 * sum(corrpos==0);
             Pc(flash_intensity - 1, 1) = corr / length(corrpos); 
-            counter_all{flash_intensity,1} = counter_fid
+            counter_all{flash_intensity,1} = counter_fid;
             
         end
 %     end
@@ -835,35 +835,46 @@ for cellnum = 1 : length(ds_slave_now)
     Pc_var = Pc_var(~flash_1ms);
     pc(n).Pc_avg = Pc_avg;
     pc(n).Pc_var = Pc_var;
-    pc(n).counter = counter_all{~flash_1ms};
+    pc(n).counter = counter_all{~flash_1ms}; %BUG HERE. WTH
 end
 % end
 disp('calc done')
 
-%% 
+%% spike count 0-300 ms
 % T = struct2table(pc);
 % sortedT = sortrows(T, 'cellid');
 % pc_sorted = table2struct(sortedT); % dependent on: ds_slave_now = sort(ds_slave_now);
 
 intensity_seq = [3,4,5,7,8,9,10,11,12,13]; % exclude dark & 1ms flash
-correct = {};
-chance = {};
-wrong = {};
+mark = {};
+pre = {};
+post = {};
 for cellnum = 1 : length(ds_slave_now)
+%     figure('units','normalized','outerposition',[0 0 1 1]) 
+
     for i = 1 : length(intensity_seq)
         n = cellnum;
-        pre = pc(n).counter{intensity_seq(i),1}(:,1);
-        post = pc(n).counter{intensity_seq(i),1}(:,2);
-        correct{:,i} = pre-post>0;
-        chance{:,i} = pre-post==0;
-        wrong{:,i} = pre-post<0;
+        pre{i,1} = pc(n).counter{intensity_seq(i),1}(:,1);
+        post{i,1} = pc(n).counter{intensity_seq(i),1}(:,2);
+        mark{i,1} = pre{i,1}-post{i,1}>0; % correct
+        mark{i,2} = pre{i,1}-post{i,1}==0; % chance
+        mark{i,3} = pre{i,1}-post{i,1}<0; % wrong
     end
     
-    
+    for sub = 1 : 3 * length(intensity_seq)
+        subplot(length(intensity_seq), 3, sub)
+        intensity = ceil(sub / 3);
+        result = mod(sub, 3);
+        
+        histogram(proj_pre, 25, 'FaceColor','r', 'EdgeColor','w')
+        hold on
+        histogram(proj_post, 20, 'FaceColor','b', 'EdgeColor','w')
+    end
+        
     
 %     ylim([0.4, 1.05])
-    xlabel('spike count 0-300 ms')
-    ylabel('histcount')
+%     xlabel('spike count 0-300 ms')
+%     ylabel('histcount')
 %     legend({'200','300','400'},'Location','southeast')
 %     legend('boxoff')
     
