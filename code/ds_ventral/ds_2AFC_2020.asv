@@ -866,17 +866,14 @@ for cellnum = 1 : length(ds_slave_now)
     for sub = 1 : 3 * length(intensity_seq)
         subplot(length(intensity_seq), 3, sub)
         intensity = ceil(sub / 3);
-        remark = mod(sub, 3); if remark == 0, remark = 3; end
+        remark = mod(sub, 3);
         
         pre_inten = pre{intensity,1};
-        pre_inten_remark = pre_inten(mark{intensity,remark});
-        post_inten = post{intensity,1};
-        post_inten_remark = post_inten(mark{intensity,remark});
+        pre_inten_remark = pre_inten(mark{})
         
-        histogram(pre_inten_remark, 10, 'FaceColor','r', 'EdgeColor','w')
+        histogram(proj_pre, 25, 'FaceColor','r', 'EdgeColor','w')
         hold on
-        histogram(post_inten_remark, 10, 'FaceColor','b', 'EdgeColor','w')
-        axis tight
+        histogram(proj_post, 20, 'FaceColor','b', 'EdgeColor','w')
     end
         
     
@@ -887,10 +884,11 @@ for cellnum = 1 : length(ds_slave_now)
 %     legend('boxoff')
     
     saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-counter-visualize' '.png'])
-	print([num2str(ds_slave_now(cellnum)) '-2AFC-counter-visualize'], '-dpdf', '-fillpage')
-    disp(['fig for ', num2str(ds_slave_now(cellnum))])
+    disp(['saved fig for ', num2str(ds_slave_now(cellnum))])
     close
 end    
+
+
 
 %% counter range impact on Pc
 
