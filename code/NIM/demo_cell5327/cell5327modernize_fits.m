@@ -1,6 +1,6 @@
 %% Modernized Field-Retina fit example
 
-cd ~/Desktop/cell5327/
+% cd ~/Desktop/cell5327/
 load spikes
 load mov
 
@@ -24,6 +24,7 @@ Xstim = NIM.create_time_embedding(mov,params_stim);
 %Xstim = create_time_embedding(mov,params_stim); 
 
 % bin spike times 
+spikes = spike{3,1};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % Could shift several time steps (6) forward, to get rid of early zeros in RF
