@@ -1,5 +1,8 @@
 %% Modernized Field-Retina fit example
 
+clear
+clc
+
 % cd ~/Desktop/cell5327/
 load spikes
 load mov
@@ -24,7 +27,6 @@ Xstim = NIM.create_time_embedding(mov,params_stim);
 %Xstim = create_time_embedding(mov,params_stim); 
 
 % bin spike times 
-spikes = spike{3,1};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % Could shift several time steps (6) forward, to get rid of early zeros in RF
@@ -173,8 +175,8 @@ Robs_rep = NIM.Spks2Robs_reps(spks_obs'+4*binsize, binsize, NTR );
 Rpred1S = mean(rep_rates')';
 
 % align PSTHs
-bg_rg_d = 50; % data selection
-ed_rg_d = 300;
+bg_rg = 50; % bg_rg_d = 50; % data selection
+ed_rg = 300; % ed_rg_d = 300;
 bg_rg_s = 48; % sim selection
 ed_rg_s = 298;
 R2s = 1-[var(RobsR(bg_rg:ed_rg)-Rpred0(bg_rg_s:ed_rg_s)) var(RobsR(bg_rg:ed_rg)-Rpred1(bg_rg_s:ed_rg_s)) var(RobsR(bg_rg:ed_rg)-Rpred1S(bg_rg_s:ed_rg_s))]/var(RobsR(bg_rg:ed_rg))
