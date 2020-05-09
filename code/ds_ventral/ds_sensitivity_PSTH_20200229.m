@@ -24,10 +24,12 @@ datarun = load_params(datarun);
 % datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
 
-%% load ds cell identified in master 
-
-ds_master_slave_id = importdata('20200229_ds_map_final.txt'); 
-ds_slave_id_seq = sort(ds_master_slave_id(:,2)); % 20200229 data
+%% load normal vs latency txt 
+normal_latency = importdata('latency.txt')
+divide = find(normal_latency(:,1)==0);
+ds_slave_normal = normal_latency(1:(divide-1), 2);
+ds_slave_latency = normal_latency((divide+1):end, 2);
+ds_slave_all = [ds_slave_normal; ds_slave_latency];
 
 %% chop data000 into sections
 
@@ -51,6 +53,8 @@ sections = [sections, ndf, flash_config, nflash];
 
 sections(:,7) = (sections(:,4)*(-10) + sections(:,5));
 section_sort = sortrows(sections, 7);
+section_sort(:,8) = section_sort(:,4)*10 + section_sort(:,5);
+
 marker = unique(section_sort(:,7));
 flash_1ms = abs( abs(marker - floor(marker)) - 0.1) < 1e-4;
 marker = marker(~flash_1ms); % exlude 1 ms flashes
@@ -132,7 +136,6 @@ for i = 1 : length(ds_slave_id_seq)
     close
 end
 toc
-
 %% sensitivity rasterplot
 
 tic
@@ -196,7 +199,72 @@ end
     
 toc % takes 7-9 min to generate a single cell sensitivity plot. needs optim
 
-% 
+%% full size sensitivity rasterplot for every flash intensity
+
+tic
+
+ds_slave_normal = sort(ds_slave_normal);
+ds_slave_now = ds_slave_normal;
+
+for i = 1 : length(ds_slave_now)
+
+    ds_slave_id = ds_slave_now(i); 
+    ds_slave_index = find(datarun.cell_ids == ds_slave_id); 
+    if isempty(ds_slave_index)
+        disp([num2str(ds_slave_id), ' not found in slave datarun.cell_id'])
+        close
+        continue
+    end
+    
+    spike_time = datarun.spikes{ds_slave_index, 1};
+
+    for m = 1: (length(marker))
+        figure('units','normalized','outerposition',[0 0 1 1])
+%         subplot(length(marker), 1, m)  
+        marker_now = marker(m);
+        marker_readable = ceil(-1/10 * marker_now) * 10 + (ceil(-1/10 * marker_now) - (-1/10 * marker_now)) * 10;
+        section_id_seq = find(marker_seq == marker_now, length(marker_seq));
+
+        for s = 1:length(section_id_seq)
+            section_id = section_id_seq(s); 
+            section_now = [section_sort(section_id, 1), section_sort(section_id, 2)];
+            section_flag = spike_time >= section_now(1) & spike_time <= section_now(2);
+
+            spike_time_section = spike_time(section_flag);
+            spike_time_section = spike_time_section - section_now(1);
+
+            rep_len = 2;
+            rep_max = round(section_now(2) - section_now(1)) / rep_len;
+
+            if section_sort(section_id, 5) < 3  % period = 2s or 0s (dark)
+                rep_step = 1;
+            elseif section_sort(section_id, 5) >= 4 % period = 4s
+                rep_step = 2; % skip 2-4s of every period, plot only 0-2s
+            end
+
+            for rep = 1 : rep_step : rep_max
+                rep_flag = spike_time_section >= (rep-1)*rep_len & spike_time_section <= rep*rep_len;
+                spike_time_rep = spike_time_section(rep_flag);
+                spike_time_rep = spike_time_rep - (rep-1)*rep_len;
+
+                rep_mark = rep * ones(length(spike_time_rep),1);
+                scatter(spike_time_rep, rep_mark, 5, 'filled')
+                axis([-0.05 (rep_len + 0.05) 0 (rep_max + 1)])
+                hold on
+            end
+            hold on
+        end
+        
+    saveas(gcf, [num2str(ds_slave_now(i)) '-sensi' num2str(marker_readable) '.png'])
+%     print([num2str(ds_slave_id), '-sensi-exclude1ms'], '-dpdf', '-fillpage')
+    disp(['saved fig for ', num2str(ds_slave_id)])
+    close    
+    end    
+end
+    
+toc % takes 7-9 min to generate a single cell sensitivity plot. needs optim
+
+%%
 % tic
 % 
 % for i = 1 : length(ds_slave_id_seq)
