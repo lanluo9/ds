@@ -877,14 +877,8 @@ for cellnum = 1 : length(ds_slave_now)
         hold on
         histogram(post_inten_remark, 10, 'FaceColor','b', 'EdgeColor','w')
         axis tight
+        xlim([0, max(xlim)])
     end
-        
-    
-%     ylim([0.4, 1.05])
-%     xlabel('spike count 0-300 ms')
-%     ylabel('histcount')
-%     legend({'200','300','400'},'Location','southeast')
-%     legend('boxoff')
     
     saveas(gcf, [num2str(ds_slave_now(cellnum)) '-2AFC-counter-visualize' '.png'])
 	print([num2str(ds_slave_now(cellnum)) '-2AFC-counter-visualize'], '-dpdf', '-fillpage')

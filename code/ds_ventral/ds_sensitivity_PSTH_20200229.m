@@ -2,17 +2,26 @@
 
 clear
 clc
+close all
 
-dataset_num = '/data000-map-sorted'; 
-date_num = '2020-02-29-0';
-
-% prefix_now = '/Volumes/dusom_fieldlab';
-prefix_now = '/Volumes/All_Staff/';
-
-datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
+datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2020-02-29-0/data000-map-sorted/data000-map-sorted';
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
+
+% clear
+% clc
+% 
+% dataset_num = '/data000-map-sorted'; 
+% date_num = '2020-02-29-0';
+% 
+% % prefix_now = '/Volumes/dusom_fieldlab';
+% prefix_now = '/Volumes/All_Staff/';
+% 
+% datapath = append(prefix_now, '/lab/Experiments/Array/Analysis/', date_num, dataset_num, dataset_num);
+% datarun = load_data(datapath);
+% datarun = load_neurons(datarun);
+% datarun = load_params(datarun);
 % datarun = load_ei(datarun, 'all', 'array_type', 519);
 
 %% load ds cell identified in master 
