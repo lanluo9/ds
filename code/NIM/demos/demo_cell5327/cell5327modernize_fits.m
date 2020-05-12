@@ -3,14 +3,15 @@
 clear
 clc
 
-% cd ~/Desktop/cell5327/
+%%
+cd demo_cell5327/
 load spikes
 load mov
 
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
 tent_basis_spacing = 1;
 nLags = 25*up_samp_fac; % 25; 
-dt = 16.5975 ./ 1000;
+dt = 16.5975 ./ 1000; % invert monitor freq
 binsize = dt/up_samp_fac;
 
 % Stimulus is a T x M matrix of 1-d binary white noise (M bars-wide, T time steps)
