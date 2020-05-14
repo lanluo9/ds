@@ -7,10 +7,10 @@ close
 %% convert data to spikes.mat & mov.mat
 
 % % datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2018-09-26-0/data007-nyj-map/data007-nyj-map';
-% datapath = '/Volumes/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
-% datarun = load_data(datapath);
-% datarun = load_neurons(datarun);
-% datarun = load_params(datarun);
+datapath = '/Volumes/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
+datarun = load_data(datapath);
+datarun = load_neurons(datarun);
+datarun = load_params(datarun);
 % 
 % % test = cellfun(@length, datarun.spikes)
 % % median(test) % since demo spikes length ~ 10^5, we'll try fit datarun.spikes{3}
@@ -38,7 +38,22 @@ cd /Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM
 load spikes_20180926_007_n3 
 load mov_20180926_007 
 
-%%
+%% reduce Xstim size
+RF = datarun.vision.sta_fits{3,1};
+RF_center_x = RF.mean(1);
+RF_center_y = RF.mean(2);
+% RF_range = max(RF.sd);
+re_size = 15/2 - 1; % 15: taken from xml filename
+x_upper = ceil(RF_center_x + re_size);
+x_lower = floor(RF_center_x - re_size);
+y_upper = ceil(RF_center_y + re_size);
+y_lower = floor(RF_center_y - re_size);
+
+mov_resize = reshape(mov, [NY, NX, NFRAMES]);
+mov_resize = mov_resize(y_lower:y_upper, x_lower:x_upper, :);
+NX = size(mov_resize,1); clear NY
+mov = reshape(mov_resize, [NX*NX, NFRAMES])';
+
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
 tent_basis_spacing = 1;
 nLags = 25*up_samp_fac; % 25; 
@@ -48,10 +63,11 @@ binsize = dt/up_samp_fac;
 % Stimulus is a T x M matrix of 1-d binary white noise (M bars-wide, T time steps)
 [NFRAMES, Nstixel] = size(mov);
 NT = NFRAMES*up_samp_fac;
-NX = 53; NY = 40; % insert mov stim param: x=width, y=height
+% NX = 53; NY = 40; % insert mov stim param: x=width, y=height
 
 % Init stim parameters structure
-params_stim = NIM.create_stim_params([nLags NX, NY], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
+params_stim = NIM.create_stim_params([nLags NX, NX], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
+
 % generate stimulus matrix
 Xstim = NIM.create_time_embedding(mov,params_stim); % out of memory!
 % bin spike times 
