@@ -19,41 +19,47 @@ spikes = datarun.spikes{3};
 
 % movie_path = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
 movie_path = '/Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
-mvi = load_movie(movie_path, datarun.triggers);
+% mvi = load_movie(movie_path, datarun.triggers);
 [mov, ~,~, dur, refresh] = get_movie_LL(movie_path, datarun.triggers, 216000); 
 % why? Nframe should theoretically be: datarun.duration * 60.35 = 217260
 
 mov = squeeze(mov(:,:,1,:)); % no need for color dimension 
 [NY, NX, NFRAMES] = size(mov);
 
-%% reduce Xstim size
-RF = datarun.vision.sta_fits{3,1};
-RF_center_x = RF.mean(1);
-RF_center_y = RF.mean(2);
-% RF_range = max(RF.sd);
-re_size = 15/2 - 1; % 15: taken from xml filename
-x_upper = ceil(RF_center_x + re_size);
-x_lower = floor(RF_center_x - re_size);
-y_upper = ceil(RF_center_y + re_size);
-y_lower = floor(RF_center_y - re_size);
+%% reduce Xstim size in time
+re_time = 216000 / 60 * 10; % take first 10 mins
+mov_resize = mov(:, :, 1:re_time);
+mov = reshape(mov_resize, [NY*NX, re_time])';
 
-% mov_resize = reshape(mov, [NY, NX, NFRAMES]);
-mov_resize = mov(y_lower:y_upper, x_lower:x_upper, :);
-NX = size(mov_resize,1); clear NY
-mov = reshape(mov_resize, [NX*NX, NFRAMES])';
+%% reduce Xstim size in space
+
+% RF = datarun.vision.sta_fits{3,1};
+% RF_center_x = RF.mean(1);
+% RF_center_y = RF.mean(2);
+% % RF_range = max(RF.sd);
+% re_size = 15/2 - 1; % 15: taken from xml filename
+% x_upper = ceil(RF_center_x + re_size);
+% x_lower = floor(RF_center_x - re_size);
+% y_upper = ceil(RF_center_y + re_size);
+% y_lower = floor(RF_center_y - re_size);
+% 
+% % mov_resize = reshape(mov, [NY, NX, NFRAMES]);
+% mov_resize = mov(y_lower:y_upper, x_lower:x_upper, :);
+% NX = size(mov_resize,1); clear NY
+% mov = reshape(mov_resize, [NX*NX, NFRAMES])';
 
 % mov = reshape(mov, [NX*NY, NFRAMES])';
 mov(mov < 0.5) = -0.48; % taken from xml contrast value
 mov(mov > 0.5) = 0.48;
 
-save('spikes_20180926_007_n3.mat', 'spikes') 
-save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
+% save('spikes_20180926_007_n3.mat', 'spikes') 
+% save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
 
 %% reload converted data
 % cd D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM
-cd /Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM
-load spikes_20180926_007_n3 
-load mov_20180926_007 
+% cd /Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM
+% load spikes_20180926_007_n3 
+% load mov_20180926_007 
 
 
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
@@ -68,7 +74,7 @@ NT = NFRAMES*up_samp_fac;
 % NX = 53; NY = 40; % insert mov stim param: x=width, y=height
 
 % Init stim parameters structure
-params_stim = NIM.create_stim_params([nLags NX, NX], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
+params_stim = NIM.create_stim_params([nLags NY, NX], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
 
 % generate stimulus matrix
 Xstim = NIM.create_time_embedding(mov,params_stim); % out of memory!
