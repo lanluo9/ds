@@ -27,33 +27,33 @@ mov = squeeze(mov(:,:,1,:)); % no need for color dimension
 [NY, NX, NFRAMES] = size(mov);
 
 %% reduce Xstim size in time
-re_time = 216000 / 60 * 10; % take first 10 mins
-mov_resize = mov(:, :, 1:re_time);
-mov = reshape(mov_resize, [NY*NX, re_time])';
+% re_time = 216000 / 60 * 10; % take first 10 mins
+% mov_resize = mov(:, :, 1:re_time);
+% mov = reshape(mov_resize, [NY*NX, re_time])';
+% % plot k0 shows RF should be x 25-40, y 17-32 (not 8-23, bc y axis flipped??)
 
 %% reduce Xstim size in space
 
-% RF = datarun.vision.sta_fits{3,1};
-% RF_center_x = RF.mean(1);
-% RF_center_y = RF.mean(2);
-% % RF_range = max(RF.sd);
-% re_size = 15/2 - 1; % 15: taken from xml filename
-% x_upper = ceil(RF_center_x + re_size);
-% x_lower = floor(RF_center_x - re_size);
-% y_upper = ceil(RF_center_y + re_size);
-% y_lower = floor(RF_center_y - re_size);
-% 
-% % mov_resize = reshape(mov, [NY, NX, NFRAMES]);
-% mov_resize = mov(y_lower:y_upper, x_lower:x_upper, :);
-% NX = size(mov_resize,1); clear NY
-% mov = reshape(mov_resize, [NX*NX, NFRAMES])';
+RF = datarun.vision.sta_fits{3,1};
+RF_center_x = RF.mean(1);
+RF_center_y = NY - RF.mean(2);
+% RF_range = max(RF.sd);
+re_size = 15/2 - 1; % 15: taken from xml filename
+x_upper = ceil(RF_center_x + re_size);
+x_lower = floor(RF_center_x - re_size);
+y_upper = ceil(RF_center_y + re_size);
+y_lower = floor(RF_center_y - re_size);
 
-% mov = reshape(mov, [NX*NY, NFRAMES])';
+% mov_resize = reshape(mov, [NY, NX, NFRAMES]);
+mov_resize = mov(y_lower:y_upper, x_lower:x_upper, :);
+NX = size(mov_resize,1); NY = NX;
+mov = reshape(mov_resize, [NY*NX, NFRAMES])';
+
 mov(mov < 0.5) = -0.48; % taken from xml contrast value
 mov(mov > 0.5) = 0.48;
 
-% save('spikes_20180926_007_n3.mat', 'spikes') 
-% save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
+save('spikes_20180926_007_n3.mat', 'spikes') 
+save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
 
 %% reload converted data
 % cd D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM
@@ -71,13 +71,12 @@ binsize = dt/up_samp_fac;
 % Stimulus is a T x M matrix of 1-d binary white noise (M bars-wide, T time steps)
 [NFRAMES, Nstixel] = size(mov);
 NT = NFRAMES*up_samp_fac;
-% NX = 53; NY = 40; % insert mov stim param: x=width, y=height
 
 % Init stim parameters structure
 params_stim = NIM.create_stim_params([nLags NY, NX], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
 
 % generate stimulus matrix
-Xstim = NIM.create_time_embedding(mov,params_stim); % out of memory!
+Xstim = NIM.create_time_embedding(mov,params_stim); % might run out of memory
 % bin spike times 
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
@@ -103,11 +102,11 @@ fit0 = fit0.fit_filters( Robs, Xstim, Ui, 'optim_params', optim_params );
 
 % find optimal regularization using nested cross-val (note this can take a while)
 fit_test = fit0.reg_path( Robs, Xstim, Ui, XVi, 'lambdaID', 'd2xt', 'optim_params', optim_params );
-% Subunit 1: Best reg = 600.00
+% Subunit 1: Best reg = 600.00 for reduction in space mov; 400 in time
 % this finds optimal value of XX
 
 % look at filter
-k0 = reshape(fit0.subunits(1).filtK, [nLags, NX * NX]);
+k0 = reshape(fit0.subunits(1).filtK, [nLags, NY * NX]);
 [mval,bestlag] = max(max(abs(k0)')); bestlag 
 
 
@@ -118,5 +117,5 @@ plot(U(:,1))
 axis tight
 axis square
 subplot(1,2,2); colormap gray
-imagesc(reshape(V(:,1), NX, NX))
+imagesc(reshape(V(:,1), NY, NX))
 axis square
