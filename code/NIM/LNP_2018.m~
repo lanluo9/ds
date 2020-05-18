@@ -208,7 +208,7 @@ save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
 LLs(2) = fitS.eval_model(Robs, Xstim, XVi );
 LLs(3) = fit1.eval_model(Robs, Xstim, XVi );
 LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
-LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
+LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is 
 LLs-fp.nullLL
 
 
