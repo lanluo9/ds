@@ -6,69 +6,64 @@ close
 
 %% convert data to spikes.mat & mov.mat
 
-% % datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2018-09-26-0/data007-nyj-map/data007-nyj-map';
-datapath = '/Volumes/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
+% datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2018-09-26-0/data007-nyj-map/data007-nyj-map';
+% datapath = '/Volumes/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
+datapath = '/Volumes/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
 datarun = load_data(datapath);
 datarun = load_neurons(datarun);
 datarun = load_params(datarun);
 
+% % movie_path = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
+% % movie_path = '/Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
+% movie_path = '/Users/katthanya/Documents/MATLAB/matlab/private/Lan/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
+% % mvi = load_movie(movie_path, datarun.triggers);
+% [mov, ~,~, dur, refresh] = get_movie_LL(movie_path, datarun.triggers, 216000); 
+% mov = squeeze(mov(:,:,1,:)); % no need for color dimension 
+% [NY, NX, NFRAMES] = size(mov);
+% 
+% % save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
+
+%% cellnum 
 % test = cellfun(@length, datarun.spikes)
 % median(test) % since demo spikes length ~ 10^5, we'll try fit datarun.spikes{3}
 % mean(test)
-spikes = datarun.spikes{3};
 
-% movie_path = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
-movie_path = '/Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM/BW-15-1-0.48-11111-53x40-60.35_xoffset2.xml';
-% mvi = load_movie(movie_path, datarun.triggers);
-[mov, ~,~, dur, refresh] = get_movie_LL(movie_path, datarun.triggers, 216000); 
-% why? Nframe should theoretically be: datarun.duration * 60.35 = 217260
+cell_index = 3;
+cell_id = datarun.cell_ids(cell_index);
+spikes = datarun.spikes{cell_index};
 
-mov = squeeze(mov(:,:,1,:)); % no need for color dimension 
-[NY, NX, NFRAMES] = size(mov);
-
-%% reduce Xstim size in time
+% reduce Xstim size in time
 % re_time = 216000 / 60 * 10; % take first 10 mins
 % mov_resize = mov(:, :, 1:re_time);
 % mov = reshape(mov_resize, [NY*NX, re_time])';
-% % plot k0 shows RF should be x 25-40, y 17-32 (not 8-23, bc y axis flipped??)
 
-%% reduce Xstim size in space
-
-RF = datarun.vision.sta_fits{3,1};
+% reduce Xstim size in space
+cd /Users/katthanya/Documents/MATLAB/matlab/private/Lan/code/NIM
+load mov_20180926_007.mat
+[NY, NX, NFRAMES] = size(mov);
+RF = datarun.vision.sta_fits{cell_index,1};
 RF_center_x = RF.mean(1);
 RF_center_y = NY - RF.mean(2);
-% RF_range = max(RF.sd);
 re_size = 15/2 - 1; % 15: taken from xml filename
+
 x_upper = ceil(RF_center_x + re_size);
 x_lower = floor(RF_center_x - re_size);
 y_upper = ceil(RF_center_y + re_size);
 y_lower = floor(RF_center_y - re_size);
 
-% mov_resize = reshape(mov, [NY, NX, NFRAMES]);
 mov_resize = mov(y_lower:y_upper, x_lower:x_upper, :);
 NX = size(mov_resize,1); NY = NX;
 mov = reshape(mov_resize, [NY*NX, NFRAMES])';
-
 mov(mov < 0.5) = -0.48; % taken from xml contrast value
 mov(mov > 0.5) = 0.48;
 
-% save('spikes_20180926_007_n3.mat', 'spikes') 
-% save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
-
-%% reload converted data
-% cd D:/RRR/Grad/Rotation/GF_lab/lab_Mac/ds/code/NIM
-% cd /Users/circuit/Documents/MATLAB/matlab/private/Lan/ds/code/NIM
-% load spikes_20180926_007_n3 
-% load mov_20180926_007 
+% %% 
 
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
 tent_basis_spacing = 1;
 nLags = 25*up_samp_fac; % 25; 
 dt = 16.5975 ./ 1000;
 binsize = dt/up_samp_fac;
-
-% Stimulus is a T x M matrix of 1-d binary white noise (M bars-wide, T time steps)
-[NFRAMES, Nstixel] = size(mov);
 NT = NFRAMES*up_samp_fac;
 
 % Init stim parameters structure
@@ -83,7 +78,7 @@ Robs = NIM.Spks2Robs(spikes, binsize, NT );
 [Ui, XVi] = NIM.generate_XVfolds( NT ); % XVi array size = NT/5
 
 
-%% round 1 fit
+% %% round 1 fit
 disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
 NL_types = {'lin'}; % define subunit as linear 
@@ -121,10 +116,10 @@ imagesc(reshape(V(:,1), NY, NX))
 axis square
 
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, 'k0_filter.png')
+saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
 close
 
-%% round 2 fit NIM
+% %% round 2 fit NIM
 mod_signs = [1 -1]; % both inputs are excitatory. (+1 for excitatory, -1 for suppressive)
 NL_types = {'rectlin','rectlin'}; % name-change
 
@@ -149,7 +144,7 @@ fit1S = fit1S.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', op
 % spike history term helps
 fit1S.display_model('Xstims', Xstim )
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, 'fit1S.png')
+saveas(gcf, ['fit1S-' num2str(cell_id) '.png'])
 close
 % plot by itself
 plot(fit1S.spk_hist.bin_edges(2:end), fit1S.spk_hist.coefs)
@@ -159,7 +154,7 @@ close
 % new model display
 fit1.display_model('Xstims',Xstim)
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, 'fit1.png')
+saveas(gcf, ['fit1' num2str(cell_id) '.png'])
 close
 
 % can also plot RFs separately
@@ -183,7 +178,7 @@ subplot(1,3,3); colormap gray
 imagesc(reshape(k2(blat2,:),NY,NX), [-1 1]*mk2)
 axis square
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, 'subunits.png')
+saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
 close
 
 fit0nl = fit0.fit_spkNL( Robs, Xstim, Ui );
@@ -195,13 +190,8 @@ fit2 = fit2.fit_upstreamNLs( Robs, Xstim, Ui );
 % this actually ends up looking rectlin, so not worth it
 fit2.display_model('Xstims',Xstim)
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, 'fit2.png')
+saveas(gcf, ['fit2-' num2str(cell_id) '.png'])
 close
-
-% save models
-save Res2mod3.mat fit0 fit1
-save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
-
 
 % internal LLx (cross-validated likelihood, although was used for meta-params)
 [LLs,~,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
@@ -212,3 +202,6 @@ LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better tha
 LLs-fp.nullLL
 
 
+% %% save models
+% save Res2mod3.mat fit0 fit1
+save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
