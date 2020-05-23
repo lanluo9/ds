@@ -4,7 +4,7 @@ clear
 clc
 close
 
-%% convert data to spikes.mat & mov.mat
+% convert data to spikes.mat & mov.mat
 
 % datapath = 'D:/RRR/Grad/Rotation/GF_lab/lab_Mac/2018-09-26-0/data007-nyj-map/data007-nyj-map';
 % datapath = '/Volumes/dusom_fieldlab/All_Staff/lab/Experiments/Array/Analysis/2018-09-26-0/data007-nyj-map/data007-nyj-map';
@@ -28,7 +28,10 @@ datarun = load_params(datarun);
 % median(test) % since demo spikes length ~ 10^5, we'll try fit datarun.spikes{3}
 % mean(test)
 
-cell_index = 3;
+for i = 4:13
+tic
+
+cell_index = i;
 cell_id = datarun.cell_ids(cell_index);
 spikes = datarun.spikes{cell_index};
 
@@ -201,7 +204,9 @@ LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLs-fp.nullLL
 
+toc
+end
 
 % %% save models
 % save Res2mod3.mat fit0 fit1
-save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
+% save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
