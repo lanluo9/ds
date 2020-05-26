@@ -1,6 +1,6 @@
 %% Mac version
-disp('')
-disp('')
+disp(' ')
+disp(' ')
 currentEditor = matlab.desktop.editor.getActive; 
 originalSelection = currentEditor.Selection; 
 assert(originalSelection(1)==originalSelection(3)); %Check that multiple lines are not selected 
@@ -29,8 +29,8 @@ currentEditor.Selection = originalSelection + 1;%Reset selection to original sta
 clear currentEditor originalselection
 
 %% fix shifting bug
-disp('')
-disp('')
+disp(' ')
+disp(' ')
 currentEditor = matlab.desktop.editor.getActive;
 originalSelection = currentEditor.Selection;
 assert(originalSelection(1)==originalSelection(3));%Check that multiple lines are not selected
