@@ -1,3 +1,6 @@
+disp('')
+disp('')
+
 currentEditor = matlab.desktop.editor.getActive;
 originalSelection = currentEditor.Selection;
 
