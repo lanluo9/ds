@@ -157,7 +157,7 @@ close
 % new model display
 fit1.display_model('Xstims',Xstim)
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit1' num2str(cell_id) '.png'])
+saveas(gcf, ['fit1-' num2str(cell_id) '.png'])
 close
 
 % can also plot RFs separately
