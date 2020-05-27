@@ -212,9 +212,11 @@ end
 % save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
 
 %% 
-[~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
-[~,pred_rateS,~,~] = fitS.eval_model(Robs, Xstim, XVi );
-[~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
-[~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
-[~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
+[~,pred_rate0,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
+[LLs,pred_rate,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
+[LLs,pred_rate,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
+[LLs,pred_rate,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
+
+
+
 
