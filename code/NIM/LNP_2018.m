@@ -255,4 +255,6 @@ for i = 1:5
 end
 %%
 % plot(R2)
-sum(R2>0) / size(R2,1) / size(R2,2)
+sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, should be due to buggy eval?
+
+% save('demo_adapt.mat', '-append')
