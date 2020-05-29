@@ -249,6 +249,10 @@ r_array = poissrnd(20,[1000 1]);
 mean(r_array)
 
 %%
-R2 = 1-mean((spk_per_bin-pred_rates(:,4)).^2)/var(spk_per_bin)
-
-
+% R2_part = 1 - mean( (spk_per_bin(bgn:fin)' - pred_rates(bgn:fin,4)) .^2) / var(spk_per_bin(bgn:fin))
+for i = 1:5
+    R2(i) = 1 - mean( (spk_per_bin' - pred_rates(:,i)) .^2) / var(spk_per_bin)
+end
+%%
+% plot(R2)
+sum(R2>0) / size(R2,1) / size(R2,2)
