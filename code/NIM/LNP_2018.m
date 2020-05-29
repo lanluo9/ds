@@ -122,7 +122,7 @@ set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
 close
 
-%% round 2 fit NIM
+% %% round 2 fit NIM
 mod_signs = [1 -1]; % both inputs are excitatory. (+1 for excitatory, -1 for suppressive)
 NL_types = {'rectlin','rectlin'}; % name-change
 
@@ -217,4 +217,38 @@ end
 [~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
 [~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
 [~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
+
+%%
+pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
+
+% Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
+% Robs_5 = sum(Robs_5, 1) ./ (binsize * 5); % Robs_5 is calculated for every 5 frames. but division seems incorrect
+
+edges = linspace(floor(spikes(1)), ceil(spikes(end)), size(pred_rates,1) + 1 );
+[spk_binned, ~] = histcounts(spikes, edges);
+spk_per_bin = spk_binned ./ 5;
+spk_per_sec = spk_binned ./ (binsize * 5); % why? is pred_rate spike per bin, not per sec?
+
+%%
+color = prism(size(pred_rates,2));
+bgn = 1;
+fin = 200;
+
+figure('units','normalized','outerposition',[0 0 1 1])
+for i = 1:size(pred_rates,2)
+    pred_rate_now = pred_rates(:,i);
+    plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1)
+    hold on
+end
+plot(spk_per_bin(bgn:fin), 'k', 'LineWidth', 2)
+legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
+legend('boxoff')
+
+%%
+r_array = poissrnd(20,[1000 1]);
+mean(r_array)
+
+%%
+R2 = 1-mean((spk_per_bin-pred_rates(:,4)).^2)/var(spk_per_bin)
+
 
