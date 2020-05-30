@@ -226,13 +226,13 @@ pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
 edges = linspace(floor(spikes(1)), ceil(spikes(end)), size(pred_rates,1) + 1 );
 [spk_binned, ~] = histcounts(spikes, edges);
-spk_per_bin = spk_binned ./ 5;
-spk_per_sec = spk_binned ./ (binsize * 5); % why? is pred_rate spike per bin, not per sec?
+spk_per_bin = spk_binned ./ 5; % pred_rate is spike per bin, not per sec
+% spk_per_sec = spk_binned ./ (binsize * 5); 
 
 %%
 color = prism(size(pred_rates,2));
-bgn = 1;
-fin = 200;
+bgn = 500;
+fin = 700;
 
 figure('units','normalized','outerposition',[0 0 1 1])
 for i = 1:size(pred_rates,2)
@@ -258,3 +258,6 @@ end
 sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, should be due to buggy eval?
 
 % save('demo_adapt.mat', '-append')
+
+%%
+save('fits-63.mat', 'fit0', 'fit0nl', 'fitS', 'fit1', 'fit1nl', 'fit1S', 'fit2')
