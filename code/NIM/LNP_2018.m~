@@ -28,10 +28,12 @@ datarun = load_params(datarun);
 % median(test) % since demo spikes length ~ 10^5, we'll try fit datarun.spikes{3}
 % mean(test)
 
-for i = 4:13
+cell_index_array = [4:13, find(datarun.cell_ids == 1578), find(datarun.cell_ids == 4756)];
+
+for i = 1 : length(cell_index_array)
 tic
 
-cell_index = i;
+cell_index = cell_index_array(i);
 cell_id = datarun.cell_ids(cell_index);
 spikes = datarun.spikes{cell_index};
 
@@ -117,9 +119,8 @@ axis square
 subplot(1,2,2); colormap gray
 imagesc(reshape(V(:,1), NY, NX))
 axis square
-
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
 close
 
 % %% round 2 fit NIM
@@ -146,8 +147,8 @@ fit1S = fit1.init_spkhist(16,'doubling_time',4, 'negcon');
 fit1S = fit1S.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', optim_params );
 % spike history term helps
 fit1S.display_model('Xstims', Xstim )
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit1S-' num2str(cell_id) '.png'])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['fit1S-' num2str(cell_id) '.png'])
 close
 % plot by itself
 plot(fit1S.spk_hist.bin_edges(2:end), fit1S.spk_hist.coefs)
@@ -156,8 +157,8 @@ close
 
 % new model display
 fit1.display_model('Xstims',Xstim)
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit1-' num2str(cell_id) '.png'])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['fit1-' num2str(cell_id) '.png'])
 close
 
 % can also plot RFs separately
@@ -180,8 +181,8 @@ axis square
 subplot(1,3,3); colormap gray
 imagesc(reshape(k2(blat2,:),NY,NX), [-1 1]*mk2)
 axis square
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
 close
 
 fit0nl = fit0.fit_spkNL( Robs, Xstim, Ui );
@@ -192,8 +193,8 @@ fit2 = fit1.init_nonpar_NLs( Xstim );
 fit2 = fit2.fit_upstreamNLs( Robs, Xstim, Ui );
 % this actually ends up looking rectlin, so not worth it
 fit2.display_model('Xstims',Xstim)
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit2-' num2str(cell_id) '.png'])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['fit2-' num2str(cell_id) '.png'])
 close
 
 % internal LLx (cross-validated likelihood, although was used for meta-params)
@@ -204,37 +205,29 @@ LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLs-fp.nullLL
 
-toc
-end
 
-% %% save models
 % save Res2mod3.mat fit0 fit1
 % save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
-
-%% 
+ 
 [~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
 [~,pred_rateS,~,~] = fitS.eval_model(Robs, Xstim, XVi );
 [~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
 [~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
 [~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
-
-%%
 pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
-% Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
-% Robs_5 = sum(Robs_5, 1) ./ (binsize * 5); % Robs_5 is calculated for every 5 frames. but division seems incorrect
+Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
+Robs_5 = sum(Robs_5, 1) ./ 5; 
 
 edges = linspace(floor(spikes(1)), ceil(spikes(end)), size(pred_rates,1) + 1 );
 [spk_binned, ~] = histcounts(spikes, edges);
-spk_per_bin = spk_binned ./ 5;
-spk_per_sec = spk_binned ./ (binsize * 5); % why? is pred_rate spike per bin, not per sec?
+spk_per_bin = spk_binned ./ 5; % pred_rate is spike per bin, not per sec!
+% spk_per_sec = spk_binned ./ (binsize * 5); 
 
-%%
 color = prism(size(pred_rates,2));
-bgn = 1;
-fin = 200;
+bgn = 1500;
+fin = 1600;
 
-figure('units','normalized','outerposition',[0 0 1 1])
 for i = 1:size(pred_rates,2)
     pred_rate_now = pred_rates(:,i);
     plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1)
@@ -243,18 +236,19 @@ end
 plot(spk_per_bin(bgn:fin), 'k', 'LineWidth', 2)
 legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, ['perf-' num2str(cell_id) '.png'])
 
-%%
-r_array = poissrnd(20,[1000 1]);
-mean(r_array)
+% %%
+% % R2_part = 1 - mean( (spk_per_bin(bgn:fin)' - pred_rates(bgn:fin,4)) .^2) / var(spk_per_bin(bgn:fin))
+% for i = 1:5
+%     R2(i) = 1 - mean( (spk_per_bin' - pred_rates(:,i)) .^2) / var(spk_per_bin)
+% end
+% % plot(R2)
+% sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, should be due to buggy eval?
 
-%%
-% R2_part = 1 - mean( (spk_per_bin(bgn:fin)' - pred_rates(bgn:fin,4)) .^2) / var(spk_per_bin(bgn:fin))
-for i = 1:5
-    R2(i) = 1 - mean( (spk_per_bin' - pred_rates(:,i)) .^2) / var(spk_per_bin)
-end
-%%
-% plot(R2)
-sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, 
+save('perf-63.mat', '-v7.3')
+disp(['saved perf for cell' num2str(cell_id)])
 
-% save('demo_adapt.mat', '-append')
+
+
