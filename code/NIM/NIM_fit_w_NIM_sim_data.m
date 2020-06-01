@@ -1,8 +1,9 @@
 %%
-clc
-clear
-close all
-
+% clc
+% clear
+% close all
+% 
+% load perf-1578.mat
 load fits-63.mat
 %% 
 [~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
@@ -14,9 +15,10 @@ load fits-63.mat
 %%
 pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
-Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
-dt = 16.5975 ./ 1000;
-Robs_5 = sum(Robs_5, 1) ./ 5; % Robs_5 is calculated for every 5 frames
+Robs_test = Robs(XVi);
+% Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
+% dt = 16.5975 ./ 1000;
+% Robs_5 = sum(Robs_5, 1) ./ 5; % Robs_5 is calculated for every 5 frames
 
 % edges = linspace(floor(spikes(1)), ceil(spikes(end)), size(pred_rates,1) + 1 );
 % [spk_binned, ~] = histcounts(spikes, edges);
@@ -25,16 +27,17 @@ Robs_5 = sum(Robs_5, 1) ./ 5; % Robs_5 is calculated for every 5 frames
 
 %%
 color = prism(size(pred_rates,2));
-bgn = 500;
-fin = 600;
+bgn = 10;
+fin = 60;
 
 figure('units','normalized','outerposition',[0 0 1 1])
 for i = 1:size(pred_rates,2)
     pred_rate_now = pred_rates(:,i);
-    plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1)
+    plot_pred = plot(bgn:fin-2, pred_rate_now(bgn : 5 : 5*(fin-bgn)), 'Color', color(i,:), 'LineWidth', 1)
+    plot_pred.Color(4) = 0.7; % alpha transparency
     hold on
 end
-plot(Robs_5(bgn:fin), 'k', 'LineWidth', 2)
+plot(bgn:fin, Robs_5(bgn:fin), 'k', 'LineWidth', 2)
 legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
 

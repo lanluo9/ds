@@ -30,7 +30,7 @@ datarun = load_params(datarun);
 
 cell_index_array = [4:13, find(datarun.cell_ids == 1578), find(datarun.cell_ids == 4756)];
 
-for counter = length(cell_index_array) : 1
+for counter = length(cell_index_array) : -1 : 1
 tic
 
 cell_index = cell_index_array(counter);
@@ -225,8 +225,8 @@ spk_per_bin = spk_binned ./ 5; % pred_rate is spike per bin, not per sec!
 % spk_per_sec = spk_binned ./ (binsize * 5); 
 
 color = prism(size(pred_rates,2));
-bgn = 1500;
-fin = 1600;
+bgn = 100;
+fin = 1000;
 
 for mm = 1:size(pred_rates,2)
     pred_rate_now = pred_rates(:,mm);
