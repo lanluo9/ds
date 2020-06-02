@@ -78,11 +78,11 @@ plot_spk.Color(4) = 0.4;
 legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
 xlim([0-2, (fin-bgn)+5])
-% saveas(gcf, ['perf-' num2str(cell_id) '.png'])
+saveas(gcf, ['perf-' num2str(cell_id) '.png'])
 
 
 
-%% generate fake spike train from model
+% %% generate fake spike train from model
 % r_array = poissrnd(20,[1000 1]);
 % mean(r_array)
 % 

@@ -1,5 +1,5 @@
 %% Make sure the NIMtoolbox is in your matlab path
-clear all
+% clear all
 load coarse_white_noise_data_2018_11_30.mat
 profile on
 profile clear
