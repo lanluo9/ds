@@ -2,7 +2,7 @@
 clc
 clear
 
-load demo_adapt.mat Robs Xstim XVi 
+load demo_adapt.mat Robs Xstim XVi fit0 fitS fit1 fit1S fit2
 % save(['before-refit-' num2str(cell_id) '.mat'], 'fit0', 'fit0nl', 'fit1', 'fit1nl', ...
 %     'fit1S', 'fit2', 'fitS', '-v7.3')
 
@@ -37,15 +37,7 @@ datarun = load_params(datarun);
 cell_index = 3; % cell_id = 63
 cell_id = datarun.cell_ids(cell_index)
 
-subplot(1,3,1)
-hist(spk_bootstrap)
-subplot(1,3,2)
-hist(spk_rnd)
-subplot(1,3,3)
-hist(datarun.spikes{3})
-set(gcf, 'Position', get(0, 'Screensize'));
-
-%% set up training set vs test set of Xstim & fake spk
+%% 
 
 cd /Users/katthanya/Documents/MATLAB/matlab/private/Lan/code/NIM
 load mov_20180926_007.mat
@@ -59,6 +51,18 @@ binsize = dt/up_samp_fac;
 NT = NFRAMES*up_samp_fac;
 [Ui_old, XVi_old] = NIM.generate_XVfolds( NT ); % original split of original data
 
+% sanity check
+subplot(1,3,1)
+histogram(spk_bootstrap)
+subplot(1,3,2)
+histogram(spk_rnd) % somehow spk_rnd is better than spk_bootstrap?? maybe should not round(rate)
+subplot(1,3,3)
+spikes = datarun.spikes{3};
+Robs = NIM.Spks2Robs(spikes, binsize, NT );
+histogram(Robs)
+set(gcf, 'Position', get(0, 'Screensize'));
+
+%% set up training set vs test set of Xstim & fake spk
 % [~,tt]=NIM.generate_XVfolds(20) % test set is always the third fifth of original data (at its middle)
 mov = mov(:, :, XVi_old); % new mov is corresponding to fake data, aka old data's test set
 [NY, NX, NFRAMES] = size(mov); NT = NFRAMES*up_samp_fac; % redefine using fake data size
@@ -92,7 +96,7 @@ disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
 NL_types = {'lin'}; % define subunit as linear 
 
-spikes = spk_bootstrap(1); % w less noise bc of bootstrapping, if there is no bias it should perform nicely
+spikes = spk_rnd(1); % w less noise bc of bootstrapping, if there is no bias it should perform nicely
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % New object-based definition of model (note regularization can be set here)
@@ -134,14 +138,14 @@ close
 mod_signs = [1 -1]; % both inputs are excitatory. (+1 for excitatory, -1 for suppressive)
 NL_types = {'rectlin','rectlin'}; % name-change
 
-spikes = spk_bootstrap(2); 
+spikes = spk_rnd(2); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 % Try spike history term
 fitS_re = fit0_re.init_spkhist(16,'doubling_time',4, 'negcon'); % I don't believe in positive spk-history
 fitS_re = fitS_re.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', optim_params );
 
-spikes = spk_bootstrap(3);
+spikes = spk_rnd(3);
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 % Always best to seed inhibition with different possibilities: random will often get stuck in local minima
@@ -157,7 +161,7 @@ fit1_re = fit1_re.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params'
 
 % Fit with spike-history term
 
-spikes = spk_bootstrap(4); % expect fit1S still have highest R2 & LL?
+spikes = spk_rnd(4); % expect fit1S still have highest R2 & LL?
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 fit1S_re = fit1_re.init_spkhist(16,'doubling_time',4, 'negcon');
@@ -201,16 +205,16 @@ set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
 close
 
-spikes = spk_bootstrap(1); % fit0nl = fit0? no spk_hist.coefs in model param
+spikes = spk_rnd(1); % fit0nl = fit0? no spk_hist.coefs in model param
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 fit0nl_re = fit0_re.fit_spkNL( Robs, Xstim, Ui );
 
-spikes = spk_bootstrap(3); 
+spikes = spk_rnd(3); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 fit1nl_re = fit1_re.fit_spkNL( Robs, Xstim, Ui );
 
 % fit upstream nonlinearity?
-spikes = spk_bootstrap(5); 
+spikes = spk_rnd(5); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 fit2_re = fit1_re.init_nonpar_NLs( Xstim );
