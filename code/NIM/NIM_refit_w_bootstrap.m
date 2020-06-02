@@ -96,7 +96,7 @@ disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
 NL_types = {'lin'}; % define subunit as linear 
 
-spikes = spk_rnd(1); % w less noise bc of bootstrapping, if there is no bias it should perform nicely
+spikes = spk_bootstrap(1); % w less noise bc of bootstrapping, if there is no bias it should perform nicely
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % New object-based definition of model (note regularization can be set here)
@@ -138,14 +138,14 @@ close
 mod_signs = [1 -1]; % both inputs are excitatory. (+1 for excitatory, -1 for suppressive)
 NL_types = {'rectlin','rectlin'}; % name-change
 
-spikes = spk_rnd(2); 
+spikes = spk_bootstrap(2); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 % Try spike history term
 fitS_re = fit0_re.init_spkhist(16,'doubling_time',4, 'negcon'); % I don't believe in positive spk-history
 fitS_re = fitS_re.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', optim_params );
 
-spikes = spk_rnd(3);
+spikes = spk_bootstrap(3);
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 % Always best to seed inhibition with different possibilities: random will often get stuck in local minima
@@ -161,7 +161,7 @@ fit1_re = fit1_re.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params'
 
 % Fit with spike-history term
 
-spikes = spk_rnd(4); % expect fit1S still have highest R2 & LL?
+spikes = spk_bootstrap(4); % expect fit1S still have highest R2 & LL?
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 fit1S_re = fit1_re.init_spkhist(16,'doubling_time',4, 'negcon');
@@ -205,16 +205,16 @@ set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
 close
 
-spikes = spk_rnd(1); % fit0nl = fit0? no spk_hist.coefs in model param
+spikes = spk_bootstrap(1); % fit0nl = fit0? no spk_hist.coefs in model param
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 fit0nl_re = fit0_re.fit_spkNL( Robs, Xstim, Ui );
 
-spikes = spk_rnd(3); 
+spikes = spk_bootstrap(3); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 fit1nl_re = fit1_re.fit_spkNL( Robs, Xstim, Ui );
 
 % fit upstream nonlinearity?
-spikes = spk_rnd(5); 
+spikes = spk_bootstrap(5); 
 Robs = NIM.Spks2Robs(spikes, binsize, NT);
 
 fit2_re = fit1_re.init_nonpar_NLs( Xstim );
@@ -233,5 +233,4 @@ LLs(4) = fit1S_re.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2_re.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLs-fp.nullLL
 
-save after_refit_poissrnd_63.mat
-
+save after_refit_bootstrap_63.mat
