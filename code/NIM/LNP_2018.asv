@@ -211,7 +211,7 @@ Robs = NIM.Spks2Robs(spikes, binsize, NT );
 % save('demo_adapt.mat', '-v7.3') % force save >2GB .mat
 
 %%
-% save('model_prep_63.mat', '-v7.3') 
+save('model_prep_63.mat', '-v7.3') 
 
 % load perf-1578.mat
 % load demo_adapt.mat
@@ -262,7 +262,7 @@ R2
 % plot(R2)
 sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, should be due to buggy eval?
 
-%% plot PSTH instead of Robs real spk % ofc this should not be done
+%% plot PSTH instead of Robs real spk % this should not be done
 
 rep_len = 50; % pretend there are reps of white noise. unit = frames. 1s = 60 frames
 Robs_test_rep = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
