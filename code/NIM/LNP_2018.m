@@ -253,7 +253,7 @@ for i = 1:5
 end
 R2
 % plot(R2)
-sum(R2>0) / size(R2,1) / size(R2,2) % model display seems reasonable though, should be due to buggy eval?
+sum(R2>0) / size(R2,1) / size(R2,2) 
 
 %% plot PSTH instead of Robs real spk % ofc this should not be done
 
@@ -284,6 +284,7 @@ set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['perf-PSTH-' num2str(cell_id) '.png'])
 
 % save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
+% save('perf_63_noXstim.mat', '-regexp', '^((?!Xstim).)*$') % not serializable?
 disp(['finished eval_model for cell' num2str(cell_id)])
 
 % toc
