@@ -205,7 +205,7 @@ LLs(2) = fitS.eval_model(Robs, Xstim, XVi );
 LLs(3) = fit1.eval_model(Robs, Xstim, XVi );
 LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
-LLs-fp.nullLL
+LLfit = LLs - fp.nullLL
 
 % save Res2mod3.mat fit0 fit1
 % save('demo_adapt_63_13.mat', '-v7.3') % force save >2GB .mat
@@ -221,23 +221,15 @@ save('before_refit_63_13.mat', '-regexp', 'fit*')
 [~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
 [~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
 [~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
-
 pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
-Robs_test = Robs(XVi);
-% Robs_5 = reshape(Robs, [size(pred_rates,2), size(pred_rates,1)]);
-% dt = 16.5975 ./ 1000;
-% Robs_5 = sum(Robs_5, 1) ./ 5; % Robs_5 is calculated for every 5 frames
-
-% edges = linspace(floor(spikes(1)), ceil(spikes(end)), size(pred_rates,1) + 1 );
-% [spk_binned, ~] = histcounts(spikes, edges);
-% spk_per_bin = spk_binned ./ 5; % pred_rate is spike per bin, not per sec
-% % spk_per_sec = spk_binned ./ (binsize * 5); 
+Robs_test = Robs(XVi); 
+% pred_rate is spike per bin, not per sec. it correspond to test set
 
 %% plot Robs real spk vs pred_rate
 color = prism(size(pred_rates,2));
-bgn = 300;
-fin = 500;
+bgn = 42900;
+fin = 43000;
 
 figure('units','normalized','outerposition',[0 0 1 1])
 for i = 1:size(pred_rates,2)
@@ -251,6 +243,8 @@ plot_spk.Color(4) = 0.4;
 legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
 xlim([0-5, (fin-bgn)+5])
+saveas(gcf, ['perf-spk-' num2str(cell_id) '.png'])
+
 
 %% test R2
 % R2_part = 1 - mean( (spk_per_bin(bgn:fin)' - pred_rates(bgn:fin,4)) .^2) / var(spk_per_bin(bgn:fin))
@@ -287,7 +281,7 @@ legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
 xlim([0-2, (fin-bgn)+5])
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['perf-' num2str(cell_id) '.png'])
+saveas(gcf, ['perf-PSTH-' num2str(cell_id) '.png'])
 
 % save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
 disp(['finished eval_model for cell' num2str(cell_id)])
