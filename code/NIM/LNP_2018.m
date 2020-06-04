@@ -255,6 +255,8 @@ R2
 % plot(R2)
 sum(R2>0) / size(R2,1) / size(R2,2) 
 
+save('before_refit_63_13.mat', 'LLfit', 'R2', '-append')
+
 %% plot PSTH instead of Robs real spk % ofc this should not be done
 
 rep_len = 50; % pretend there are reps of white noise. unit = frames. 1s = 60 frames

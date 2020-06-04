@@ -257,7 +257,7 @@ LLs(2) = fitS_re.eval_model(Robs, Xstim, XVi );
 LLs(3) = fit1_re.eval_model(Robs, Xstim, XVi );
 LLs(4) = fit1S_re.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2_re.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
-LLfit = LLs - fp.nullLL
+LLfit_re = LLs - fp.nullLL
 
 % save after_refit_poissrnd_63.mat
 save('after_refit_63_13.mat', '-regexp', 'fit*')
@@ -297,11 +297,14 @@ saveas(gcf, ['perf-spk-refit-' num2str(cell_id) '.png'])
 %% test R2
 % R2_part = 1 - mean( (spk_per_bin(bgn:fin)' - pred_rates(bgn:fin,4)) .^2) / var(spk_per_bin(bgn:fin))
 for i = 1:5
-    R2(i) = 1 - mean( (Robs_test - pred_rates(:,i)) .^2) / var(Robs_test);
+    R2_re(i) = 1 - mean( (Robs_test - pred_rates(:,i)) .^2) / var(Robs_test);
 end
-R2
+R2_re
 % plot(R2)
-sum(R2>0) / size(R2,1) / size(R2,2)
+% sum(R2>0) / size(R2,1) / size(R2,2)
+
+save('after_refit_63_13.mat', 'LLfit_re', 'R2_re', '-append')
+
 
 %% plot PSTH instead of Robs real spk % ofc this should not be done
 
