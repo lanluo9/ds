@@ -57,6 +57,7 @@ clear Ui XVi
 %% sanity check
 subplot(1,3,1)
 histogram(spk_bootstrap) %(:,4))
+xlim([-0.5, 4.5])
 ylabel('fake spk w bootstrap')
 subplot(1,3,2)
 histogram(spk_rnd) %(:,4))
@@ -66,6 +67,7 @@ subplot(1,3,3)
 spikes = datarun.spikes{3};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 histogram(Robs)
+xlim([-0.5, 4.5])
 ylabel('real spk Robs')
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['fake-spk-dist-' num2str(cell_id) '.png'])
@@ -138,11 +140,11 @@ k0 = reshape(fit0_re.subunits(1).filtK, [nLags, NY * NX]);
 figure(2); clf;
 [U, S, V] = svd(k0);
 subplot(1,2,1)
-plot(U(:,1))
+plot(-1*U(:,1))
 axis tight
 axis square
 subplot(1,2,2); colormap gray
-imagesc(reshape(V(:,1), NY, NX))
+imagesc(reshape(-1*V(:,1), NY, NX))
 axis square
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
