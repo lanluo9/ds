@@ -278,22 +278,34 @@ Robs_test = Robs(XVi);
 
 %% plot Robs real spk vs pred_rate
 color = prism(size(pred_rates,2));
-bgn = 300;
+Robs_shuffled = Robs_test(randperm(length(Robs_test)));
+bgn = 200;
 fin = 400;
 
-figure('units','normalized','outerposition',[0 0 1 1])
+subplot(2,1,1)
 for i = 1:size(pred_rates,2)
     pred_rate_now = pred_rates(:, i);
-    plot_pred = plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+    plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
     plot_pred.Color(4) = 0.7; % alpha transparency
     hold on
 end
-plot_spk = plot(Robs_test(bgn:fin), 'k', 'LineWidth', 2);
+plot_spk = plot(bgn:fin, Robs_shuffled(bgn:fin), 'k', 'LineWidth', 2);
 plot_spk.Color(4) = 0.4; 
 legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
 legend('boxoff')
-xlim([0-5, (fin-bgn)+5])
-saveas(gcf, ['perf-spk-refit-' num2str(cell_id) '.png'])
+
+subplot(2,1,2)
+for i = 1:size(pred_rates,2)
+    pred_rate_now = pred_rates(:, i);
+    plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+    plot_pred.Color(4) = 0.7; % alpha transparency
+    hold on
+end
+plot_spk = plot(bgn:fin, Robs_test(bgn:fin), 'k', 'LineWidth', 2);
+plot_spk.Color(4) = 0.4; 
+% xlim([0-5, (fin-bgn)+5])
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, ['perf-spk-cp-' num2str(cell_id) '.png'])
 
 
 %% test R2

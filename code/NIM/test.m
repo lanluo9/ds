@@ -47,3 +47,20 @@ R2
 sum(R2>0) / size(R2,1) / size(R2,2) 
 
 save('before_refit_63_13.mat', 'LLfit', 'R2', 'pred_rates', '-append')
+
+
+%% shuffling
+Robs_shuffled = Robs_test(randperm(length(Robs_test)));
+
+[LLs_shuffle,~,~,fp] = fit0.eval_model(Robs_shuffled, Xstim, XVi );
+LLs_shuffle(2) = fitS.eval_model(Robs_shuffled, Xstim, XVi );
+LLs_shuffle(3) = fit1.eval_model(Robs_shuffled, Xstim, XVi );
+LLs_shuffle(4) = fit1S.eval_model(Robs_shuffled, Xstim, XVi );
+LLs_shuffle(5) = fit2.eval_model(Robs_shuffled, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
+LLfit_shuffle = LLs_shuffle - fp.nullLL
+
+
+for i = 1:5
+    R2_shuffle(i) = 1 - mean( (Robs_shuffled - pred_rates(:,i)) .^2) / var(Robs_shuffled);
+end
+R2_shuffle
