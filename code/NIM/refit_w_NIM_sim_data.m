@@ -2,20 +2,16 @@
 clc
 clear
 
-% load perf_63_noXstim.mat
+load perf_63_noXstim.mat
 
-% load demo_adapt.mat Robs Xstim XVi fit0 fitS fit1 fit1S fit2
-% save(['before-refit-' num2str(cell_id) '.mat'], 'fit0', 'fit0nl', 'fit1', 'fit1nl', ...
-%     'fit1S', 'fit2', 'fitS', '-v7.3')
-
-% [~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
-% [~,pred_rateS,~,~] = fitS.eval_model(Robs, Xstim, XVi );
-% [~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
-% [~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
-% [~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
+[~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
+[~,pred_rateS,~,~] = fitS.eval_model(Robs, Xstim, XVi );
+[~,pred_rate1,~,~] = fit1.eval_model(Robs, Xstim, XVi );
+[~,pred_rate1S,~,~] = fit1S.eval_model(Robs, Xstim, XVi );
+[~,pred_rate2,~,~] = fit2.eval_model(Robs, Xstim, XVi );
 
 %% generate fake binned spike from model
-% pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
+pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
 spk_bootstrap = round(pred_rates); % bootstrapping when generating fake data is equivalent to round(rate)
 spk_rnd = pi * ones(size(pred_rates));
@@ -39,8 +35,6 @@ spk_rnd(spk_rnd < 0) = 0; % spk number cannot be negative
 % cell_index = 3; % cell_id = 63
 % cell_id = datarun.cell_ids(cell_index)
 
-%% 
-
 % cd /Users/katthanya/Documents/MATLAB/matlab/private/Lan/code/NIM
 % load mov_20180926_007.mat
 % [NY, NX, NFRAMES] = size(mov);
@@ -54,27 +48,32 @@ NT = NFRAMES*up_samp_fac;
 clear Ui XVi
 [Ui_old, XVi_old] = NIM.generate_XVfolds( NT ); % original split of original data
 
-%% sanity check
+%% compare fake vs real Robs distribution
+
 subplot(1,3,1)
 histogram(spk_bootstrap) %(:,4))
 xlim([-0.5, 4.5])
 ylabel('fake spk w bootstrap')
+
 subplot(1,3,2)
 histogram(spk_rnd) %(:,4))
 xlim([-0.5, 4.5])
 ylabel('fake spk single poissrnd')
+
 subplot(1,3,3)
 spikes = datarun.spikes{3};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 histogram(Robs)
 xlim([-0.5, 4.5])
 ylabel('real spk Robs')
+
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['fake-spk-dist-' num2str(cell_id) '.png'])
 % should use spk_rnd, which is closer to real spk than spk_bootstrap
 
 %% set up training set vs test set of Xstim & fake spk
-% [~,tt]=NIM.generate_XVfolds(20) % test set is always the third fifth of original data (at its middle)
+
+% [~,tt] = NIM.generate_XVfolds(20) % test set is always the third fifth of original data (at its middle)
 % mov = mov(:, :, XVi_old); % new mov is corresponding to fake data, aka old data's test set
 % [NY, NX, NFRAMES] = size(mov); NT = NFRAMES*up_samp_fac; % redefine using fake data size
 
@@ -274,11 +273,11 @@ save('after_refit_63_13.mat', '-regexp', 'fit*')
 pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
 Robs_test = Robs(XVi); 
+Robs_shuffled = Robs_test(randperm(length(Robs_test)));
 % pred_rate is spike per bin, not per sec. it correspond to test set
 
 %% plot Robs real spk vs pred_rate
 color = prism(size(pred_rates,2));
-Robs_shuffled = Robs_test(randperm(length(Robs_test)));
 bgn = 200;
 fin = 400;
 
@@ -321,33 +320,33 @@ save('after_refit_63_13.mat', 'LLfit_re', 'R2_re', '-append')
 
 
 %% plot PSTH instead of Robs real spk % ofc this should not be done
-
-rep_len = 60; % pretend there are reps of white noise. unit = frames. 1s = 60 frames
-Robs_test_rep = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
-Robs_test_rep = sum(Robs_test_rep, 1) ./ size(Robs_test_rep, 2); 
-
-color = prism(size(pred_rates,2));
-bgn = 10;
-fin = 60;
-
-for i = 1:size(pred_rates,2)
-    pred_rate_now = pred_rates(:, i);
-    pred_rate_now = reshape(pred_rate_now, [rep_len, length(pred_rate_now)/rep_len]);
-    pred_rate_now = sum(pred_rate_now, 1) ./ size(pred_rate_now, 2);    
-    
-    plot_pred = plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
-    plot_pred.Color(4) = 0.7; % alpha transparency
-    hold on
-end
-plot_spk = plot(Robs_test_rep(bgn:fin), 'k', 'LineWidth', 2);
-plot_spk.Color(4) = 0.4; 
-
-legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
-legend('boxoff')
-xlim([0-2, (fin-bgn)+5])
-set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['perf-PSTH-refit' num2str(cell_id) '.png'])
-
-% save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
-% save('perf_63_noXstim.mat', '-regexp', '^((?!Xstim).)*$') % not serializable?
-% disp(['finished eval_model for cell' num2str(cell_id)])
+% 
+% rep_len = 60; % pretend there are reps of white noise. unit = frames. 1s = 60 frames
+% Robs_test_rep = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
+% Robs_test_rep = sum(Robs_test_rep, 1) ./ size(Robs_test_rep, 2); 
+% 
+% color = prism(size(pred_rates,2));
+% bgn = 10;
+% fin = 60;
+% 
+% for i = 1:size(pred_rates,2)
+%     pred_rate_now = pred_rates(:, i);
+%     pred_rate_now = reshape(pred_rate_now, [rep_len, length(pred_rate_now)/rep_len]);
+%     pred_rate_now = sum(pred_rate_now, 1) ./ size(pred_rate_now, 2);    
+%     
+%     plot_pred = plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+%     plot_pred.Color(4) = 0.7; % alpha transparency
+%     hold on
+% end
+% plot_spk = plot(Robs_test_rep(bgn:fin), 'k', 'LineWidth', 2);
+% plot_spk.Color(4) = 0.4; 
+% 
+% legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
+% legend('boxoff')
+% xlim([0-2, (fin-bgn)+5])
+% set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['perf-PSTH-refit' num2str(cell_id) '.png'])
+% 
+% % save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
+% % save('perf_63_noXstim.mat', '-regexp', '^((?!Xstim).)*$') % not serializable?
+% % disp(['finished eval_model for cell' num2str(cell_id)])

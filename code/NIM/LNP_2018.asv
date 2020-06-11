@@ -23,6 +23,7 @@ datarun = load_params(datarun);
 % save('mov_20180926_007.mat', 'mov', '-v7.3') % force save >2GB .mat
 
 %% 
+
 % cell_index_array = [4:13, find(datarun.cell_ids == 1578), find(datarun.cell_ids == 4756)];
 % for counter = length(cell_index_array) : -1 : 1
 
@@ -278,36 +279,36 @@ sum(R2_shuffled>0) / size(R2_shuffled,1) / size(R2_shuffled,2)
 % save('before_refit_63_13.mat', 'LLfit', 'R2', '-append')
 
 %% plot PSTH instead of Robs real spk % ofc this should not be done
-% 
-% rep_len = 50; % pretend there are reps of white noise. unit = frames. 1s = 60 frames
-% Robs_test_rep = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
-% Robs_test_rep = sum(Robs_test_rep, 1) ./ size(Robs_test_rep, 2); 
-% 
-% color = prism(size(pred_rates,2));
-% bgn = 50;
-% fin = 150;
-% 
-% for i = 1:size(pred_rates,2)
-%     pred_rate_now = pred_rates(:, i);
-%     pred_rate_now = reshape(pred_rate_now, [rep_len, length(pred_rate_now)/rep_len]);
-%     pred_rate_now = sum(pred_rate_now, 1) ./ size(pred_rate_now, 2);    
-%     
-%     plot_pred = plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
-%     plot_pred.Color(4) = 0.7; % alpha transparency
-%     hold on
+
+rep_len = 50; % pretend there are reps of white noise. unit = frames. 1s = 60 frames
+Robs_test_rep = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
+Robs_test_rep = sum(Robs_test_rep, 1) ./ size(Robs_test_rep, 2); 
+
+color = prism(size(pred_rates,2));
+bgn = 50;
+fin = 150;
+
+for i = 1:size(pred_rates,2)
+    pred_rate_now = pred_rates(:, i);
+    pred_rate_now = reshape(pred_rate_now, [rep_len, length(pred_rate_now)/rep_len]);
+    pred_rate_now = sum(pred_rate_now, 1) ./ size(pred_rate_now, 2);    
+    
+    plot_pred = plot(pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+    plot_pred.Color(4) = 0.7; % alpha transparency
+    hold on
+end
+plot_spk = plot(Robs_test_rep(bgn:fin), 'k', 'LineWidth', 2);
+plot_spk.Color(4) = 0.4; 
+
+legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
+legend('boxoff')
+xlim([0-2, (fin-bgn)+5])
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, ['perf-PSTH-' num2str(cell_id) '.png'])
+
+% save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
+% save('perf_63_noXstim.mat', '-regexp', '^((?!Xstim).)*$') % not serializable?
+disp(['finished eval_model for cell' num2str(cell_id)])
+
+% toc
 % end
-% plot_spk = plot(Robs_test_rep(bgn:fin), 'k', 'LineWidth', 2);
-% plot_spk.Color(4) = 0.4; 
-% 
-% legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
-% legend('boxoff')
-% xlim([0-2, (fin-bgn)+5])
-% set(gcf, 'Position', get(0, 'Screensize'));
-% saveas(gcf, ['perf-PSTH-' num2str(cell_id) '.png'])
-% 
-% % save(['perf-' num2str(cell_id) '.mat'], '-v7.3')
-% % save('perf_63_noXstim.mat', '-regexp', '^((?!Xstim).)*$') % not serializable?
-% disp(['finished eval_model for cell' num2str(cell_id)])
-% 
-% % toc
-% % end
