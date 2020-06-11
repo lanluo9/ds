@@ -258,11 +258,11 @@ k0 = reshape(fit0.subunits(1).filtK, [nLags, NY * NX]);
 figure(2); clf;
 [U, S, V] = svd(k0);
 subplot(1,2,1)
-plot(U(:,1))
+plot(-1*U(:,1))
 axis tight
 axis square
 subplot(1,2,2); colormap gray
-imagesc(reshape(V(:,1), NY, NX))
+imagesc(reshape(-1*V(:,1), NY, NX))
 axis square
 set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
@@ -365,3 +365,6 @@ end
 
 R2
 sum(R2>0) / size(R2,1) / size(R2,2)
+
+save('fit_empty_w_real_63_13.mat', '-regexp', 'fit*')
+save('fit_empty_w_real_63_13.mat', 'R2', 'LLfit', '-append')
