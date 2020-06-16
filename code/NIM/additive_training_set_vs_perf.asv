@@ -36,7 +36,6 @@ NX = size(mov_resize,1); NY = NX; % redefine size after resizing
 mov = reshape(mov_resize, [NY*NX, NFRAMES])';
 mov(mov < 0.5) = -0.48; % taken from xml contrast value
 mov(mov > 0.5) = 0.48;
-clear mov_resize
 
 %%
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
@@ -55,14 +54,12 @@ Xstim = NIM.create_time_embedding(mov, params_stim); % beware of memory
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % For generating nested-cross validation indices (this is default 5-fold)
-[Ui_old, XVi_old] = NIM.generate_XVfolds( NT ); % XVi array size = NT/5. XVi is test set, while Ui is training set
+% [Ui, XVi] = NIM.generate_XVfolds( NT ); % XVi array size = NT/5. XVi is test set, while Ui is training set
 
-frame_per_sec = NFRAMES / datarun.duration; 
-test_set_len = 10 * 60 * frame_per_sec; % fix test set length to 10 min
-training_set_len = [1, 5, 10, 20, 30, 40, 50]  * 60 * frame_per_sec;
+test_set_len = 10 * 60 * 
+training_set_len
 
-XVi = [(NT - test_set_len + 1) : 1 : NT]';
-Ui_seq = {};
+
 
 
 %% round 1 fit
