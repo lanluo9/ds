@@ -57,12 +57,19 @@ Robs = NIM.Spks2Robs(spikes, binsize, NT );
 % For generating nested-cross validation indices (this is default 5-fold)
 [Ui_old, XVi_old] = NIM.generate_XVfolds( NT ); % XVi array size = NT/5. XVi is test set, while Ui is training set
 
+%%
 frame_per_sec = NFRAMES / datarun.duration; 
 test_set_len = 10 * 60 * frame_per_sec; % fix test set length to 10 min
 training_set_len = [1, 5, 10, 20, 30, 40, 50]  * 60 * frame_per_sec;
 
 XVi = [(NT - test_set_len + 1) : 1 : NT]';
 Ui_seq = {};
+for i = 1 : length(training_set_len)
+    fin_max = min(XVi) - 1;
+    bgn = randi([1, fin_max - training_set_len]);
+    
+    Ui_seq{i} = [bgn : 1 : (bgn + training_set_len)];
+end
 
 
 %% round 1 fit
