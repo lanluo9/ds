@@ -63,16 +63,23 @@ test_set_len = 10 * 60 * frame_per_sec; % fix test set length to 10 min
 training_set_len = [1, 5, 10, 20, 30, 40, 50]  * 60 * frame_per_sec;
 
 XVi = [(NT - test_set_len + 1) : 1 : NT]';
-Ui_seq = {};
+% Ui_seq_rnd = {};
+Ui_seq_last = {};
 for i = 1 : length(training_set_len)
     fin_max = min(XVi) - 1;
-    bgn = randi([1, fin_max - training_set_len]);
-    
-    Ui_seq{i} = [bgn : 1 : (bgn + training_set_len)];
+%     bgn = randi([1, fin_max - training_set_len(i) + 1]);    
+%     Ui_seq_rnd{i,1} = [bgn : 1 : (bgn + training_set_len(i) - 1)];
+    Ui_seq_last{i,1} = [(fin_max - training_set_len(i) + 1) : 1 : fin_max];
+%     intersect(Ui_seq_last{i,1}, XVi)
 end
 
+%%
+for j = 1 : 2 %length(training_set_len)
+Ui = Ui_seq_last{j,1};
 
-%% round 1 fit
+training_set_len(j)
+
+% %% round 1 fit
 disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
 NL_types = {'lin'}; % define subunit as linear 
@@ -117,8 +124,8 @@ mod_signs = [1 -1]; % both inputs are excitatory. (+1 for excitatory, -1 for sup
 NL_types = {'rectlin','rectlin'}; % name-change
 
 % Try spike history term
-fitS = fit0.init_spkhist(16,'doubling_time',4, 'negcon'); % I don't believe in positive spk-history
-fitS = fitS.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', optim_params );
+fit0S = fit0.init_spkhist(16,'doubling_time',4, 'negcon'); % I don't believe in positive spk-history
+fit0S = fit0S.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', optim_params );
 
 % Always best to seed inhibition with different possibilities: random will often get stuck in local minima
 fit1 = fit0;
@@ -176,6 +183,8 @@ close
 
 fit0nl = fit0.fit_spkNL( Robs, Xstim, Ui );
 fit1nl = fit1.fit_spkNL( Robs, Xstim, Ui );
+fit0Snl = fit0S.fit_spkNL( Robs, Xstim, Ui );
+fit1Snl = fit1S.fit_spkNL( Robs, Xstim, Ui );
 
 % fit upstream nonlinearity?
 fit2 = fit1.init_nonpar_NLs( Xstim );
@@ -188,10 +197,19 @@ close
 
 % internal LLx (cross-validated likelihood, although was used for meta-params)
 [LLs,~,~,fp] = fit0.eval_model(Robs, Xstim, XVi );
-LLs(2) = fitS.eval_model(Robs, Xstim, XVi );
-LLs(3) = fit1.eval_model(Robs, Xstim, XVi );
-LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
-LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
+LLs(2) = fit0S.eval_model(Robs, Xstim, XVi );
+LLs(3) = fit0nl.eval_model(Robs, Xstim, XVi );
+LLs(4) = fit0Snl.eval_model(Robs, Xstim, XVi );
+
+LLs(5) = fit1.eval_model(Robs, Xstim, XVi );
+LLs(6) = fit1S.eval_model(Robs, Xstim, XVi );
+LLs(7) = fit1nl.eval_model(Robs, Xstim, XVi );
+LLs(8) = fit1Snl.eval_model(Robs, Xstim, XVi );
+
+LLs(9) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLfit = LLs - fp.nullLL
 
-save(['fit' num2str(training_set_len) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
+save(['fit' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
+save(['fit' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
+
+end
