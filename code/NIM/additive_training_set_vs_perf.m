@@ -77,7 +77,7 @@ end
 for j = 1 : 2 %length(training_set_len)
 Ui = Ui_seq_last{j,1};
 
-training_set_len(j)
+training_min = training_set_len(j) / frame_per_sec / 60
 
 % %% round 1 fit
 disp('Fitting GLM: 1 excitatory filter')
@@ -116,7 +116,7 @@ subplot(1,2,2); colormap gray
 imagesc(reshape(V(:,1), NY, NX))
 axis square
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['k0_filter-' num2str(cell_id) '.png'])
+saveas(gcf, ['k0_filter-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
 close
 
 % %% round 2 fit NIM
@@ -144,7 +144,7 @@ fit1S = fit1S.fit_filters( Robs, Xstim, Ui, 'fit_offsets', 1, 'optim_params', op
 % spike history term helps
 fit1S.display_model('Xstims', Xstim )
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit1S-' num2str(cell_id) '.png'])
+saveas(gcf, ['fit1S-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
 close
 % plot by itself
 % plot(fit1S.spk_hist.bin_edges(2:end), fit1S.spk_hist.coefs)
@@ -154,7 +154,7 @@ close
 % new model display
 fit1.display_model('Xstims',Xstim)
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit1-' num2str(cell_id) '.png'])
+saveas(gcf, ['fit1-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
 close
 
 % can also plot RFs separately
@@ -178,7 +178,7 @@ subplot(1,3,3); colormap gray
 imagesc(reshape(k2(blat2,:),NY,NX), [-1 1]*mk2)
 axis square
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['subunits-' num2str(cell_id) '.png'])
+saveas(gcf, ['subunits-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
 close
 
 fit0nl = fit0.fit_spkNL( Robs, Xstim, Ui );
@@ -192,7 +192,7 @@ fit2 = fit2.fit_upstreamNLs( Robs, Xstim, Ui );
 % this actually ends up looking rectlin, so not worth it
 fit2.display_model('Xstims',Xstim)
 set(gcf, 'Position', get(0, 'Screensize'));
-saveas(gcf, ['fit2-' num2str(cell_id) '.png'])
+saveas(gcf, ['fit2-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
 close
 
 % internal LLx (cross-validated likelihood, although was used for meta-params)
@@ -211,5 +211,6 @@ LLfit = LLs - fp.nullLL
 
 save(['fit' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
 save(['fit' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
+disp(['finished training set len ' num2str(training_min) 'min' ])
 
 end
