@@ -1,0 +1,2951 @@
+iPhone:Lan katthanya$ clear
+
+iPhone:Lan katthanya$ open -n /Applications/Vision.app/
+LSOpenURLsWithRole() failed with error -10810 for the file /Applications/Vision.app.
+iPhone:Lan katthanya$ java -version
+openjdk version "14" 2020-03-17
+OpenJDK Runtime Environment (build 14+36-1461)
+OpenJDK 64-Bit Server VM (build 14+36-1461, mixed mode, sharing)
+
+
+iPhone:Lan katthanya$ java -version
+openjdk version "14" 2020-03-17
+OpenJDK Runtime Environment (build 14+36-1461)
+OpenJDK 64-Bit Server VM (build 14+36-1461, mixed mode, sharing)
+iPhone:Lan katthanya$ clear
+
+iPhone:Lan katthanya$ java -version
+openjdk version "14" 2020-03-17
+OpenJDK Runtime Environment (build 14+36-1461)
+OpenJDK 64-Bit Server VM (build 14+36-1461, mixed mode, sharing)
+iPhone:Lan katthanya$ brew info java
+openjdk: stable 13.0.2+8 (bottled) [keg-only]
+Development kit for the Java programming language
+https://openjdk.java.net/
+Not installed
+From: https://github.com/Homebrew/homebrew-core/blob/master/Formula/openjdk.rb
+==> Dependencies
+Build: autoconf ✘
+==> Caveats
+For the system Java wrappers to find this JDK, symlink it with
+  sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+
+openjdk is keg-only, which means it was not symlinked into /usr/local,
+because it shadows the macOS `java` wrapper.
+
+==> Analytics
+install: 90,521 (30 days), 326,580 (90 days), 458,474 (365 days)
+install-on-request: 10,175 (30 days), 35,687 (90 days), 53,854 (365 days)
+build-error: 0 (30 days)
+iPhone:Lan katthanya$ brew tap caskroom/versions
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 3 taps (homebrew/core, homebrew/cask and adoptopenjdk/openjdk).
+==> New Formulae
+asuka                      gau                        odin
+autodiff                   gdbgui                     oha
+bootloadhid                geph2                      openfast
+cbmc                       ghc@8.8                    openstackclient
+cddlib                     ghz                        pfetch
+cdo                        ghz-web                    qrcp
+chezmoi                    git-bug                    quill
+claws-mail                 gmailctl                   rbtools
+clip                       go-jsonnet                 rcm
+code-server                gocloc                     redo
+cqlkit                     graphql-cli                reorder-python-imports
+cucumber-ruby              guile@2                    rtorrent
+detach                     hcxtools                   semgrep
+dgraph                     hdf5-mpi                   sollya
+dmagnetic                  immudb                     spotify-tui
+dolt                       jc                         spotifyd
+duckdb                     jolie                      tanka
+duktape                    kamel                      tengo
+earthly                    kde-extra-cmake-modules    trailscraper
+erlang@22                  kumactl                    trimage
+eva                        lanraragi                  unum
+fargatecli                 lc0                        uutils-coreutils
+fcct                       leakcanary-shark           vlmcsd
+field3d                    libcpuid                   volta
+flamegraph                 libolm                     wasm-pack
+flarectl                   libpqxx@6                  xxh
+flash                      libtorrent-rakshasa        zenith
+fplll                      lizard-analyzer
+==> Updated Formulae
+openssl@1.1 ✔                            libuv
+tmux ✔                                   libvirt
+abcl                                     libvisio
+abcmidi                                  libwbxml
+abook                                    libwebsockets
+abseil                                   libxlsxwriter
+ace                                      libxmlsec1
+acpica                                   libyaml
+activemq                                 libzt
+adios2                                   libzzip
+adplug                                   lilv
+adwaita-icon-theme                       link-grammar
+algol68g                                 liquibase
+aliyun-cli                               liquidctl
+allure                                   liquigraph
+alot                                     literate-git
+amazon-ecs-cli                           little-cms2
+ammonite-repl                            livestreamer
+amqp-cpp                                 llnode
+angular-cli                              llvm
+anime-downloader                         llvm@6
+annie                                    llvm@7
+ansible                                  llvm@8
+ansible@2.8                              llvm@9
+ant                                      lmdb
+ant@1.9                                  lmod
+apache-arrow                             logstash
+apache-arrow-glib                        logtalk
+apache-flink                             luaradio
+apib                                     luvit
+apollo-cli                               lv
+appium                                   lv2
+arangodb                                 lxc
+archivemount                             macvim
+arduino-cli                              makeself
+armadillo                                mame
+artifactory                              manticoresearch
+asciidoctor                              mapnik
+asciidoctorj                             mapserver
+asio                                     mariadb
+ask-cli                                  mariadb-connector-c
+astrometry-net                           mariadb-connector-odbc
+asyncplusplus                            mariadb@10.1
+atlantis                                 mariadb@10.2
+atlassian-cli                            mariadb@10.3
+audacious                                mas
+autogen                                  math-comp
+autopep8                                 maven-completion
+aws-cdk                                  mavsdk
+aws-elasticbeanstalk                     maxwell
+aws-google-auth                          mbedtls
+aws-sdk-cpp                              mdcat
+awscli                                   mdk
+awscli@1                                 mdv
+axel                                     mednafen
+azcopy                                   megatools
+azure-cli                                meilisearch
+azure-storage-cpp                        memcached
+b3sum                                    menhir
+babel                                    mercurial
+babeld                                   mercury
+babl                                     mesa
+balena-cli                               meson
+ballerina                                meson-internal
+bandwhich                                metabase
+baobab                                   mftrace
+bareos-client                            mg
+bartycrouch                              mgba
+basex                                    micro
+bash                                     micronaut
+bat                                      micropython
+batik                                    mikutter
+bats-core                                mill
+bazel                                    minidlna
+bazelisk                                 minikube
+bcoin                                    minimal-racket
+bde                                      minio
+benthos                                  minio-mc
+bento4                                   miniserve
+bettercap                                minizip2
+bgpdump                                  mint
+bib-tool                                 mitie
+bibclean                                 mitmproxy
+bibtexconv                               mk-configure
+binaryen                                 mkdocs
+bind                                     mkl-dnn
+bindfs                                   mksh
+biosig                                   mkvtomp4
+bison                                    mkvtoolnix
+bitrise                                  mlpack
+bitwarden-cli                            mm-common
+blackbox                                 mmctl
+blitz                                    moarvm
+bluepill                                 mockolo
+bluetoothconnector                       modman
+bmake                                    modules
+bochs                                    molecule
+boost                                    molten-vk
+boot-clj                                 monero
+borgmatic                                mongo-cxx-driver
+boringtun                                mongo-orchestration
+botan                                    mono
+broot                                    mono-libgdiplus
+btfs                                     monolith
+buildifier                               mosh
+buildkit                                 movgrab
+bullet                                   mpd
+bundletool                               mpg123
+bup                                      mpop
+bwfmetaedit                              mps-youtube
+byacc                                    mpv
+bzt                                      msmtp
+c-ares                                   mu
+cacli                                    mujs
+caddy                                    multimarkdown
+caf                                      mupdf
+caffe                                    mupdf-tools
+cake                                     mutt
+calabash                                 mvnvm
+calceph                                  mvtools
+calicoctl                                mycli
+capnp                                    mypy
+capstone                                 mysql
+cargo-c                                  mysql-client
+cargo-completion                         mysql-client@5.7
+carla                                    mysql-connector-c++
+cartridge-cli                            mysql-search-replace
+cassandra                                nagios
+cassandra-cpp-driver                     nano
+castxml                                  nanopb-generator
+catch2                                   nativefier
+cattle                                   nats-server
+ccfits                                   nave
+ccls                                     navi
+cdk8s                                    nbdime
+ceres-solver                             ncdu
+certbot                                  ncmpc
+cfengine                                 ncmpcpp
+cfitsio                                  nebula
+cfn-lint                                 needle
+cfr-decompiler                           nef
+cglm                                     neomutt
+cgns                                     neon
+cgoban                                   nestopia-ue
+chadwick                                 netdata
+chafa                                    netlify-cli
+chakra                                   netpbm
+chamber                                  nettle
+chapel                                   newman
+charm-tools                              newrelic-cli
+cheat                                    nginx
+checkbashisms                            ngspice
+checkstyle                               ngt
+chordii                                  nickle
+chromaprint                              nicovideo-dl
+chronograf                               nifi-registry
+chuck                                    nift
+circleci                                 nlopt
+citus                                    nnn
+cjdns                                    node
+ckan                                     node-build
+clamav                                   node-sass
+clang-format                             node@10
+clib                                     node@12
+clingo                                   node_exporter
+cloc                                     nomad
+clojure-lsp                              notifiers
+clojurescript                            notmuch
+closure-compiler                         now-cli
+clozure-cl                               nqp
+clp                                      nrpe
+cmake                                    nsd
+cmark                                    nss
+cmark-gfm                                ntopng
+codequery                                nuget
+codespell                                numpy
+cointop                                  nushell
+colordiff                                nut
+commandbox                               nuttcp
+composer                                 nvc
+conan                                    nyx
+concurrencykit                           oauth2_proxy
+conserver                                oclgrind
+console_bridge                           ocrmypdf
+consul                                   octant
+consul-template                          octave
+contentful-cli                           octomap
+convox                                   offlineimap
+cookiecutter                             okteto
+coq                                      olsrd
+corral                                   oniguruma
+cosi                                     onnxruntime
+coturn                                   onscripter
+couchdb                                  opa
+cpl                                      opam
+cpp-gsl                                  open-babel
+cppad                                    open-completion
+cppcheck                                 open-image-denoise
+cpprestsdk                               open-mesh
+cpputest                                 open-zwave
+create-dmg                               openapi-generator
+credstash                                opencc
+creduce                                  openconnect
+cromwell                                 opencv
+csvq                                     opencv@2
+ctemplate                                opencv@3
+ctl                                      openexr
+cups                                     openfortivpn
+curaengine                               openh264
+curl                                     openimageio
+curl-openssl                             openjdk@11
+cypher-shell                             openldap
+cython                                   openrct2
+dafny                                    opensaml
+daq                                      openssh
+darcs                                    opensubdiv
+dartsim                                  openttd
+dasht                                    openvdb
+dasm                                     openvpn
+datamash                                 operator-sdk
+datetime-fortran                         orc-tools
+dav1d                                    osc
+davix                                    osm2pgrouting
+davmail                                  osmium-tool
+dbhash                                   osmosis
+dbmate                                   ospray
+dcm2niix                                 osquery
+ddclient                                 otf2
+debianutils                              oxipng
+deno                                     p11-kit
+deployer                                 pachi
+detekt                                   packer
+detox                                    paket
+devspace                                 pandoc-crossref
+dfmt                                     parallel
+dhall                                    parallelstl
+dhall-bash                               pari
+dhall-json                               passenger
+dhall-lsp-server                         passpie
+dhall-yaml                               pastebinit
+diamond                                  pazpar2
+dict                                     pc6001vx
+diff-pdf                                 pcre2
+diff-so-fancy                            pdal
+diffoscope                               pdf2htmlex
+direnv                                   pdfcpu
+dita-ot                                  pdfcrack
+django-completion                        pdfpc
+dmd                                      pdfsandwich
+dnscontrol                               pdftk-java
+dnsdist                                  pdftoipe
+dnsmasq                                  pdns
+dnstwist                                 pdnsrec
+docfx                                    pegtl
+docker                                   percona-server
+docker-completion                        percona-toolkit
+doctl                                    perl
+docutils                                 perl@5.18
+dosbox-x                                 peru
+dovecot                                  petsc
+doxygen                                  petsc-complex
+drafter                                  pgbouncer
+dscanner                                 pgpool-ii
+dub                                      pgrouting
+duck                                     phoronix-test-suite
+dune                                     php
+dungeon                                  php-code-sniffer
+duo_unix                                 php-cs-fixer
+duplicity                                php@7.2
+dvc                                      php@7.3
+dwdiff                                   phplint
+dxpy                                     phpstan
+e2fsprogs                                phpunit
+e2tools                                  pianobar
+easy-tag                                 picard-tools
+easyrpg-player                           picat
+ecl                                      pidgin
+efl                                      pike
+ejabberd                                 pinboard-notes-backup
+ejdb                                     pipenv
+elasticsearch                            pipx
+elixir                                   pius
+embree                                   pixman
+emscripten                               planck
+enet                                     plantuml
+ensmallen                                platformio
+entr                                     plenv
+envconsul                                pmd
+ephemeralpg                              pngpaste
+epic5                                    pnpm
+epstool                                  poetry
+erlang                                   polynote
+erlang@21                                ponyc
+eslint                                   ponysay
+etcd                                     poppler
+ethereum                                 posh
+evince                                   postgresql
+exif                                     postgresql@10
+exodriver                                postgresql@11
+exploitdb                                postgresql@9.5
+ext2fuse                                 postgresql@9.6
+faas-cli                                 postgrest
+fades                                    powerline-go
+faiss                                    pre-commit
+fastd                                    prestosql
+fastlane                                 prettier
+fasttext                                 procs
+faudio                                   profanity
+fauna-shell                              proj
+fb-client                                prometheus
+fd                                       proteinortho
+fdroidserver                             protobuf
+feedgnuplot                              protobuf-c
+feh                                      protoc-gen-go
+fetchmail                                protoc-gen-grpc-web
+ffmpeg                                   prototool
+ffmpeg2theora                            proxytunnel
+ffmpeg@2.8                               pspg
+ffmpegthumbnailer                        pueue
+ffms2                                    pulp
+ffsend                                   pulumi
+fibjs                                    purescript
+file-roller                              puzzles
+filebeat                                 pwntools
+findent                                  pycodestyle
+firebase-cli                             pygobject3
+fish                                     pyinstaller
+flake8                                   pylint
+flow                                     pympress
+fluent-bit                               pypy
+fluid-synth                              pypy3
+flyway                                   pyqt
+fmt                                      pyside
+fn                                       python-markdown
+folly                                    python-yq
+fontforge                                python@3.8
+fonttools                                pyvim
+fop                                      q
+forcecli                                 qalculate-gtk
+fossil                                   qbs
+freeciv                                  qcachegrind
+freediameter                             qcli
+freeipmi                                 qemu
+freeling                                 qmmp
+freerdp                                  qpdf
+freeswitch                               qpid-proton
+freetds                                  qt
+frotz                                    quazip
+frpc                                     questdb
+frps                                     quickjs
+frugal                                   qxmpp
+fs-uae                                   r
+fselect                                  radare2
+funcoeszz                                rakudo
+fuseki                                   rakudo-star
+futhark                                  rancher-cli
+fwup                                     rargs
+game-music-emu                           ratfor
+gatsby-cli                               rav1e
+gauge                                    rawtoaces
+gawk                                     raylib
+gcab                                     rbspy
+gcc                                      rclone
+gcc@4.9                                  rdesktop
+gcc@5                                    rdfind
+gcc@6                                    rdiff-backup
+gcc@7                                    rdup
+gcc@8                                    re-flex
+gcviewer                                 re2
+gd                                       rebar3
+gdal                                     recon-ng
+gdb                                      redex
+gdk-pixbuf                               redis
+geant4                                   redis@3.2
+gedit                                    redis@4.0
+gegl                                     redpen
+genders                                  regina-rexx
+geogram                                  remarshal
+geoipupdate                              repo
+geoserver                                restview
+gerbil-scheme                            rex
+gettext                                  rgbds
+gexiv2                                   rgxg
+gforth                                   ripgrep
+gh                                       ripgrep-all
+ghc                                      rke
+ghex                                     robot-framework
+gifski                                   robotfindskitten
+gimme                                    rom-tools
+ginac                                    root
+git                                      roswell
+git-absorb                               rpm
+git-annex                                rrdtool
+git-cinnabar                             rswift
+git-cola                                 rsyslog
+git-delta                                ruby
+git-gui                                  ruby-build
+git-lfs                                  ruby@2.6
+git-plus                                 rust
+git-quick-stats                          s-nail
+git-series                               s3fs
+git-subrepo                              s3ql
+git-trim                                 sagittarius-scheme
+gitfs                                    salt
+gitg                                     sane-backends
+github-release                           sbcl
+gitlab-gem                               sbt
+gitlab-runner                            scala
+gitleaks                                 scamper
+gitless                                  schema-evolution-manager
+gitmoji                                  scrcpy
+gitversion                               sd
+gjs                                      seal
+gl2ps                                    sec
+glade                                    sentencepiece
+gleam                                    serd
+glib                                     serf
+glib-networking                          serverless
+glib-openssl                             sfk
+glm                                      shadowenv
+glooctl                                  shared-mime-info
+glslang                                  shfmt
+gnome-recipes                            shibboleth-sp
+gnu-chess                                shogun
+gnu-getopt                               shyaml
+gnu-smalltalk                            signal-cli
+gnumeric                                 sile
+gnustep-make                             silk
+gnutls                                   simgrid
+go                                       simple-scan
+go-bindata                               singular
+go@1.13                                  sip
+goaccess                                 siril
+gobject-introspection                    sispmctl
+godep                                    skaffold
+goffice                                  skopeo
+golang-migrate                           sleuthkit
+gom                                      snakemake
+gomplate                                 snapcraft
+google-authenticator-libpam              snapraid
+googler                                  sngrep
+goose                                    sniffglue
+gopass                                   snort
+goreleaser                               softhsm
+gotop                                    solarus
+gpgme                                    solr
+gpsd                                     solr@7.7
+gr-osmosdr                               sonarqube
+gradle                                   sonarqube-lts
+grafana                                  sonobuoy
+grakn                                    sourcedocs
+graph-tool                               sourcery
+graphene                                 spades
+graphviz                                 spdlog
+grc                                      sphinx-doc
+grex                                     spice-protocol
+grin                                     spim
+gromacs                                  spirv-cross
+groonga                                  spirv-tools
+groovy                                   spoof-mac
+groovysdk                                spotbugs
+grpc                                     sql-translator
+grpc-swift                               sqlcipher
+grpcurl                                  sqldiff
+grsync                                   sqlite
+gsettings-desktop-schemas                sqlite-analyzer
+gsoap                                    sqlmap
+gspell                                   squid
+gst-plugins-bad                          src
+gst-plugins-ugly                         ssh-audit
+gst-validate                             ssh-copy-id
+gtk+3                                    sslmate
+gtranslator                              sslyze
+gucharmap                                starship
+guile                                    stella
+gwt                                      stellar-core
+hadolint                                 step
+handbrake                                stoken
+hapi-fhir-cli                            stone-soup
+harfbuzz                                 streamlink
+hashpump                                 stress-ng
+haskell-stack                            subliminal
+haxe                                     subnetcalc
+hcloud                                   subversion
+healpix                                  suite-sparse
+heartbeat                                sundials
+hebcal                                   supervisor
+helm                                     suricata
+helm@2                                   swagger-codegen
+helmfile                                 swagger-codegen@2
+helmsman                                 swi-prolog
+help2man                                 swift
+hfstospell                               swift-protobuf
+highlight                                swift-sh
+hiredis                                  swiftformat
+hive                                     syncthing
+hlint                                    synfig
+homeassistant-cli                        sysbench
+homebank                                 sysdig
+homeshick                                tarantool
+honcho                                   tarsnapper
+hopenpgp-tools                           tass64
+hpack                                    tccutil
+htmlcleaner                              tealdeer
+http-server                              tectonic
+httpflow                                 teensy_loader_cli
+httpie                                   tektoncd-cli
+hugo                                     telegraf
+hyperfine                                teleport
+hyperscan                                template-glib
+hypre                                    termius
+i2p                                      termrec
+i2pd                                     termtosvg
+iam-policy-json-to-terraform             terraform
+iblinter                                 terraform-provider-libvirt
+ice                                      terragrunt
+icu4c                                    testssl
+idris                                    texlab
+igraph                                   texmath
+igv                                      tfenv
+ilmbase                                  tflint
+imagemagick                              theharvester
+imagemagick@6                            thors-serializer
+imgproxy                                 tika
+influxdb                                 tile38
+inform6                                  timewarrior
+inlets                                   timidity
+inspircd                                 tintin
+instead                                  tmux-xpanes
+internetarchive                          tmuxinator
+inxi                                     tmuxinator-completion
+ipfs                                     tokei
+ipopt                                    tomcat
+ipython                                  tomcat-native
+ircd-hybrid                              tomcat@7
+irrtoolset                               tomcat@8
+iso-codes                                tomee-plume
+ispc                                     tomee-plus
+istioctl                                 tomee-webprofile
+janet                                    topgrade
+jansson                                  tor
+jbake                                    tox
+jdupes                                   traefik
+jena                                     trafficserver
+jenkins                                  translate-shell
+jenkins-job-builder                      translate-toolkit
+jenkins-lts                              transmission-cli
+jenv                                     travis
+jetty                                    treefrog
+jetty-runner                             trezor-agent
+jflex                                    triangle
+jfrog-cli-go                             triton
+jhipster                                 tth
+jlog                                     ttygif
+jmeter                                   tundra
+joplin                                   tvnamer
+jp2a                                     twarc
+jrnl                                     txr
+jrtplib                                  typescript
+jsdoc3                                   uchardet
+json-fortran                             ucloud
+jsonnet                                  uftp
+jsonrpc-glib                             uhd
+jsvc                                     ultralist
+juju                                     unbound
+jupyterlab                               uncrustify
+just                                     ungit
+k3d                                      unoconv
+kafka                                    unpaper
+kakoune                                  urdfdom
+kapacitor                                urdfdom_headers
+katago                                   urh
+kcptun                                   urweb
+keepassc                                 userspace-rcu
+kerl                                     util-linux
+khal                                     uwsgi
+khard                                    v8
+kibana                                   vagrant-completion
+kind                                     vala
+kitchen-sync                             vale
+knot                                     valgrind
+komposition                              vamp-plugin-sdk
+kops                                     vapoursynth
+kotlin                                   vapoursynth-imwri
+kpcli                                    vapoursynth-ocr
+krakend                                  vapoursynth-sub
+krb5                                     vault
+ktoblzcheck                              vcs
+kubeaudit                                vdirsyncer
+kubecfg                                  velero
+kubectx                                  verilator
+kubeprod                                 vert.x
+kubernetes-cli                           vfuse
+kubernetes-service-catalog-client        vgmstream
+kubeseal                                 vim
+kumo                                     vips
+kustomize                                vit
+kvazaar                                  vnu
+kyma-cli                                 vpn-slice
+languagetool                             vte3
+lasso                                    vttest
+latexdiff                                vulkan-headers
+lazydocker                               wabt
+lazygit                                  wallpaper
+lcm                                      wandio
+ledger                                   wartremover
+lego                                     wasm3
+lensfun                                  watchman
+lerna                                    watson
+lf                                       wavpack
+lft                                      wcslib
+lgogdownloader                           weaver
+libarchive                               webarchiver
+libav                                    weboob
+libbladerf                               webpack
+libcbor                                  webtorrent-cli
+libcdr                                   weechat
+libcec                                   whatmp3
+libdap                                   when
+libdazzle                                whistle
+libdeflate                               widelands
+libepoxy                                 wildfly-as
+libexif                                  wimlib
+libfabric                                winetricks
+libffi                                   wireguard-tools
+libfido2                                 wireshark
+libflowmanager                           wolfmqtt
+libfreehand                              wolfssl
+libfreenect                              wordgrinder
+libgeotiff                               wpscan
+libgit2                                  wrangler
+libgit2-glib                             write-good
+libgpg-error                             wtf
+libgphoto2                               wtfutil
+libgr                                    wumpus
+libgweather                              wxmac
+libhdhomerun                             wxmaxima
+libheif                                  x264
+libhttpserver                            x265
+libical                                  xa
+libjson-rpc-cpp                          xapian
+libksba                                  xclogparser
+liblcf                                   xerces-c
+libmaa                                   xgboost
+libmspub                                 xmake
+libmypaint                               xml-tooling-c
+libngspice                               xmrig
+libnice                                  xonsh
+libntlm                                  xpa
+libopenmpt                               xrootd
+libosinfo                                xsimd
+libosmium                                xtensor
+libphonenumber                           yaegi
+libplctag                                yamllint
+libpq                                    yapf
+libpqxx                                  yara
+libprotoident                            yaws
+libproxy                                 yaz
+libpulsar                                yle-dl
+libqalculate                             yosys
+librdkafka                               youtube-dl
+librealsense                             yq
+libressl                                 z
+librsvg                                  z3
+librsync                                 zabbix
+libsass                                  zbackup
+libsecret                                zebra
+libserdes                                zeek
+libspectre                               zero-install
+libspiro                                 zig
+libtensorflow                            zint
+libtensorflow@1                          znc
+libtorch                                 zola
+libtorrent-rasterbar                     zookeeper
+libtrace                                 zorba
+libuninameslist                          zstd
+==> Deleted Formulae
+crc                        deisctl                    open-cobol
+deis                       gnome-builder              pijul
+==> Updated Casks
+adoptopenjdk8 ✔
+java ✔
+0-ad
+010-editor
+115browser
+1password
+1password-cli
+4k-stogram
+4k-video-downloader
+4k-youtube-to-mp3
+a-better-finder-attributes
+a-better-finder-rename
+ableton-live
+ableton-live-intro
+ableton-live-lite
+ableton-live-standard
+ableton-live-suite
+abricotine
+abstract
+acorn
+acquia-dev
+activedock
+activitywatch
+actual-odbc-pack
+adafruit-arduino
+adguard
+adium
+adobe-acrobat-reader
+adoptopenjdk
+adoptopenjdk11
+adoptopenjdk11-jre
+adoptopenjdk11-openj9
+adoptopenjdk11-openj9-jre
+adoptopenjdk11-openj9-jre-large
+adoptopenjdk11-openj9-large
+adoptopenjdk14
+adoptopenjdk14-jre
+adoptopenjdk14-openj9
+adoptopenjdk14-openj9-jre
+adoptopenjdk14-openj9-jre-large
+adoptopenjdk14-openj9-large
+adoptopenjdk8-jre
+adoptopenjdk8-openj9
+adoptopenjdk8-openj9-jre
+adoptopenjdk8-openj9-jre-large
+adoptopenjdk8-openj9-large
+aerial
+agenda
+air-video-server-hd
+aircall
+airdisplay
+airdroid
+airflow
+airfoil
+airparrot
+airpass
+airqmon
+airserver
+airtable
+airtame
+airy
+alacritty
+alephone
+alfaview
+algodoo
+aliworkbench
+all-in-one-messenger
+alt-tab
+altair-graphql-client
+altserver
+alva
+amadeus-pro
+amadine
+amazon-chime
+amazon-music
+amazon-photos
+amazon-workdocs
+amazon-workspaces
+amethyst
+amitv87-pip
+ammonite
+ananas-analytics-desktop-edition
+android-file-transfer
+android-ndk
+android-platform-tools
+android-sdk
+android-studio
+angry-ip-scanner
+anka-flow
+anki
+another-redis-desktop-manager
+anvil
+anydo
+anylist
+apache-couchdb
+apache-directory-studio
+apk-icon-editor
+app-tamer
+appcode
+appgate-sdp-client
+appium
+appstudio
+appzapper
+aptanastudio
+aptible
+aqua-data-studio
+aquamacs
+archiver
+aria-maestosa
+aria2d
+ariang
+ark-desktop-wallet
+armory
+arq
+arq-cloud-backup
+arrayfire
+arrsync
+artisan
+asciidocfx
+astah-professional
+astropad
+astropad-studio
+atext
+atom
+audio-hijack
+audioslicer
+audirvana
+auristor-client
+auryo
+authy
+autofirma
+autopkgr
+autumn
+avg-antivirus
+aviatrix-vpn-client
+avibrazil-rdm
+avidemux
+avira-antivirus
+avocode
+avogadro
+awa
+aware
+aws-vault
+axe-electrum
+axure-rp
+azure-data-studio
+back-in-time
+backblaze
+backlog
+backuploupe
+badlion-client
+baiducloud
+baidunetdisk
+balenaetcher
+ballast
+balsamiq-wireframes
+bandage
+bankid
+banking-4
+banktivity
+banshee
+baritone
+bartender
+barxtemp
+base
+basecamp
+basictex
+bathyscaphe
+battlescribe
+bbc-iplayer-downloads
+bbedit
+bdash
+beaker-browser
+beatunes
+beautune
+bee
+beersmith
+bestres
+bettertouchtool
+betterzip
+betwixt
+bibdesk
+bilimini
+bino
+birdfont
+biscuit
+bisq
+bit-slicer
+bitmessage
+bitrix24
+bitshares
+bitwarden
+blink1control
+blisk
+blitz
+blobby-volley2
+blockblock
+blockstack
+blocs
+bloodhound
+blue-jeans
+bluefish
+bonitastudiocommunity
+bookmacster
+boom
+boom-3d
+boostnote
+bootstrap-studio
+bootxchanger
+borgbackup
+bossa
+bot-framework-emulator
+box-drive
+box-edit
+box-sync
+boxer
+brackets
+brain-workshop
+brave-browser
+breakaway
+brewtarget
+bria
+bricklink-studio
+bricksmith
+brightness-sync
+brl-cad-mged
+brook
+btcpayserver-vault
+bubo
+buildsettingextractor
+bunch
+bunqcommunity-bunq
+burn
+burp-suite
+busycal
+busycontacts
+butt
+buttercup
+bzflag
+c0re100-qbittorrent
+cabal
+cacher
+cakebrew
+calcservice
+calendar-366
+calibre
+camed
+camtasia
+camunda-modeler
+canary
+caprine
+captain
+captin
+caption
+capto
+carbon-copy-cloner
+cardhop
+caret
+catch
+catlight
+cave-story
+ccmenu
+cctalk
+cellery
+cellprofiler
+cemu
+cerebro
+chalk
+charles
+chatmate-for-facebook
+chatmate-for-whatsapp
+chatology
+chatty
+cheatsheet
+checkra1n
+chemdoodle
+chessx
+chiaki
+chromedriver
+chromium
+chrysalis
+citra
+cityofzion-neon
+ckan
+clashx
+classroom-assistant
+clean-me
+cleanmymac
+clementine
+clion
+clip-studio-paint
+clipgrab
+clipy
+clock
+clockify
+clonk
+cloud-pbx
+cloudapp
+cloudcompare
+cloudmounter
+clover-configurator
+cmake
+cncjs
+cncnet
+coccinellida
+cockatrice
+cocktail
+cocoapods
+cocoarestclient
+code-notes
+code42-crashplan
+codekit
+coderunner
+collabshot
+colorpicker-skalacolor
+colorsnapper
+colortester
+colour-contrast-analyser
+comma-chameleon
+commander-one
+commandq
+connectiq
+controllermate
+controlplane
+cookie
+copyclip
+copyq
+coqide
+cord
+corona-tracker
+corretto
+coteditor
+couchbase-server-community
+couchbase-server-enterprise
+couchpotato
+coverload
+cozy-drive
+craftmanager
+creepy
+cronnix
+cryptomator
+crystalmaker
+cubicsdr
+cuda-z
+cumulus
+cura-lulzbot
+cutbox
+cutter
+cyberduck
+cycling74-max
+cytoscape
+daedalus
+daemon-tools
+daily-english-listening
+darktable
+dash
+dash-dash
+dashcam-viewer
+dashlane
+dat
+data-science-studio
+datadog-agent
+datagrip
+datazenit
+datovka
+datweatherdoe
+davmail
+day-o
+db-browser-for-sqlite
+dbeaver-community
+dbglass
+dbkoda
+dbngin
+dbschema
+dbvisualizer
+dcommander
+dcp-o-matic
+dcp-o-matic-batch-converter
+dcp-o-matic-encode-server
+dcp-o-matic-kdm-creator
+dcp-o-matic-player
+dcv-viewer
+dd-utility
+debookee
+deckset
+deco
+deeper
+deepstream
+deezer
+default-folder-x
+delicious-library
+deltawalker
+deluge
+detectx-swift
+detexify
+devdocs
+devonagent
+devonthink
+dexed
+dhs
+dia
+dialpad
+diashapes
+dictater
+dictionaries
+difffork
+digikam
+dingtalk
+disk-arbitrator
+disk-drill
+diskcatalogmaker
+displaycal
+dissenter-browser
+djay-pro
+djv
+djview
+do-not-disturb
+docker
+docker-toolbox
+dockstation
+dogecoin
+doly
+domainbrain
+dosbox
+dosbox-x
+doteditor
+dotnet
+dotnet-sdk
+double-commander
+downie
+doxygen
+dragthing
+drama
+drawbot
+drawio
+dremel-slicer
+drop-to-gif
+droplr
+dropshare
+duckietv
+duefocus
+duet
+dukto
+duo-connect
+dupeguru
+duplicacy
+duplicacy-web-edition
+duplicati
+dust3d
+dvdstyler
+dwarf-fortress-lmp
+dynamodb-local
+eagle
+eaglefiler
+ebmac
+eddie
+edfbrowser
+editaro
+edrawmax
+eiskaltdcpp
+elan
+elasticwolf
+electerm
+electric-sheep
+electron
+electron-cash
+electron-fiddle
+electronmail
+electrumsv
+eloston-chromium
+emailchemy
+emby-server
+encryptme
+endless-sky
+endurance
+engine-prime
+enpass
+entropy
+envkey
+epic
+epic-games
+epichrome
+epub-to-pdf
+eqmac
+espresso
+eudic
+eurkey
+everweb
+exactscan
+exfalso
+exist-db
+exodus
+expo-xde
+expressvpn
+extraterm
+falcon-sql-client
+family-tree-builder
+fanny
+fantastical
+fantasy-map-generator
+farrago
+fastrawviewer
+favro
+fedora-media-writer
+feed-the-beast
+feem
+feishu
+fenix
+ferdi
+figtree
+fiji
+filebot
+filedrop
+filepane
+find-any-file
+finicky
+firecamp
+firefox
+firestorm
+fl-studio
+flame
+flash-decompiler-trillix
+flash-npapi
+flash-player
+flash-player-debugger
+flash-player-debugger-npapi
+flash-player-debugger-ppapi
+flash-ppapi
+flashlighttool
+fldigi
+flic
+flightgear
+flipper
+flock
+flotato
+flowdock
+flowsync
+flume
+fluor
+fly
+fman
+focus-booster
+focusatwill
+focused
+focuswriter
+folding-at-home
+foldingtext
+foldit
+fontbase
+fontexplorer-x-pro
+fontforge
+fontgoggles
+fontlab
+fontplop
+forecast
+fork
+forklift
+forticlient
+foxitreader
+fpcsrc
+framer
+framer-x
+franz
+freac
+fredm-fuse
+free-download-manager
+free-ruler
+freecad
+freecol
+freedom
+freemind
+freenettray
+freeorion
+freeplane
+freesmug-chromium
+freeyourmusic
+frescobaldi
+frhelper
+fromscratch
+front
+fs-uae
+fsmonitor
+fsnotes
+funter
+fuse
+futuniuniu
+fuwari
+ganache
+ganttproject
+garagebuy
+garagesale
+gb-studio
+gcollazo-mongodb
+gearboy
+geektool
+gemini
+genymotion
+geogebra
+geotag-photos-pro
+geph
+gephi
+get-backup-pro
+getrasplex
+gfortran
+ghost
+ghost-browser
+ghosttile
+gifox
+gifs
+gimp
+gingko
+gisto
+gitahead
+gitbox
+gitfinder
+gitfox
+github
+gitify
+gitkraken
+gitnote
+gitup
+gloomhaven-helper
+glyphfinder
+glyphs
+gmvault
+gns3
+gnucash
+go-agent
+go-server
+gobdokumente
+godot
+godot-mono
+gog-galaxy
+gogs
+goland
+goldencheetah
+golly
+goodsync
+goofy
+google-chrome
+google-earth-pro
+google-japanese-ime
+googleappengine
+gopass-ui
+gotiengviet
+gplates
+gpodder
+gpower
+gps4cam
+gpxsee
+gqrx
+gramps
+grandperspective
+grandtotal
+graphicconverter
+gretl
+gridea
+grids
+grisbi
+growlnotify
+gswitch
+gtkwave
+guijs
+guild-wars2
+gureumkim
+gzdoom
+ha-menu
+hacker-menu
+hackhands
+hackintool
+hammerspoon
+handbrake
+handshaker
+handylock
+haptic-touch-bar
+harmony
+haroopad
+harvest
+hazel
+hbuilder
+hbuilderx
+hdrmerge
+headset
+heimdall-suite
+helium
+hermes
+hex-fiend
+hipchat
+hma-pro-vpn
+houdahspot
+houseparty
+hstracker
+http-toolkit
+hubic
+hubstaff
+hugin
+hydrogen
+hype
+hyper
+hyperbackupexplorer
+ibackup-viewer
+ibettercharge
+ibm-cloud-cli
+icab
+icestudio
+iconizer
+iconjar
+icq
+idagio
+iexplorer
+igdm
+iglance
+image2icon
+imagej
+imaging-edge
+imazing
+imazing-mini
+imgotv
+impactor
+indigo
+inkdrop
+inkscape
+inky
+insomnia
+inssider
+instant-articles-builder
+insync
+integrity
+intel-haxm
+intel-power-gadget
+intellij-idea
+intellij-idea-ce
+intelliscape-caffeine
+invesalius
+invisiblix
+inxmail-professional
+ionic-lab
+ios-app-signer
+iota-wallet
+ipe
+ipepresenter
+ipfs
+ipremoteutility
+ipsecuritas
+irccloud
+iridium
+iris
+isabelle
+ishowu-instant
+istat-server
+itch
+iterm2
+ithoughtsx
+itk-snap
+itools
+itsycal
+itubedownloader
+itunes-volume-control
+ivideonclient
+ivideonserver
+ivpn
+j
+jabref
+jalbum
+jalview
+jamf-migrator
+jami
+jamovi
+jasp
+jasper
+jaxx-liberty
+jbrowse
+jcryptool
+jd-gui
+jdk-mission-control
+jedit
+jedit-omega
+jeromelebel-mongohub
+jet
+jetbrains-toolbox
+jgrasp
+jitsi-meet
+joplin
+journey
+jprofiler
+jubler
+juicebar
+julia
+jump
+jumpcut
+jumpshare
+jupyter-notebook-viewer
+kactus
+kakapo
+kaku
+kaleidoscope
+kap
+kapow
+katalon-studio
+keep-it
+keepassxc
+keepingyouawake
+keeweb
+keka
+kext-updater
+kextviewr
+keybase
+keyboard-maestro
+keyboardcleantool
+keymanager
+keyshot
+keystore-explorer
+kicad
+kid3
+kindle
+kindle-comic-creator
+kindle-previewer
+kindlegen
+kinza
+kite
+kitematic
+kitty
+kiwi-for-g-suite
+kiwix
+klatexformula
+klayout
+klokki
+knime
+knock
+knockknock
+knotes
+knox
+knuff
+koa11y
+koala
+kobo
+kode54-cog
+kodelife
+kodi
+kotlin-native
+krisp
+krita
+kstars
+kube-forwarder
+kubernetic
+kugoumusic
+lando
+lantern
+laravel-kit
+lark
+lastpass
+latexdraw
+latexit
+launchcontrol
+laverna
+lazarus
+lazpaint
+lbry
+league-displays
+league-of-legends
+leanote
+ledger-live
+lego-mindstorms-ev3
+lehreroffice
+lektor
+lelivrescolairefr
+lens
+lepton
+librecad
+libreoffice
+libreoffice-language-pack
+liclipse
+lidarr
+lifesize
+lightgallery
+lightproxy
+lighttable
+lightworks
+lincastor
+line-bot-designer
+linear
+lingo
+lingon-x
+listen1
+liteide
+little-snitch
+lmms
+local
+localdev
+localizationeditor
+lockdown
+lockrattler
+logdna-agent
+logdna-cli
+loginputmac
+logisim
+logitech-presentation
+logmein-hamachi
+logos
+loom
+loopback
+losslesscut
+love
+lulu
+luminance-hdr
+lunar
+luxmark
+luyten
+lynkeos
+lynx
+lyricsx
+maccy
+macdjview
+macdown
+macfusion
+macfusion-ng
+macgamestore
+macgdbp
+macpass
+macpilot
+macs-fan-control
+macsvg
+mactex
+mactex-no-gui
+mactracker
+macupdater
+macvim
+macwinzipper
+macx-dvd-ripper-pro
+magicavoxel
+magiccap
+mailbutler
+mailmaster
+mailmate
+mailspring
+maintenance
+makehuman
+makemkv
+maltego
+malus
+malwarebytes
+mame
+manico
+manta
+manuscripts
+manuskript
+mapillary-uploader
+marathon
+marginnote
+mark-text
+markdownmdimporter
+marked
+marshallofsound-google-play-music-player
+marvel
+marvin
+masscode
+massreplaceit
+master-password
+masterway-note
+mate-translate
+mattermost
+max
+mblock
+mcbopomofo
+mcedit
+media-converter
+mediaelch
+megahertz-knotes
+meld
+mellowplayer
+melodics
+memory
+memory-map
+mendeley-reference-manager
+menubar-countdown
+menumeters
+menutube
+merlin-project
+meshcommander
+meshlab
+metabase
+metasploit
+metaz
+meteorologist
+mgba
+mia-for-gmail
+michaelvillar-timer
+microblog
+microsoft-edge
+microsoft-excel
+microsoft-office
+microsoft-outlook
+microsoft-powerpoint
+microsoft-r-open
+microsoft-teams
+microsoft-word
+middleclick
+midikeys
+miditrail
+mikogo
+miktex-console
+milanote
+milkytracker
+mimecast
+min
+mindforger
+mindjet-mindmanager
+minecraft
+minecraft-server
+minecraftpe
+mini-program-studio
+miniconda
+minitube
+minizincide
+miro-formerly-realtimeboard
+mirrordisplays
+mission-control-plus
+mjml
+mjolnir
+mkchromecast
+mkvtoolnix
+mmex
+mnemosyne
+mochi
+mockoon
+mockplus
+mockuuups-studio
+modelio
+monero-wallet
+moneymoney
+moneywiz
+mongodb-compass
+mongodb-compass-community
+mongodb-compass-isolated-edition
+mongodb-compass-readonly
+mongotron
+monitorearth
+mono-mdk
+monogame
+monolingual
+moonlight
+morpheus
+mos
+moscow-ml
+motion
+motrix
+mountain-duck
+movist-pro
+mp3gain-express
+mpeg-streamclip
+mplab-xc32
+mplayer-osx-extended
+mplayerx
+mps
+mpv
+mqtt-explorer
+mqttfx
+mtmr
+mu-editor
+mucommander
+mudlet
+mullvadvpn
+multifirefox
+multipass
+multitouch
+mumble
+munki
+murus
+museeks
+musescore
+musicbrainz-picard
+mweb
+my-budget
+my-image-garden
+mycloud
+mycrypto
+mylio
+mymonero
+mysqlworkbench
+nagbar
+nally
+namebench
+nano
+natron
+navicat-data-modeler
+navicat-data-modeler-essentials
+navicat-for-mariadb
+navicat-for-mysql
+navicat-for-oracle
+navicat-for-postgresql
+navicat-for-sql-server
+navicat-for-sqlite
+navicat-premium
+navicat-premium-essentials
+nbtexplorer
+ndm
+neo4j
+neofinder
+nestopia
+neteasemusic
+netiquette
+netnewswire
+netron
+netxms-console
+ngrok
+nheko
+night-owl
+nightingale
+nimble
+nisus-thesaurus
+nodebox
+nodeclipse
+noisytyper
+nomachine
+nordvpn
+nosleep
+nosql-workbench-for-amazon-dynamodb
+nosqlbooster-for-mongodb
+nosqlclient
+notable
+notedup
+noteplan
+noti
+notion
+noun-project
+now
+noxappplayer
+nrlquaker-winbox
+nsregextester
+nteract
+nuclear
+nucleo
+nuclino
+nulloy
+numi
+nvalt
+nvidia-geforce-now
+nzbget
+obs
+obyte
+ocenaudio
+oclint
+odio
+odrive
+ogdesign-eagle
+omegat
+omnidazzle
+omnifocus
+omnigraffle
+one-switch
+onedrive
+onenote-importer-preview
+oni
+onyx
+oolite
+open-ecard
+openarena
+openaudible
+openbazaar
+openboard
+openboardview
+openconnect-gui
+opencore-configurator
+openemu
+openineditor-lite
+openinterminal
+openinterminal-lite
+openlp
+openmsx
+openmtp
+openmw
+opennx
+openoffice
+openra
+openrct2
+openrefine
+opensesame
+openshot-video-editor
+opensong
+opentoonz
+openttd
+openvanilla
+openvisualtraceroute
+openwebstart
+openzfs
+opera
+optimal-layout
+oracle-jdk
+oracle-jdk-javadoc
+origami-studio
+origin
+orka
+oryoki
+oscar
+osxfuse
+otter-browser
+outline
+outline-manager
+overflow
+oversight
+owasp-zap
+p4v
+pacifist
+packages
+packet-peeper
+packetproxy
+packetsender
+pagico
+paintbrush
+paintcode
+pandora
+panoply
+paperspace
+parallels
+parallels-toolbox
+parse
+parsec
+particle-dev
+password-gorilla
+pastebot
+path-finder
+pd-l2ork
+pdf-converter-master
+pdf-expert
+pdf-toolbox
+pdfelement
+pdfelement-express
+pdfpen
+pdfpenpro
+pdfsam-basic
+penc
+pencil2d
+perforce
+permute
+persepolis-download-manager
+pext
+pg-commander
+pgadmin4
+phantomjs
+phoenix-slides
+phonegap
+photoninja
+photosweeper-x
+phpstorm
+pibakery
+piezo
+pineapple
+pinegrow
+pingid
+pingplotter
+pinta
+pixelsnap
+plan
+play
+playback
+playmemories-home
+plex
+plex-media-player
+plex-media-server
+plexamp
+pliim
+plotdigitizer
+plover
+pocket-casts
+podman
+podolski
+poedit
+poi
+pokerth
+polar-bookshelf
+polymail
+pomotodo
+pomotroid
+popchar
+popo
+portfolioperformance
+porting-kit
+postbox
+posterazor
+postgres
+postico
+postman
+powder-player
+powerpanel
+powerphotos
+powershell
+praat
+preform
+prepros
+presentation
+principle
+prismatik
+pritunl
+private-internet-access
+privatetunnel
+proclaim
+projectlibre
+propresenter
+protege
+protonmail-bridge
+protonvpn
+protopie
+provisionql
+proximity
+proxyman
+prudent
+prusaslicer
+psi
+psi-plus
+publii
+publish-or-perish
+pulse-sms
+puppetry
+purevpn
+pycharm
+pycharm-ce
+pycharm-edu
+pyfa
+pynsource
+pyzo
+qbittorrent
+qblocker
+qcma
+qdslrdashboard
+qfinder-pro
+qgis
+qgroundcontrol
+qiyimedia
+qlab
+qlfits
+qlstephen
+qnapi
+qobuz
+qownnotes
+qq
+qsync-client
+qt-creator
+qt-design-studio
+qtox
+qtpass
+qtspim
+quakespasm
+quassel
+querious
+quickbooks-online
+quicken
+quip
+quiterss
+quodlibet
+qutebrowser
+qv2ray
+qxmledit
+r
+rabbitmq
+race-into-space
+racket
+racket-cs
+radarr
+radiant-player
+rambox
+ransomwhere
+rapidweaver
+raven
+razorsql
+rclone-browser
+rcloneosx
+react-native-debugger
+react-proto
+react-studio
+reaper
+rectangle
+red
+redis
+refined-github-safari
+reflector
+reggy
+reikey
+rekordbox
+remember-the-milk
+remote-desktop-manager
+remote-desktop-manager-free
+remoteviewer
+remotix-agent
+renamer
+resilio-sync
+resolume-arena
+retinizer
+retro-virtual-machine
+retroarch
+retroarch-metal
+retroshare
+reunion
+reveal
+rhinoceros
+ricochet
+rider
+ridibooks
+ring
+ringcentral
+riot
+ripcord
+roaringapps
+robofont
+roboform
+rocket
+rocket-chat
+rodeo
+rotato
+routebuddy
+rowanj-gitx
+rowmote-helper
+royal-tsx
+rssowl
+rstudio
+rsyncosx
+rubymine
+runjs
+runway
+ryver
+sabaki
+sabnzbd
+sage
+sameboy
+saoimageds9
+sapmachine-jdk
+satellite-eyes
+sauerbraten
+scala-ide
+scaleft
+scap-workbench
+scapple
+schism-tracker
+scidavis
+scidvsmac
+scihubeva
+scilab
+scope
+scout
+scratch
+screen
+screenflick
+screens
+screens-connect
+scribus
+script-debugger
+scrivener
+scrutiny
+seadrive
+seafile-client
+seaglass
+seamonkey
+seashore
+second-life-viewer
+segger-embedded-studio-for-arm
+sejda-pdf
+selfcontrol
+sencha
+send-to-kindle
+sensei
+sensiblesidebuttons
+sequel-pro
+serviio
+session
+session-manager-plugin
+setapp
+sfdx
+sharepod
+shift
+shiftit
+shifty
+shimo
+shoes
+shotcut
+showyedge
+shuttle
+sidequest
+sidestep
+sigil
+signal
+sigviewer
+silentknight
+simple-comic
+simplenote
+simplesynth
+simply-fortran
+singularity
+sirimote
+sitebulb
+sizzy
+skala-preview
+sketch
+sketchpacks
+sketchup
+sketchup-pro
+skim
+skreenics
+skyfonts
+skype
+skype-for-business
+slack
+slate
+slicer
+slimbatterymonitor
+slingplayer
+slite
+smartgit
+smlnj
+smooze
+snagit
+sneek
+snes9x
+snipaste
+snowflake-snowsql
+soapui
+socket-io-tester
+softmaker-freeoffice
+softorino-youtube-converter
+softraid
+softube-central
+sogouinput
+solvespace
+sonic-visualiser
+soulver
+sound-control
+sound-siphon
+soundcleod
+sourcetrail
+sourcetree
+sparkle
+sparkleshare
+spectacle
+spectacle-editor
+spectrum
+spectx
+speedcrunch
+spek
+spillo
+splashtop-business
+splashtop-personal
+splashtop-streamer
+splice
+spotifree
+spotify
+spotspot
+springtoolsuite
+sql-tabs
+sqlectron
+sqlexplorer
+sqlpro-for-mssql
+sqlpro-for-mysql
+sqlpro-for-postgres
+sqlpro-for-sqlite
+sqlpro-studio
+squirrel
+squirrelsql
+ssh-tunnel-manager
+stack
+stand
+standard-notes
+starcraft
+startninja
+startupizer
+station
+stay
+steam
+steamcmd
+steermouse
+stella
+stellarium
+stepmania
+stoplight-studio
+storyboarder
+streamlink-twitch-gui
+stretchly
+strongvpn
+studio-3t
+studiolinkstandalone
+subler
+sublime-merge
+subsurface
+sunvox
+supercollider
+superduper
+superproductivity
+supertuxkart
+surge
+surge-synthesizer
+suspicious-package
+sweet-home3d
+swift-explorer
+swift-publisher
+swiftformat-for-xcode
+swiftstack-client
+swifty
+swiftybeaver
+swinsian
+swish
+switchhosts
+switchresx
+synalyze-it-pro
+sync-my-l2p
+syncovery
+syncplay
+syncterm
+syncthing
+synfigstudio
+synthesia
+sysdig-inspect
+tableau
+tableau-prep
+tableau-public
+tableau-reader
+tableflip
+tableplus
+tabula
+tad
+tagger
+tagspaces
+tandem
+taskade
+taskexplorer
+tastyworks
+tbe
+tbs-studio
+tcl
+td-agent
+teambition
+teamdrive
+teamspeak-client
+teamviewer
+teamwire
+teeworlds
+telavox-flow
+telegram
+telegram-desktop
+tempo
+tencent-lemon
+tenor
+termhere
+terminus
+termius
+texpad
+texstudio
+textadept
+textexpander
+textmate
+texworks
+the-archive-browser
+the-battle-for-wesnoth
+the-cheat
+the-unarchiver
+thebrain
+thedesk
+there
+therm
+thingsmacsandboxhelper
+thonny
+thonny-xxl
+thought-train
+threads
+thumbsup
+thunder
+thunderbird
+thyme
+tibco-jaspersoft-studio
+tickeys
+ticktick
+tiddly
+tidepool-uploader
+tifig
+tiger-trade
+tigervnc-viewer
+tikzit
+tiled
+tiles
+timecamp
+timelane
+timely
+timemator
+timestamp
+timeular
+timing
+tinderbox
+tinkerwell
+tiny-player
+tinymediamanager
+tinypng4mac
+tla-plus-toolbox
+todometer
+todotxt
+toggl
+toontown-rewritten
+toptracker
+tor-browser
+torguard
+torrent-file-editor
+tortoisehg
+touch-bar-simulator
+touchdesigner
+tower
+townwifi
+trader-workstation
+trailer
+trainerroad
+transmission
+transmit
+transocks
+transtype
+tresorit
+trezor-bridge
+tribler
+trilium-notes
+trim-enabler
+trinity
+triplecheese
+trolcommander
+tropy
+trufont
+tunnelbear
+tunnelblick
+tuntap
+tuple
+turbo-boost-switcher
+turbovnc-viewer
+turtl
+tusk
+tuxguitar
+tv-browser
+tvrenamer
+tweetbot
+tweeten
+twine
+twist
+twitch
+typora
+tysimulator
+ubar
+ubersicht
+uc-one
+udig
+ueli
+ui-browser
+ultimaker-cura
+ultimate
+ultrastardeluxe
+uncolored
+understand
+unetbootin
+unicodechecker
+uniconverter
+unison
+unite
+unity
+unity-android-support-for-editor
+unity-download-assistant
+unity-ios-support-for-editor
+unity-lumin-support-for-editor
+unity-webgl-support-for-editor
+unity-windows-support-for-editor
+universal-media-server
+unpkg
+upic
+upm
+upwork
+utools
+utox
+uu-booster
+v2rayu
+vagrant
+vagrant-manager
+vagrant-vmware-utility
+vassal
+vellum
+veracrypt
+veusz
+vidcutter
+videostream
+vidrio
+vienna
+vimr
+vip-access
+virtualbox
+virtualbox-extension-pack
+virtualgl
+virtualhostx
+visicut
+visit
+visual
+visual-paradigm
+visual-paradigm-ce
+visual-studio
+visual-studio-code
+visualboyadvance-m
+visualvm
+vitalsource-bookshelf
+vitamin-r
+vivaldi
+vivi
+vk-messenger
+vlc
+vmpk
+vmware-fusion
+vnote
+volt
+voodoopad
+vorta
+vox
+vox-preferences-pane
+vscodium
+vsee
+vu
+vuescan
+vv
+vyprvpn
+vysor
+wacom-inkspace
+wallpaper-wizard
+waltr
+wanna
+wasabi-wallet
+waterfox
+waterfox-current
+wavebox
+wavesurfer
+webarchiveextractor
+webcamoid
+webcatalog
+webponize
+webpquicklook
+website-watchman
+webstorm
+webtorrent
+wechat
+wechatwebdevtools
+wechatwork
+weiyun
+weka
+wercker-cli
+wey
+whalebird
+whatsapp
+whatsize
+whatsyoursign
+whoozle-android-file-transfer
+wickrme
+widelands
+wifispoof
+winds
+wings3d
+wire
+wireshark
+wireshark-chmodbpf
+wiznote
+wkhtmltopdf
+wondershare-filmora
+wordpresscom
+wordservice
+workflowy
+wpsoffice
+writefull
+wwdc
+x-moto
+x2goclient
+x48
+xact
+xamarin-android
+xamarin-ios
+xamarin-mac
+xamarin-studio
+xamarin-workbooks
+xampp
+xaos
+xca
+xctu
+xdm
+xee
+xiami
+ximalaya
+xld
+xlink-kai
+xlplayer
+xmind-zen
+xquartz
+xrg
+xscope
+yacreader
+yakyak
+yam-display
+yammer
+yandex
+yandex-cloud-cli
+yandex-disk
+yate
+yed
+yinxiangbiji
+yojimbo
+youdaodict
+youdaonote
+youku
+yourkit-java-profiler
+yu-writer
+yy
+yyets
+zalo
+zazu
+zeebe-modeler
+zeplin
+zeronet
+zesarux
+zettelkasten
+zettlr
+zoc
+zoho-docs
+zoho-mail
+zoho-workdrive
+zoom-in
+zoomus
+zotero
+zulip
+zulu
+zxpinstaller
+==> Deleted Casks
+appearin                                 liteswitch-x
+appshelf                                 livechat
+argouml                                  logoist
+baiduhi                                  madruby
+capture-one                              mammon
+cloudtv                                  manopen
+colorpicker-rcwebcolorpicker             moodo
+cube                                     netsurf
+dawnlabs-alchemy                         people-plus-content-ip
+deploystudio                             qtum-qt
+dradio                                   rcdefaultapp
+eve                                      roblox
+fastlane                                 safaricookiecutter
+feeder                                   safarisort
+font-cica                                shinhan-ezplus
+glip                                     sus-inspector
+gog-downloader                           tap
+gpsdump                                  tftpserver
+grip                                     the-hit-list
+hab                                      unity-linux-support-for-editor
+haskell-for-mac                          validator-sac
+hider                                    whatsapp-pocket
+hook                                     wineskin-winery
+hyperion-download-manager                wko
+iphoney
+
+Error: caskroom/versions was moved. Tap homebrew/cask-versions instead.
+iPhone:Lan katthanya$ homebrew/cask-versions
+-bash: homebrew/cask-versions: No such file or directory
+iPhone:Lan katthanya$ brew tap cask-versions
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 1 tap (homebrew/core).
+==> New Formulae
+cloud-nuke
+==> Updated Formulae
+castxml             dar                 erlang@22           gotop
+cdogs-sdl           erlang              glooctl             sqlmap
+
+Error: Invalid tap name 'cask-versions'
+iPhone:Lan katthanya$ brew cask-versions
+Error: Unknown command: cask-versions
+iPhone:Lan katthanya$ brew search java
+==> Formulae
+app-engine-java            java11                     jslint4java
+google-java-format         javacc                     libreadline-java
+java                       javarepl                   pdftk-java
+==> Casks
+eclipse-java                             netbeans-java-se
+eclipse-javascript                       oracle-jdk-javadoc
+java ✔                                   yourkit-java-profiler
+netbeans-java-ee                         homebrew/cask-versions/java-beta
+iPhone:Lan katthanya$ brew cask install java8
+Error: Cask 'java8' is unavailable: No Cask with this name exists.
+iPhone:Lan katthanya$ brew cask install java11
+Error: Cask 'java11' is unavailable: No Cask with this name exists.
+iPhone:Lan katthanya$ brew cask install java
+Updating Homebrew...
+Warning: Cask 'java' is already installed.
+
+To re-install java, run:
+  brew cask reinstall java
+iPhone:Lan katthanya$ brew cask reinstall java
+==> Downloading https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb3263
+######################################################################## 100.0%
+==> Verifying SHA-256 checksum for Cask 'java'.
+==> Uninstalling Cask java
+==> Backing Generic Artifact 'openjdk-14.jdk' up to '/usr/local/Caskroom/java/14,36:076b
+Password:
+==> Removing Generic Artifact '/Library/Java/JavaVirtualMachines/openjdk-14.jdk'.
+==> Purging files for version 14,36:076bab302c7b4508975440c56f6cc26a of Cask java
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/CodeResources: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/_CodeSignature/CodeResources: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/jawt.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/classfile_constants.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/jdwpTransport.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/jvmti.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/jni.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/jvmticmlr.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/darwin/jni_md.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/include/darwin/jawt_md.h: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/release: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libnet.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libnio.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libinstrument.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libzip.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/psfontj2d.properties: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/fontconfig.properties.src: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libfreetype.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjli.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libsplashscreen.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libmanagement_ext.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libdt_socket.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libj2pkcs11.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/jvm.cfg: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjimage.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/security/public_suffix_list.dat: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/security/default.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/security/blacklisted.certs: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/security/cacerts: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/jfr/default.jfc: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/jfr/profile.jfc: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libosxkrb5.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libosxui.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/tzdb.dat: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libmanagement_agent.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/librmi.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjdwp.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libsunec.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libawt_lwawt.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/server/libjvm.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/server/classes.jsa: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/server/libjsig.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjavajpeg.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libmlib_image.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libmanagement.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjsound.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/ct.sym: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libj2pcsc.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjsig.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libprefs.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjawt.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libattach.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/jrt-fs.jar: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libfontmanager.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/fontconfig.bfc: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/src.zip: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libosxsecurity.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libextnet.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjaas.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/liblcms.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libverify.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/psfont.properties.ja: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libj2gss.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libsaproc.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/modules: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/classlist: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libjava.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libawt.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libosx.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/lib/libosxapp.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.dynalink/dynalink.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml/bcel.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml/xalan.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml/dom.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml/jcup.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml/xerces.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.localedata/thaidict.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.crypto.cryptoki/pkcs11wrapper.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.crypto.cryptoki/pkcs11cryptotoken.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/asm.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/LICENSE: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/public_suffix.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/ADDITIONAL_LICENSE_INFO: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/ASSEMBLY_EXCEPTION: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/cldr.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/icu.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/unicode.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/c-libutl.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.base/aes.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.internal.opt/jopt-simple.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.internal.le/jline.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.scripting.nashorn/joni.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.scripting.nashorn/double-conversion.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.smartcardio/pcsclite.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.javadoc/jszip.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.javadoc/jquery.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.javadoc/jqueryUI.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/freetype.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/mesa3d.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/colorimaging.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/libpng.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/xwd.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/giflib.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/harfbuzz.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/jpeg.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.desktop/lcms.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/jdk.crypto.ec/ecc.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/legal/java.xml.crypto/santuario.md: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/logging.properties: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/sound.properties: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/java.security: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/java.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/unlimited/default_US_export.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/unlimited/default_local.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/README.txt: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/limited/default_US_export.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/limited/exempt_local.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/security/policy/limited/default_local.policy: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/net.properties: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/management/jmxremote.access: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/management/management.properties: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/conf/management/jmxremote.password.template: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.security.sasl.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jartool.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.se.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.zipfs.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jdeps.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jstatd.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jdwp.agent.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.sql.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.incubator.foreign.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.smartcardio.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.hotspot.agent.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.jvmstat.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.compiler.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.sql.rowset.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jfr.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.aot.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.rmic.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.crypto.cryptoki.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.vm.compiler.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.scripting.nashorn.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.unsupported.desktop.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.management.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.rmi.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.management.jfr.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.sctp.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.security.jgss.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.vm.compiler.management.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.net.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.prefs.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.logging.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.xml.dom.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.base.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.xml.crypto.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.naming.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.ed.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.naming.dns.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.datatransfer.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.unsupported.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jlink.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.scripting.nashorn.shell.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.charsets.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.localedata.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jcmd.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.desktop.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.accessibility.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.attach.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.management.rmi.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.transaction.xa.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jshell.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.xml.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.management.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.opt.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.httpserver.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.net.http.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.compiler.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.le.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.incubator.jpackage.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.instrument.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.dynalink.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.management.agent.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.internal.vm.ci.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.security.auth.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.scripting.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jdi.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.crypto.ec.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.naming.rmi.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jconsole.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.javadoc.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.editpad.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.jsobject.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/java.security.jgss.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Home/jmods/jdk.nio.mapmode.jmod: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/MacOS/libjli.dylib: Operation not permitted
+chmod: Unable to change file mode on /usr/local/Caskroom/java/14,36:076bab302c7b4508975440c56f6cc26a/jdk-14.jdk/Contents/Info.plist: Operation not permitted
+==> Using sudo to gain ownership of path '/usr/local/Caskroom/java/14,36:076bab302c7b450
+==> Installing Cask java
+==> Moving Generic Artifact 'jdk-14.0.1.jdk' to '/Library/Java/JavaVirtualMachines/openj
+🍺  java was successfully installed!
+iPhone:Lan katthanya$ java -version
+openjdk version "14.0.1" 2020-04-14
+OpenJDK Runtime Environment (build 14.0.1+7)
+OpenJDK 64-Bit Server VM (build 14.0.1+7, mixed mode, sharing)
+iPhone:Lan katthanya$ 

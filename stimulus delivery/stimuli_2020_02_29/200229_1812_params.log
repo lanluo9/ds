@@ -1,0 +1,25 @@
+FlowMovPlayer bgt-0.1
+scrWidthPx 800
+scrHeightPx 600
+monitor 2
+fullScreen true
+frameRate 60
+trialLen 120
+preStimLen 60
+postStimLen 15
+nReps 3
+movieFileName movie-4dot/4dot-part0.bgt
+movieFileName movie-4dot/4dot-part1.bgt
+movieFileName movie-4dot/4dot-part2.bgt
+clientStart localhost
+ port  9090
+ msgType  1
+ msg 1
+clientEnd localhost
+ port  9090
+ msgType  1
+ msg 0
+clientTrialStart localhost
+ port  9090
+ msgType  1
+ msg 1

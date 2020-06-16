@@ -1,0 +1,11 @@
+what was supposed to happen:
+i fitted NIM w white noise dataset 007
+used NIM to generate fake poisson spk
+refit NIM w fake data
+check model changes & perf
+
+what happened instead:
+i fitted NIM w white noise dataset 007
+used NIM to generate fake poisson spk
+fit an empty NIM w fake data, which might have gone wrong too bc i now suspect i only used spk(1) instead of spk(:,1)
+NIM model looks like a horror movie
