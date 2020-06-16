@@ -1,3 +1,4 @@
+%% load fit w 48 min real data 'before-refit'
 
 clear
 clc
@@ -15,7 +16,7 @@ load mov_20180926_007_cell63.mat
 NFRAMES = size(mov, 1);
 NX = sqrt(size(mov, 2)); NY = NX; 
 
-%%
+%% param of original fit
 up_samp_fac = 1; % 1; A little nicer resolution at 2, but indeed runs longer
 tent_basis_spacing = 1;
 nLags = 25*up_samp_fac;
@@ -29,12 +30,13 @@ params_stim = NIM.create_stim_params([nLags NY, NX], 'stim_dt',	dt, 'upsampling'
 % generate stimulus matrix
 Xstim = NIM.create_time_embedding(mov, params_stim); % beware of memory
 % bin spike times 
+cell_index = 3; 
+cell_id = datarun.cell_ids(cell_index)
+spikes = datarun.spikes{cell_index};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
 % For generating nested-cross validation indices (this is default 5-fold)
 [Ui, XVi] = NIM.generate_XVfolds( NT ); % XVi array size = NT/5. XVi is test set, while Ui is training set
-
-%%
 
 load before_refit_63_13.mat
 
@@ -46,7 +48,7 @@ load before_refit_63_13.mat
 
 pred_rates = [pred_rate0, pred_rateS, pred_rate1, pred_rate1S, pred_rate2];
 
-%% generate fake binned spike from model
+% generate fake binned spike from model
 
 % spk_bootstrap = round(pred_rates); % bootstrapping when generating fake data is equivalent to round(rate)
 spk_rnd = pi * ones(size(pred_rates));
@@ -58,7 +60,7 @@ end
 % spk_rnd(spk_rnd < 0) = 0; % interestingly, fake spk_rnd has no negative entry
 % length(spk_rnd(spk_rnd > 4)) / length(spk_rnd(:)) % also very few large entry
 
-%% fit empty model w 10 min fake data
+%% reset param first
 
 % clearvars -except spk_rnd
 clear -regexp ^fit*
@@ -70,7 +72,8 @@ Robs = spk_rnd(:, 4);
 NT = size(mov, 1);
 [Ui, XVi] = NIM.generate_XVfolds( NT ); 
 
-%%
+%% fit empty model w 10 min fake data
+
 disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
 NL_types = {'lin'}; % define subunit as linear 
@@ -207,17 +210,17 @@ end
 R2
 sum(R2>0) / size(R2,1) / size(R2,2)
 
-%% fit empty model w 10 min real data
+%% reset param again
 
-save('fit_empty_w_poiss_63_13.mat', '-regexp', 'fit*')
-save('fit_empty_w_poiss_63_13.mat', 'R2', 'LLfit', '-append')
-clear -regexp fit*
+% save('fit_empty_w_poiss_63_13.mat', '-regexp', 'fit*')
+% save('fit_empty_w_poiss_63_13.mat', 'R2', 'LLfit', '-append')
+% clear -regexp fit*
 
 cd D:\RRR\Grad\Rotation\GF_lab\lab_Mac\ds\code\NIM
 load mov_20180926_007_cell63.mat
 NT_whole = size(mov, 1);
 
-mov = mov( 1:NT_whole/5, :); % use 1/5 of whole data
+mov = mov( 1:NT_whole/5, :); % use 1/5 of whole data % should have used the last 1/5, since that will match what the fake data is simulating!
 params_stim = NIM.create_stim_params([nLags NY, NX], 'stim_dt',	dt, 'upsampling', up_samp_fac, 'tent_spacing', tent_basis_spacing);
 Xstim = NIM.create_time_embedding(mov, params_stim); 
 NT = size(mov, 1);
@@ -228,7 +231,7 @@ cell_id = datarun.cell_ids(cell_index)
 spikes = datarun.spikes{cell_index};
 Robs = NIM.Spks2Robs(spikes, binsize, NT );
 
-%%
+%% fit empty model w 10 min real data
 
 disp('Fitting GLM: 1 excitatory filter')
 mod_signs = [1]; % determines whether input is exc or sup (doesn't matter in the linear case)
@@ -349,7 +352,9 @@ LLs(4) = fit1S.eval_model(Robs, Xstim, XVi );
 LLs(5) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLfit = LLs - fp.nullLL
 
-% test R2
+%% predicted rate and test R2
+
+load fit_empty_w_poiss_63_13.mat
 
 [~,pred_rate0,~,~] = fit0.eval_model(Robs, Xstim, XVi );
 [~,pred_rateS,~,~] = fitS.eval_model(Robs, Xstim, XVi );
@@ -366,5 +371,38 @@ end
 R2
 sum(R2>0) / size(R2,1) / size(R2,2)
 
-save('fit_empty_w_real_63_13.mat', '-regexp', 'fit*')
-save('fit_empty_w_real_63_13.mat', 'R2', 'LLfit', '-append')
+% save('fit_empty_w_real_63_13.mat', '-regexp', 'fit*')
+% save('fit_empty_w_real_63_13.mat', 'R2', 'LLfit', '-append')
+
+%% compare shuffled Robs vs real Robs vs pred_rate
+Robs_test_shuffled = Robs_test(randperm(length(Robs_test))); 
+
+color = prism(size(pred_rates,2));
+bgn = 600;
+fin = 800;
+
+subplot(2,1,1)
+for i = 1:size(pred_rates,2)
+    pred_rate_now = pred_rates(:, i);
+    plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+    plot_pred.Color(4) = 0.7; % alpha transparency
+    hold on
+end
+plot_spk = plot(bgn:fin, Robs_test_shuffled(bgn:fin), 'k', 'LineWidth', 2);
+plot_spk.Color(4) = 0.4; 
+legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
+legend('boxoff')
+
+subplot(2,1,2)
+for i = 1:size(pred_rates,2)
+    pred_rate_now = pred_rates(:, i);
+    plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+    plot_pred.Color(4) = 0.7; % alpha transparency
+    hold on
+end
+plot_spk = plot(bgn:fin, Robs_test(bgn:fin), 'k', 'LineWidth', 2);
+plot_spk.Color(4) = 0.4; 
+
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(gcf, ['perf-spk-cp-' num2str(cell_id) '.png'])
+
