@@ -209,8 +209,8 @@ LLs(8) = fit1Snl.eval_model(Robs, Xstim, XVi );
 LLs(9) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLfit = LLs - fp.nullLL
 
-save(['fit_' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
-save(['fit_' num2str(training_set_len(j)) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
+save(['fit_' num2str(training_set_len(j) / 60 / frame_per_sec) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
+save(['fit_' num2str(training_set_len(j) / 60 / frame_per_sec) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
 disp(['finished training set len ' num2str(training_min) 'min' ])
 
 end
