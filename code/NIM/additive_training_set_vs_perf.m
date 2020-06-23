@@ -209,8 +209,48 @@ LLs(8) = fit1Snl.eval_model(Robs, Xstim, XVi );
 LLs(9) = fit2.eval_model(Robs, Xstim, XVi ); % fit2 (w nonlin) is not better than fit1
 LLfit = LLs - fp.nullLL
 
-save(['fit_' num2str(training_set_len(j) / 60 / frame_per_sec) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
-save(['fit_' num2str(training_set_len(j) / 60 / frame_per_sec) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
+save(['fit_' num2str(training_min) 'min_cell63_RFsize13.mat'], '-regexp', 'fit*')
+save(['fit_' num2str(training_min) 'min_cell63_RFsize13.mat'], 'XVi', 'LLfit', '-append')
 disp(['finished training set len ' num2str(training_min) 'min' ])
 
 end
+
+
+%% visualize fit_spkNL
+
+for j = 1 : length(training_set_len)
+
+    training_min = training_set_len(j) / frame_per_sec / 60
+    load(['fit_' num2str(training_min) 'min_cell63_RFsize13.mat'], 'fit0nl', 'fit1nl')
+        
+%     figure('units','normalized','outerposition',[0 0 1 1/2]) 
+    fit0nl.display_model('Xstims', Xstim )
+    set(gcf, 'Position', [0 0 15000 250]);
+    saveas(gcf, ['fit0nl-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
+    close
+    
+    fit1nl.display_model('Xstims', Xstim )
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, ['fit1nl-' num2str(training_min) 'min_' num2str(cell_id) '.png'])
+    close
+
+end
+fprintf('done')
+
+%% test LL error for 50 min
+
+[LLs_test,~,~,fp_test] = fit0.eval_model(Robs, Xstim, XVi_old );
+LLs_test(2) = fit0S.eval_model(Robs, Xstim, XVi_old );
+LLs_test(3) = fit0nl.eval_model(Robs, Xstim, XVi_old );
+LLs_test(4) = fit0Snl.eval_model(Robs, Xstim, XVi_old );
+
+LLs_test(5) = fit1.eval_model(Robs, Xstim, XVi_old );
+LLs_test(6) = fit1S.eval_model(Robs, Xstim, XVi_old );
+LLs_test(7) = fit1nl.eval_model(Robs, Xstim, XVi_old );
+LLs_test(8) = fit1Snl.eval_model(Robs, Xstim, XVi_old );
+
+LLs_test(9) = fit2.eval_model(Robs, Xstim, XVi_old ); % fit2 (w nonlin) is not better than fit1
+LLfit_test = LLs_test - fp_test.nullLL
+
+%%
+[fit1.eval_model( Robs,Xstim, Ui_seq_last{end,1} ) fit1.eval_model( Robs,Xstim, XVi)]
