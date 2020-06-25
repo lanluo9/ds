@@ -415,10 +415,12 @@ scatter(training_set_len, LL_avg, 'r') % even highest LL at 5 min is low: ~0.2
 %% test large bin size -> R2
 
 blur_seq = [1,2,4,6,9,  15,25,30,45,60];
+R2_blur_seq = {};
+R2_blur_shuffled_seq = {};
 
 for nblur = 1 : length(blur_seq)
     
-blur_ratio = blur_seq(nblur); % factor(length(Robs_test))
+blur_ratio = blur_seq(nblur) % factor(length(Robs_test))
 large_binsize = binsize * blur_ratio;
 
 Robs_test = Robs(XVi); 
@@ -472,15 +474,43 @@ for j = 1 : length(training_set_len)
     plot_spk.Color(4) = 0.4; 
 
     set(gcf, 'Position', get(0, 'Screensize'));
-    saveas(gcf, ['perf-' num2str(training_min) 'large-bin-' num2str(large_binsize) '.png'])
+    saveas(gcf, ['perf-' num2str(training_min) '-large-bin-' num2str(blur_ratio) '.png'])
     close
 
     for i = 1:5
         R2_blur(j,i) = 1 - mean( (Robs_test_blur' - pred_rates(:,i)) .^2) / var(Robs_test_blur);
         R2_blur_shuffled(j,i) = 1 - mean( (Robs_test_blur_shuffled' - pred_rates(:,i)) .^2) / var(Robs_test_blur_shuffled);
     end
-    R2_blur
-    R2_blur_shuffled
+    R2_blur_seq{nblur} = R2_blur;
+    R2_blur_shuffled_seq{nblur} = R2_blur_shuffled;
     
 end
 end
+
+
+%% R2 as function of training_min w diff binsize
+
+training_min_seq = training_set_len / frame_per_sec / 60;
+
+R2_avg_blur = {};
+for nblur = 1 : length(blur_seq)
+    R2_avg_blur{nblur} = mean(R2_blur_seq{nblur},2); % avg across models
+%     R2_avg_blur{nblur} = max(R2_blur_seq{nblur},[],2); % max across models
+%     R2_var_blur = var(R2_blur,2) % try errorbar later
+end
+
+color = hsv(length(blur_seq)); % jet prism
+for i = 1 : length(blur_seq)
+    R2_now = R2_avg_blur{i};
+    plot_pred = plot(training_min_seq, R2_now, 'Color', color(i,:), 'LineWidth', 2);
+    plot_pred.Color(4) = 0.7; % alpha transparency
+    hold on
+end
+legend({'1','2','4','6','9', '15','25','30','45','60'}, 'Location','northeast')
+legend('boxoff')
+ylim([0,1])
+
+set(gcf, 'Position', get(0, 'Screensize'));
+% saveas(gcf, ['R2-large-bin-' num2str(blur_ratio) '.png'])
+% saveas(gcf, ['R2-max-model-' num2str(blur_ratio) '.png'])
+% close
