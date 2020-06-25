@@ -511,6 +511,6 @@ legend('boxoff')
 ylim([0,1])
 
 set(gcf, 'Position', get(0, 'Screensize'));
-% saveas(gcf, ['R2-large-bin-' num2str(blur_ratio) '.png'])
-% saveas(gcf, ['R2-max-model-' num2str(blur_ratio) '.png'])
+% saveas(gcf, ['R2-large-bin'  '.png'])
+% saveas(gcf, ['R2-max-model' '.png'])
 % close
