@@ -405,16 +405,17 @@ end
 %% R2 as function of training_min
 
 R2_avg = mean(R2,2)
-R2_avg_blur = mean(R2_blur,2)
+% R2_avg_blur_test = mean(R2_blur,2)
 
-scatter(training_set_len, R2_avg, 'b') % same trend as LL
+plot(training_min_seq, R2_avg, 'b') % same trend as LL
 hold on
-scatter(training_set_len, R2_avg_blur, 'g') % blurring helps R2 plateau? still max at 5-10 min
-scatter(training_set_len, LL_avg, 'r') % even highest LL at 5 min is low: ~0.2
+% plot(training_min_seq, R2_avg_blur_test, 'g') % blurring helps R2 plateau? still max at 5-10 min
+% plot(training_min_seq, LL_avg, 'r') % even highest LL at 5 min is low: ~0.2
+ylim([0,1])
 
 %% test large bin size -> R2
 
-blur_seq = [1,2,4,6,9,  15,25,30,45,60];
+blur_seq = [1,2,4,6,9, 15,25,30,45,60];
 R2_blur_seq = {};
 R2_blur_shuffled_seq = {};
 
@@ -491,18 +492,18 @@ end
 %% R2 as function of training_min w diff binsize
 
 training_min_seq = training_set_len / frame_per_sec / 60;
+R2_avg_blur = {}; R2_var_blur = {};
 
-R2_avg_blur = {};
 for nblur = 1 : length(blur_seq)
     R2_avg_blur{nblur} = mean(R2_blur_seq{nblur},2); % avg across models
 %     R2_avg_blur{nblur} = max(R2_blur_seq{nblur},[],2); % max across models
-%     R2_var_blur = var(R2_blur,2) % try errorbar later
+    R2_var_blur{nblur} = var(R2_blur_seq{nblur},0,2); % try errorbar later
 end
 
 color = hsv(length(blur_seq)); % jet prism
 for i = 1 : length(blur_seq)
-    R2_now = R2_avg_blur{i};
-    plot_pred = plot(training_min_seq, R2_now, 'Color', color(i,:), 'LineWidth', 2);
+%     R2_now = R2_avg_blur{i};
+    plot_pred = errorbar(training_min_seq, R2_avg_blur{i}, R2_var_blur{i}, 'Color', color(i,:), 'LineWidth', 2);
     plot_pred.Color(4) = 0.7; % alpha transparency
     hold on
 end
@@ -511,6 +512,6 @@ legend('boxoff')
 ylim([0,1])
 
 set(gcf, 'Position', get(0, 'Screensize'));
-% saveas(gcf, ['R2-large-bin'  '.png'])
+saveas(gcf, ['R2-large-bin-errorbar'  '.png'])
 % saveas(gcf, ['R2-max-model' '.png'])
-% close
+close
