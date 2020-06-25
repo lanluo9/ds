@@ -237,7 +237,7 @@ for j = 1 : length(training_set_len)
 end
 fprintf('done')
 
-%% test LL error for 50 min
+%% test LL error for 50 min: why deducted fp is from fit0 only? is it constant?
 
 [LLs_test,~,~,fp_test] = fit0.eval_model(Robs, Xstim, XVi_old );
 LLs_test(2) = fit0S.eval_model(Robs, Xstim, XVi_old );
@@ -252,5 +252,105 @@ LLs_test(8) = fit1Snl.eval_model(Robs, Xstim, XVi_old );
 LLs_test(9) = fit2.eval_model(Robs, Xstim, XVi_old ); % fit2 (w nonlin) is not better than fit1
 LLfit_test = LLs_test - fp_test.nullLL
 
-%%
 [fit1.eval_model( Robs,Xstim, Ui_seq_last{end,1} ) fit1.eval_model( Robs,Xstim, XVi)]
+
+%% LL as function of training_min
+% bc training set end point is test set start point, LL declines when
+% training set gets further from test set
+% plot(spikes) shows almost constant firing rate. changing XVi might not help
+
+for j = 1 : length(training_set_len)
+
+    training_min = training_set_len(j) / frame_per_sec / 60
+    load(['fit_' num2str(training_min) 'min_cell63_RFsize13.mat'])
+    
+    LL_avg(j) = mean(LLfit);
+       
+end
+scatter(training_set_len, LL_avg, 'r') % even highest LL at 10 min is low: ~0.2
+
+
+%% R2 & visualize perf
+
+Robs_test = Robs(XVi); % pred_rate unit is spike per bin, not per sec. pred_rate array correspond to test set
+Robs_test_shuffled = Robs_test(randperm(length(Robs_test))); % shuffle spk to visualize performance
+
+for j = 1 : length(training_set_len)
+
+    training_min = training_set_len(j) / frame_per_sec / 60
+    load(['fit_' num2str(training_min) 'min_cell63_RFsize13.mat'])
+	
+    [~,pred_rate0,~,fp_test0] = fit0.eval_model(Robs, Xstim, XVi );
+    [~,pred_rate0S,~,fp_test0S] = fit0S.eval_model(Robs, Xstim, XVi );
+    [~,pred_rate1,~,fp_test1] = fit1.eval_model(Robs, Xstim, XVi );
+    [~,pred_rate1S,~,fp_test1S] = fit1S.eval_model(Robs, Xstim, XVi );
+    [~,pred_rate2,~,fp_test2] = fit2.eval_model(Robs, Xstim, XVi );
+    
+    pred_rates = [pred_rate0, pred_rate0S, pred_rate1, pred_rate1S, pred_rate2];
+%     fp_test0.nullLL
+%     fp_test0S.nullLL
+%     fp_test1.nullLL
+%     fp_test1S.nullLL
+%     fp_test2.nullLL
+    
+    color = prism(size(pred_rates,2));
+    bgn = 200;
+    fin = 400;
+
+    subplot(2,1,1)
+    for i = 1:size(pred_rates,2)
+        pred_rate_now = pred_rates(:, i);
+        plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+        plot_pred.Color(4) = 0.7; % alpha transparency
+        hold on
+    end
+    plot_spk = plot(bgn:fin, Robs_test(bgn:fin), 'k', 'LineWidth', 2);
+    plot_spk.Color(4) = 0.4; 
+    legend({'0','S','1', '1S', '2', 'robs'}, 'Location','northeast')
+    legend('boxoff')
+
+    subplot(2,1,2)
+    for i = 1:size(pred_rates,2)
+        pred_rate_now = pred_rates(:, i);
+        plot_pred = plot(bgn:fin, pred_rate_now(bgn:fin), 'Color', color(i,:), 'LineWidth', 1);
+        plot_pred.Color(4) = 0.7; % alpha transparency
+        hold on
+    end
+    plot_spk = plot(bgn:fin, Robs_test_shuffled(bgn:fin), 'k', 'LineWidth', 2);
+    plot_spk.Color(4) = 0.4; 
+
+    set(gcf, 'Position', get(0, 'Screensize'));
+    saveas(gcf, ['perf-spk-cp-' num2str(training_min) '.png'])
+    close
+
+    for i = 1:5
+        R2(j,i) = 1 - mean( (Robs_test - pred_rates(:,i)) .^2) / var(Robs_test);
+        R2_shuffled(j,i) = 1 - mean( (Robs_test_shuffled - pred_rates(:,i)) .^2) / var(Robs_test_shuffled);
+    end
+    R2
+    R2_shuffled
+%     sum(R2>0) / size(R2,1) / size(R2,2) 
+%     sum(R2_shuffled>0) / size(R2_shuffled,1) / size(R2_shuffled,2) 
+    
+end
+
+%% R2 as function of training_min
+
+R2_avg = mean(R2,2)
+
+scatter(training_set_len, R2_avg) % same trend as LL
+hold on
+scatter(training_set_len, LL_avg, 'r') % even highest LL at 10 min is low: ~0.2
+
+%% increase time bin size
+
+blur_ratio = 3;
+
+Robs_test = Robs(XVi); % pred_rate unit is spike per bin, not per sec. pred_rate array correspond to test set
+Robs_test_shuffled = Robs_test(randperm(length(Robs_test))); % shuffle spk to visualize performance
+
+Robs_test_blur = reshape(Robs_test, [rep_len, length(Robs_test)/rep_len]);
+
+
+
+
