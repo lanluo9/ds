@@ -413,13 +413,13 @@ hold on
 % plot(training_min_seq, LL_avg, 'r') % even highest LL at 5 min is low: ~0.2
 ylim([0,1])
 
-%% test large bin size -> R2
+%% test large bin size -> R2 
 
 blur_seq = [1,2,4,6,9, 15,25,30,45,60];
 R2_blur_seq = {};
 R2_blur_shuffled_seq = {};
 
-for nblur = 1 : length(blur_seq)
+for nblur = 1 : length(blur_seq) % should switch inner vs outer loop: first training min, then blur ratio
     
 blur_ratio = blur_seq(nblur) % factor(length(Robs_test))
 large_binsize = binsize * blur_ratio;
@@ -515,3 +515,6 @@ set(gcf, 'Position', get(0, 'Screensize'));
 saveas(gcf, ['R2-large-bin-errorbar'  '.png'])
 % saveas(gcf, ['R2-max-model' '.png'])
 close
+
+%%
+
